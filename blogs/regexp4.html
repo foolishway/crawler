@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: Regular Expression Article #4</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>Regular Expression Article #4
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Thursday, January 19, 2012.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+<p><p class="lp">In January 2007 I posted an article on my web site titled &#8220;<a href="http://swtch.com/~rsc/regexp/regexp1.html">Regular Expression Matching Can Be Simple And Fast.</a>&#8221;  I intended this to be the first of three; the second would explain how to do submatching using automata, and the third would explain how to make a really fast DFA.  These were inspired by my work on Google Code Search.
+</p>
+
+<p class="pp">
+Today, the <a href="http://swtch.com/~rsc/regexp/regexp4.html">fourth article</a> in my three-part series is available, accompanied by source code (as usual).  This one describes how Code Search worked.
+</p></p>
+
+      </div>
+      
+      <div class="comments">
+        <div class="comments-header">
+          <p>Comments?  Please join the <a href="https://plus.google.com/116810148281701144465/posts/cLLByoCMULk">Google+ discussion</a>.</p>
+        </div>
+        <div class="comments-body">
+          <div id="plus-comments">
+          </div>
+        </div>
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+    
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script>
+
+
+
+function plusComments(me, postid, key) {
+$.ajax({
+type: 'GET',
+url: 'https://www.googleapis.com/plus/v1/activities/'+postid+'/comments?alt=json&maxResults=100&pp=1&key='+key,
+dataType: 'jsonp',
+success: function(z, textStatus)
+{
+
+var items = z.items;
+var countitems = 0;
+for(Object in items) countitems++;
+for (var i = 0; i < countitems; i++) {
+
+var nam = z.items[i].actor.displayName;                    
+var pid = z.items[i].actor.url;                           
+var img = z.items[i].actor.image.url;           
+var text = z.items[i].object.content;                   
+
+
+(function(d){d.timeago=function(g){if(g instanceof Date){return a(g)}else{if(typeof g==="string"){return a(d.timeago.parse(g))}else{return a(d.timeago.datetime(g))}}};var f=d.timeago;d.extend(d.timeago,{settings:{refreshMillis:60000,allowFuture:false,strings:{prefixAgo:null,prefixFromNow:null,suffixAgo:"ago",suffixFromNow:"from now",seconds:"less than a minute",minute:"about a minute",minutes:"%d minutes",hour:"about an hour",hours:"about %d hours",day:"a day",days:"%d days",month:"about a month",months:"%d months",year:"about a year",years:"%d years",numbers:[]}},inWords:function(l){var m=this.settings.strings;var i=m.prefixAgo;var q=m.suffixAgo;if(this.settings.allowFuture){if(l<0){i=m.prefixFromNow;q=m.suffixFromNow}l=Math.abs(l)}var o=l/1000;var g=o/60;var n=g/60;var p=n/24;var j=p/365;function h(r,t){var s=d.isFunction(r)?r(t,l):r;var u=(m.numbers&&m.numbers[t])||t;return s.replace(/%d/i,u)}var k=o<45&&h(m.seconds,Math.round(o))||o<90&&h(m.minute,1)||g<45&&h(m.minutes,Math.round(g))||g<90&&h(m.hour,1)||n<24&&h(m.hours,Math.round(n))||n<48&&h(m.day,1)||p<30&&h(m.days,Math.floor(p))||p<60&&h(m.month,1)||p<365&&h(m.months,Math.floor(p/30))||j<2&&h(m.year,1)||h(m.years,Math.floor(j));return d.trim([i,k,q].join(" "))},parse:function(h){var g=d.trim(h);g=g.replace(/\.\d\d\d+/,"");g=g.replace(/-/,"/").replace(/-/,"/");g=g.replace(/T/," ").replace(/Z/," UTC");g=g.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2");return new Date(g)},datetime:function(h){var i=d(h).get(0).tagName.toLowerCase()==="time";var g=i?d(h).attr("datetime"):d(h).attr("title");return f.parse(g)}});d.fn.timeago=function(){var h=this;h.each(c);var g=f.settings;if(g.refreshMillis>0){setInterval(function(){h.each(c)},g.refreshMillis)}return h};function c(){var g=b(this);if(!isNaN(g.datetime)){d(this).text(a(g.datetime))}return this}function b(g){g=d(g);if(!g.data("timeago")){g.data("timeago",{datetime:f.datetime(g)});var h=d.trim(g.text());if(h.length>0){g.attr("title",h)}}return g.data("timeago")}function a(g){return f.inWords(e(g))}function e(g){return(new Date().getTime()-g.getTime())}document.createElement("abbr");document.createElement("time")}(jQuery));
+
+var publi = ($.timeago($.trim(z.items[i].published))); 
+
+
+
+
+var meclass = "";
+if (pid === 'https://plus.google.com/'+me){
+  meclass = " me";
+}
+
+var comment = '<div class="plus-comment'+meclass+'"><img class="plus-img" src="'+img+'" /><p><a href="'+pid+'" target="blank" title="'+nam+'\'s Google+ profile">'+nam+'</a> <span class="comment-when">('+publi+')</span> '+text+'</p><div class="plus-clear"></div></div>';
+
+$('#plus-comments').append(comment);
+
+}
+
+}});
+}
+</script>
+
+    <script>plusComments("116810148281701144465", "z13ez31j2z3jdtbyn04ce545ymaigp1zoec", "AIzaSyB_JO6hyAJAL659z0Dmu0RUVVvTx02ZPMM")</script>
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

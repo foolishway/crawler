@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: Thinking about the Go Proposal Process (Go Proposals, Part 1)</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>Thinking about the Go Proposal Process
+        
+        <div class="subtitle">(<i><a href="proposals">Go Proposals</a>, Part 1</i>)</div>
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Monday, August 5, 2019.
+            
+           <font size="-1"><a href="proposals-intro.pdf">PDF</a></font>
+        </div>
+        </div>
+        </h1>
+        
+
+<p>
+I’ve been thinking a lot recently about the
+<a href="https://golang.org/s/proposal">Go proposal process</a>,
+which is the way we propose, discuss, and decide
+changes to Go itself.
+Like <a href="https://blog.golang.org/experiment">nearly everything about Go</a>,
+the proposal process is an experiment,
+so it makes sense to reflect on what we’ve
+learned and try to improve it.
+This post is the first in <a href="https://research.swtch.com/proposals">a series of posts</a>
+about what works well and,
+more importantly,
+what we might want to change.
+
+<p>
+This post is focused on where we are now and how we got here.
+Later posts will focus on specific areas where we might improve.
+At our annual contributor summit held at Gophercon last week,
+about thirty or so contributors from outside Google attended
+and helped us on the Go team think through many of these areas.
+Their suggestions figure prominently in the posts to follow,
+as, I hope, will yours.
+
+<p>
+(If you are curious what the contributor summit is,
+here’s
+<a href="https://blog.golang.org/contributors-summit">Sam Whited’s recap of our first such summit in 2017</a>.
+This year’s was pretty similar in spirit, although with different discussion topics.
+This year there were about 60 people in the room,
+roughly evenly split between members of the Go team at Google
+and contributors from outside Google.)
+<a class=anchor href="#proposal_process"><h2 id="proposal_process">Proposal Process</h2></a>
+
+
+<p>
+When we started Go, we launched with instructions on day one
+detailing how to send us code changes,
+which are of course the core of any open source project.
+Around five years ago we noticed that despite the many
+code contributions,
+most change proposals
+were made by the Go team at Google,
+even when motivated and driven by feedback from the broader Go user community.
+One reason, we realized, was that the process for proposing changes
+was nearly completely undocumented.
+To try to address this, we introduced a formal change proposal process in 2015,
+now documented at <a href="https://golang.org/s/proposal">golang.org/s/proposal</a>.
+For more background,
+see <a href="https://youtu.be/0ht89TxZZnk?t=1637">Andrew Gerrand’s 2015 GopherCon talk, starting at 27m17s</a>
+(only a few minutes).
+In that talk, Andrew said, “It’s important to note that this process is an experiment.
+We’re still kind of discussing exactly how that process should work.”
+
+<p>
+I talked at GopherCon this year about the
+<a href="https://blog.golang.org/experiment">experiment, simplify, ship</a> cycle we use for just about everything.
+Like with other parts of Go,
+we’ve learned from our experiments using the proposal process
+and made adjustments in the past,
+and of course we intend to keep doing that.
+
+<p>
+The current proposal process is documented as four steps:
+<ol>
+<li>
+The author creates a brief issue clearly describing the proposal. (No need for a design document just yet.)
+<li>
+Discussion on the GitHub issue aims to triage the proposal into one of three buckets: accept; decline; or ask for a detailed design doc addressing an identified list of concerns.
+<li>
+If the previous step ended at accept/decline, we’re done. Otherwise, the author writes a design doc, which is discussed on the GitHub issue.
+<li>
+Once comments and design doc revisions wind down, a final discussion aims to reach a final accept or decline decision.</ol>
+
+
+<p>
+See the <a href="https://golang.org/s/proposal">full document</a> for details.
+<a class=anchor href="#random_sample"><h2 id="random_sample">A Random Sample</h2></a>
+
+
+<p>
+As I write this, there are 1633 GitHub issues labeled Proposal.
+Of the 1187 that have been closed, 170 were accepted, about 14%.
+
+<p>
+To get a sense of the submissions, discussions, and outcomes,
+here are twenty selected at random (by a Perl script).
+<ul>
+<li>
+<a href="https://golang.org/issue/11502">#11502 A security response policy for Go</a> (39 comments, accepted)
+<li>
+<a href="https://golang.org/issue/14991">#14991 add a builtin splice function for easier slice handling</a> (7 comments)
+<li>
+<a href="https://golang.org/issue/16844">#16844 freeze net/rpc</a> (20 comments, accepted)
+<li>
+<a href="https://golang.org/issue/17672">#17672 remote runtime</a> (9 comments)
+<li>
+<a href="https://golang.org/issue/18303">#18303 flag.failf should return an error with Cause() error</a> (15 comments)
+<li>
+<a href="https://golang.org/issue/18662">#18662 Struct field tags for directional Marshal/Unmarshal</a> (6 comments)
+<li>
+<a href="https://golang.org/issue/21360">#21360 add a build tag "test"</a> (14 comments)
+<li>
+<a href="https://golang.org/issue/21592">#21592 add an in-memory writer/seeker to io package</a> (9 comments)
+<li>
+<a href="https://golang.org/issue/22247">#22247 Add sync.Map.Len() method</a> (5 comments)
+<li>
+<a href="https://golang.org/issue/22918">#22918 go/doc: consts/vars should be grouped with types by their computed type</a> (31 comments)
+<li>
+<a href="https://golang.org/issue/23331">#23331 encoding/json: export the offset method of the Decoder</a> (7 comments)
+<li>
+<a href="https://golang.org/issue/23789">#23789 add uuid generator to stdlib</a> (13 comments)
+<li>
+<a href="https://golang.org/issue/24410">#24410 Add some way to explore packages and structs inside.</a> (6 comments)
+<li>
+<a href="https://golang.org/issue/25273">#25273 add token to syntax to reduce error boilerplate</a> (2 comments)
+<li>
+<a href="https://golang.org/issue/25518">#25518 x/vgo: allow aliases in go.mod</a> (10 comments)
+<li>
+<a href="https://golang.org/issue/25670">#25670 don’t include cgo with net on Unix by default</a> (7 comments)
+<li>
+<a href="https://golang.org/issue/26803">#26803 mime/multipart: add (*Reader).NextRawPart to avoid quoted-printable decoding</a> (9 comments, accepted)
+<li>
+<a href="https://golang.org/issue/26822">#26822 flag: clean up error message</a> (20 comments, accepted)
+<li>
+<a href="https://golang.org/issue/30886">#30886 cmd/go: allow replacing a subdirectory within a package</a> (4 comments)
+<li>
+<a href="https://golang.org/issue/31041">#31041 package and file organisation</a> (7 comments)</ul>
+
+
+<p>
+One is significant.
+Most are small.
+A few are not well-defined.
+Most had fewer than ten comments.
+This is typical.
+<a class=anchor href="#process_evolution"><h2 id="process_evolution">Process Evolution</h2></a>
+
+
+<p>
+For many people, the proposal process represents not those small changes and suggestions
+in the random sample but instead larger proposed changes, like type aliases (2016),
+monotonic time (2017), Go modules (2018), new number literals (2019),
+and the abandoned “try” proposal (2019).
+
+<p>
+These large changes are of course important,
+and in each of these we’ve learned a bit more
+about what works and what doesn’t for making
+successful changes.
+
+<p>
+The discussion of the original aliases proposal
+helped us understand the importance of
+motivating changes, like my
+<a href="https://talks.golang.org/2016/refactor.article">codebase refactoring talk and article</a>
+motivated type aliases.
+During that experience,
+someone introduced me to
+Rust’s “<a href="http://aturon.github.io/tech/2018/05/25/listening-part-1/">no new rationale</a>” rule,
+which we have tried to follow when making difficult decisions since then.
+I reflected more about motivation for changes,
+using both aliases and monotonic time as examples,
+in <a href="https://blog.golang.org/toward-go2">my GopherCon 2017 talk kicking off Go 2</a>.
+
+<p>
+Although there were parts of the Go modules proposal
+that did not go well,
+the general approach of spending significant time
+discussing the ideas before starting the formal proposal process
+did seem to help:
+at the time that we accepted the modules proposal,
+the <a href="https://github.com/golang/go/issues/24301">GitHub conversation and reactions</a>
+were overwhelmingly in favor.
+
+<p>
+One thing we learned from aliases and then from modules
+was the importance of having an implementation people can try
+and also the importance of having the changes ready
+to be committed at the start of a development cycle.
+We <a href="https://blog.golang.org/go2-here-we-come">adopted this idea explicitly</a>
+for Go 2 language changes,
+and it was successful for the smaller Go 1.13 changes
+like the <a href="https://tip.golang.org/doc/go1.13#language">new number literal syntax</a>.
+
+<p>
+For the <a href="https://golang.org/issue/32437">recent “try” proposal</a>,
+we followed the evolving process,
+including making changes available for people to use early in a cycle,
+and the discussion and reactions were much more heated than we expected.
+We abandoned the proposal only a week before the summit,
+and one thing was eager to discuss with contributors was
+what had been different about “try” and how to continue to
+improve the process to make future changes smoother.
+(If the discussion about “try” was difficult,
+what will happen when we discuss <a href="https://blog.golang.org/why-generics">generics?</a>)
+<a class=anchor href="#improvement_areas"><h2 id="improvement_areas">Improvement Areas</h2></a>
+
+
+<p>
+The discussions we had over six hours or so at the contributor summit
+surfaced at least six different areas where we might improve
+the proposal process specifically and the Go project’s community engagement
+more generally.
+I plan to write a post about each of these themes,
+but I’ll summarize them briefly here too.
+I’d be happy to hear suggestions for any other important areas
+that I’ve missed.
+
+<p>
+<b>Clarity &amp; Transparency</b>.
+Adding clarity and transparency about how we make changes to Go—making that process easier
+to follow and to participate in—was the original motivation for creating the proposal process.
+There’s more we could do, including publishing a record of
+proposal decisions.
+(Most of the proposal review group’s time is spent not on decisions
+but on adding people to issues, pinging requests for more information, and so on.)
+<i>Update</i>: See the “<a href="proposals-clarity">Clarity &amp; Transparency</a>” post for more thoughts.
+
+<p>
+<b>Scaling the Process</b>.
+The proposal process is meant to lightweight enough to apply to very small changes,
+such as the recently accepted
+<a href="https://golang.org/issue/32420">proposal to add a <code>SubexpIndex</code> method to <code>regexp.Regexp</code></a>.
+As the proposed change gets bigger,
+it may make sense to introduce additional process.
+For example, we were careful at Gophercon 2018
+to publish our thoughts about
+error handling and generics as
+“design drafts” not proposals.
+For a large enough change, perhaps publishing iterating on
+design drafts should formally be the first step of the process.
+<i>Update</i>: See the “<a href="proposals-size">Sizing Changes</a>” post for more thoughts.
+
+<p>
+<b>Scaling Discussions</b>.
+GitHub’s issue tracker is not particularly effective at large discussions.
+For large changes, we may want to investigate alternatives,
+and we certainly want to make sure to have more discussion
+long before it is time to make any decisions.
+For example, publishing multiple design drafts,
+giving talks, and publishing articles are all ways to
+engage helpful discussion before reaching the point in
+the proposal process where decisions are being made.
+
+<p>
+<b>Prototypes &amp; Experiments</b>.
+For most non-trivial changes it is helpful to understand
+them by trying them out before making a decision.
+We do this as a matter of course for small changes:
+we always have at least a few months between when
+a change is made and the corresponding release,
+during which we can reconsider, adjust, or remove it.
+We arrange to
+<a href="https://blog.golang.org/go2-here-we-come">land language changes on day 1</a>
+of a development cycle to maximize that window.
+But for large changes we probably need a way to make
+prototypes available separately, to give even more time,
+a bit like the <code>vgo</code> prototype for Go modules.
+
+<p>
+<b>Community Representation</b>.
+Andrew said in 2015 that he hoped
+the proposal process would
+“make the process more accessible to anybody
+who really wants to get involved in the design of Go.”
+We definitely get many more proposals from
+outside the Go team now than we did in 2015,
+so in that sense it has succeeded.
+On the other hand, we believe there are
+<a href="https://research.swtch.com/gophercount">over a million Go programmers</a>,
+but only 2300 different GitHub accounts have commented on
+proposal issues, or a quarter of one percent of users.
+If this were a random sample of our users, that might be fine,
+but we know the participation is skewed to
+English-speaking GitHub users
+who can take the time to keep up with the Go issue tracker.
+To make the best possible decisions we need to
+gather input from more sources,
+from a broader cross-section of the population of the Go community,
+by which I mean all Go users.
+(On a related note, anyone who describes “the Go community”
+as having a clear opinion about anything must have in mind a
+much narrower definition of that group:
+a million or more people can’t be painted with a single brush.)
+
+<p>
+<b>Community Coordination</b>.
+We have had mixed results attempting to engage
+the broader Go community in the work of developing Go.
+The clearest success is the technical development of
+the Go source code itself.
+Today, I count exactly 2,000 email addresses
+in the Go CONTRIBUTORS file,
+and only 310 from google.com or golang.org.
+The next biggest success is probably the proposal process itself:
+I estimate that the Go team accounts for about 15% of proposals overall
+and about 30% of accepted proposals.
+We also created a few working groups, most notably the
+<a href="https://groups.google.com/d/msg/go-package-management/P8TehVoFLjg/Ni6VRyOjEAAJ">package management committee</a> in 2016
+and the
+<a href="https://blog.golang.org/developer-experience">developer experience</a> and
+<a href="https://blog.golang.org/community-outreach-working-group">community outreach</a>
+working groups in 2017.
+Each one had aspects that worked well and aspects that didn’t.
+More recently, the
+<a href="https://golang.org/wiki/golang-tools">golang-tools</a> group
+started in 2018 is coming up on its first birthday
+and seems to be operating well.
+We should try to learn from the successful and unsuccessful
+aspects of all these groups and try to
+create new, successful, sustainable groups.
+<a class=anchor href="#next"><h2 id="next">Next</h2></a>
+
+
+<p>
+I plan to post about a new theme every day or two,
+starting with the ones in the previous section,
+until I run out of interesting thoughts.
+
+<p>
+Please remember as you read these posts that the goal here is
+thinking, brainstorming, looking for good ideas.
+There are almost certainly bad ideas in these posts too.
+Don’t assume that everything I mention will happen,
+especially not in the exact form described.
+Everything about these posts is very rough.
+The point of posting this series—thinking out loud
+instead of thinking quietly—is so that
+anyone who is interested can join the thinking.
+
+<p>
+I encourage feedback, whether in the form of comments on the posts,
+mail to rsc@golang.org,
+or your own blog posts (please leave links in the comments).
+Thanks for taking the time to read these and think with me.
+      </div>
+      
+      
+      <div id="disqus_thread"></div>
+      <script>
+      var disqus_config = function () {
+          this.page.url = "https://research.swtch.com/proposals-intro";  
+          this.page.identifier = "blog/proposals-intro"; 
+      };
+      (function() { 
+          var d = document, s = d.createElement('script');
+          s.src = '//swtch.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

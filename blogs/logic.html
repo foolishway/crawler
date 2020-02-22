@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: Formal Logic Club</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>Formal Logic Club
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Monday, March 8, 2010.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+<p><p class=lp>I've been laughing at this for weeks.  It's too good not to share.</p>
+<br>
+
+<blockquote title="(The most important question about any formal logic system is whether it is consistent.  An inconsistent formal system admits proofs of any statement at all&#8212;for example, that 2 + 3 = 4&#8212;which would make it not terribly useful.  Gödel proved that any interesting formal system can only prove its own consistency if it is in fact inconsistent.)">
+<p class=lp>
+The first rule of Formal Logic Club is you do not prove the consistency of Formal Logic Club.
+</p>
+<br>
+
+<p class=lp>
+The second rule of Formal Logic Club is you do not prove the inconsistency of Formal Logic Club.
+</p>
+
+<p class=pp>&#8212; <a href="http://laboratorium.net/archive/2000/08/14/formal_logic_cl">James Grimmelmann</a>
+</p>
+<br>
+</blockquote>
+
+<p class=lp>
+(Yes, this looks like <a href="http://xkcd.com/703/">http://xkcd.com/703/</a>,
+but it beat xkcd to the punchline by ten years, and it's funnier.)
+</p>
+<br></p>
+
+
+
+
+
+<div class="comments">
+  <div class="comments-header old">
+    <p>(Comments originally posted via Blogger.)</p>
+  </div>
+  <div class="comments-body">
+    <div id="plus-comments">
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/04156597987518490568'>Mathieu</a> <span class="comment-when">(March 20, 2010 10:55 AM)</span> on a similar note, there&#39;s also http://abstrusegoose.com/244</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01709709006511218720'>Ed</a> <span class="comment-when">(October 27, 2010 4:22 PM)</span> That&#39;s the funniest thing I&#39;ve seen on the web in awhile.  Godel?  Funny?  Thanks for making my afternoon.<br /><br />Ed</p>
+ </li></ul></div>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

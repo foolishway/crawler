@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: Unix Viruses</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>Unix Viruses
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Friday, February 1, 2008.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+<p><p class=lp>Disk-based computer viruses came of age with MS-DOS; network-based viruses came of age with Microsoft Windows.  (The most stunning recent example is the widespread <a href="http://www.schneier.com/blog/archives/2007/10/the_storm_worm.html">Storm worm</a> which is at this very minute probably sending you pump-and-dump and greeting card spam.)</p>
+
+<p class=pp>Most Linux and OS X users have a frustratingly smug attitude of &#8220;we're immune to viruses, because we use Unix.&#8221;
+This is obviously false: the <a href="http://query.nytimes.com/gst/fullpage.html?res=940DE2D81038F937A35752C1A96E948260&amp;pagewanted=all">original Internet worm</a> ran on Unix.  The simple security mechanisms in Unix-based systems do raise the virus-writing bar slightly, but a more likely explanation of the lack of viruses on Unix-based systems is their lack of current market share: Windows users are simply a much bigger and therefore more attractive target.</p>
+
+<p class=pp>Especially for these smug Unix users, it should be sobering to read Tom Duff's 1987 technical report &#8220;<a href="http://plan9.bell-labs.com/who/dmr/tdvirus.pdf"><b>Viral Attacks on UNIX&#174; System Security</b></a>,&#8221; which describes a simple, benign disk-based virus targeted at Unix executables.  Even working under the constraints of the Unix permission bits, Duff managed to infect 466 files across 46 systems over a period of a few months, including an experimental &#8220;secure&#8221; version of Unix (to its credit, the kernel on that system did detect the virus).
+Duff's paper also describes a simple virus written in shell script.  He cautions:</p>
+<blockquote><p class=lp>However sorely you are tempted, <i>do not</i> run this code.  It got loose on my machine while being debugged for inclusion in this paper, and within an hour had infected about 140 files, at which time several copies were energetically seeking other files to infect, running the machine's load average, normally between .05 and 1.25, up to about 17.  I had to stop the machine in the middle of a work day and spend three hours scouring the disks, earning the ire of ten or so co-workers.  I feel extremely fortunate that it did not escape onto the Datakit network.</p>
+</blockquote>
+
+<p class=lp>Doug McIlroy's 1989 paper &#8220;<a href="http://www.cs.dartmouth.edu/%7Edoug/v101.ps.gz">Virology 101</a>&#8221; (gzipped PostScript) carries the shell script virus farther, developing progressively more virulent strains.  McIlroy summarizes his paper:</p>
+
+<blockquote><p class=lp>There is nothing mysterious about computer viruses.  A working, but easily observable, virus can be written in a few lines of code.  Although particular virus attacks may be guarded against, no general defense within one domain of reference is possible; viruses are a natural consequence of stored-program computation.  Like other hazards of technology, their thread may be mitigated by cautious behavior and community sanctions.</p></blockquote>
+
+<p class=lp>
+(Finally, of course, there is Thompson's &#8220;<a href="http://cm.bell-labs.com/who/ken/trust.html">Reflections on Trusting Trust</a>,&#8221; but that's a discussion for another day.)</p></p>
+
+
+
+
+
+<div class="comments">
+  <div class="comments-header old">
+    <p>(Comments originally posted via Blogger.)</p>
+  </div>
+  <div class="comments-body">
+    <div id="plus-comments">
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01863908675256558774'>Maht</a> <span class="comment-when">(February 2, 2008 1:59 PM)</span> <span class='deleted-comment'>This post has been removed by the author.</span></p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01863908675256558774'>Maht</a> <span class="comment-when">(February 2, 2008 2:00 PM)</span> Hi Russ, I'm enjoying your series.<BR/><BR/>After reading Doug's paper I was curious to read :<BR/>J. A. Reeds, /bin/sh: The biggest UNIX&#8220; security Loophole,11217-840302-04TM, AT&T Bell<BR/>Laboratories, Murray Hill, NJ (1984).<BR/><BR/>but a web search turns up nothing,<BR/>So I'm mentioning it here in case someone knows how I can find a copy, thanks.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/10866530772307754358'>Renaissance</a> <span class="comment-when">(February 4, 2008 8:03 PM)</span> Fred Cohen invented the first computer virus which ran on VAX VMS in the 1993-1984 time frame at USC.  My memory is vague but it was probably 1983.  He had his office across the hall from the lab where I worked on 6th floor Powell Hall.  Since we were neighbors and fellow hackers when he got it working we were the first people he showed it to.  He published about it soon afterward so it would not surprise me if a Unix virus was created shortly afterward.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/10903971441214777545'>Sorin T</a> <span class="comment-when">(February 25, 2008 9:27 AM)</span> If I remember well Fred Cohen is saying in his book also 1983 .. he also mentions about trying to talk with IBM/MS [and others] about MSDOS design which ignored totally such things [viruses] but with no success. And he always tried to show the problems in OS/net service design/architecture and not exploiting a particular bug ..</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p>Anonymous <span class="comment-when">(July 1, 2011 2:42 PM)</span> You can&#39;t mention Reflections on Trusting Trust without also mentioning David Wheeler&#39;s Countering Trusting Trust - http://www.dwheeler.com/trusting-trust/ . It&#39;s practically obligatory to include it as a rider :)</p>
+ </li></ul></div>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

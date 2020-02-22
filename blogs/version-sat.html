@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: Version SAT</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>Version SAT
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Tuesday, December 13, 2016.
+            
+          
+        </div>
+        </div>
+        </h1>
+        <style>
+sub { font-size: 70% }
+</style>
+
+
+<p>
+Dependency hell is NP-complete. But maybe we can climb out.
+
+<p>
+The package version selection problem is to find a set of dependencies that can be used to build a top-level package P that is complete (all dependencies satisfied) and compatible (no two incompatible packages are selected). There may be no such set, because of the diamond dependency problem: perhaps A needs B and C; B needs D version 1, not 2; and C needs D version 2, not 1. In this case, assuming it's not possible to choose both versions of D, there is no way to build A.
+
+<p>
+<center><img src="version-sat.svg"></center>
+
+<p>
+A package manager needs an algorithm to select package versions: when you run <code>apt-get install perl</code>, it may assume you mean the latest version of Perl, but then it has to find a way to satisfy Perl's transitive dependencies, or else to print an understandable explanation of why Perl can't be installed. You might reasonably wonder: how expensive is it to solve this problem, in the worst case? You probably don't want your package manager to take hours or days or years to decide whether it can install Perl.
+
+<p>
+Unfortunately, the version selection problem is NP-complete,
+which means that we're exceedingly unlikely to find an algorithm guaranteed to run quickly on every input.
+This post gives a proof of NP-completeness for version selection,
+looks at how existing package managers cope,
+and briefly discusses possible approaches to avoid an NP-complete task.
+<a class=anchor href="#proof"><h2 id="proof">Proof of NP-Completeness</h2></a>
+
+
+<p>
+To consider NP-completeness, we need to shift from our modern world of algorithms with rich outputs to the limited world of complexity theory,
+where algorithms have one boolean output: yes or no.
+In this world of complexity theory, we'll define the VERSION problem (they're always all caps) to ask whether there is a valid version selection.
+This boolean VERSION problem is only half of our original problem, and we can prove that it's NP-complete.
+To do so, we need to prove two separate facts: that VERSION is in NP and that VERSION is NP-hard.
+
+<p>
+A problem is in NP if every “yes” answer has an easily-checked polynomial-size explanation.
+
+<p>
+VERSION is in NP, because any “yes” answer can be explained by listing the selected package versions.
+This list is no bigger than the input and can be checked for correctness in time no worse than quadratic
+in the input (probably linear, depending on details of the computing model).
+
+<p>
+A problem is NP-hard if an efficient solution for that problem can be adapted into an efficient solution to <i>every</i> other problem in NP.
+That's a pretty tall order, but it is enough for us to show how to adapt an efficient solution for VERSION
+into an efficient solution for one other NP-hard problem (call it HARD) and then rely on the fact that
+someone else has proven that an efficient solution for HARD can be adapted into an efficient solution
+for every other problem in NP.
+
+<p>
+A useful example of an NP-complete (in NP and NP-hard) problem is 3-SAT.
+In 3-SAT, the input is a boolean formula over some number of boolean variables,
+constrained to be a conjunction (an AND) of some number of disjunctions (ORs)
+of three literals each, where a literal is a variable or its negation.
+For example, here is an input for 3-SAT (∧ means AND, ∨ means OR, and ¬ means NOT):
+
+<p>
+<center>(¬ <i>x</i><sub>1</sub> ∨ ¬ <i>x</i><sub>2</sub> ∨ ¬ <i>x</i><sub>3</sub>) <font style="font-size: 120%;">∧</font> (¬ <i>x</i><sub>2</sub> ∨ ¬ <i>x</i><sub>3</sub> ∨ ¬ <i>x</i><sub>4</sub>) <font style="font-size: 120%;">∧</font> (¬ <i>x</i><sub>2</sub> ∨ ¬ <i>x</i><sub>2</sub> ∨ <i>x</i><sub>3</sub>) <font style="font-size: 120%;">∧</font> (<i>x</i><sub>2</sub> ∨ <i>x</i><sub>2</sub> ∨ <i>x</i><sub>2</sub>)</center>
+
+<p>
+It is satisfiable by exactly one assignment to the variables—<i>x</i><sub>1</sub> = 0, <i>x</i><sub>2</sub> = 1, <i>x</i><sub>3</sub> = 1, <i>x</i><sub>4</sub> = 0—so the answer is yes.
+
+<p>
+If we extend it to add one more clause,
+
+<p>
+<center>(¬ <i>x</i><sub>1</sub> ∨ ¬ <i>x</i><sub>2</sub> ∨ ¬ <i>x</i><sub>3</sub>) <font style="font-size: 120%;">∧</font> (¬ <i>x</i><sub>2</sub> ∨ ¬ <i>x</i><sub>3</sub> ∨ ¬ <i>x</i><sub>4</sub>) <font style="font-size: 120%;">∧</font> (¬ <i>x</i><sub>2</sub> ∨ ¬ <i>x</i><sub>2</sub> ∨ <i>x</i><sub>3</sub>) <font style="font-size: 120%;">∧</font> (<i>x</i><sub>2</sub> ∨ <i>x</i><sub>2</sub> ∨ <i>x</i><sub>2</sub>) <font style="font-size: 120%;">∧</font> (<i>x</i><sub>1</sub> ∨ ¬ <i>x</i><sub>2</sub> ∨ <i>x</i><sub>4</sub>)</center>
+
+<p>
+then it is unsatisfiable by any assignment to the variables, so the answer is no.
+
+<p>
+The general form of a 3-SAT instance is a formula <i>F</i> that is the conjunction of
+clauses <i>C</i><sub>1</sub> through <i>C</i><sub><i>n</i></sub> over variables <i>V</i><sub>1</sub> through <i>V</i><sub><i>m</i></sub>,
+where each <i>C</i><sub><i>i</i></sub> is a disjunction of three literals, each of the form
+<i>x</i><sub><i>j</i></sub> or ¬ <i>x</i><sub><i>j</i></sub>   for some variable <i>x</i><sub><i>j</i></sub> .
+Duplicate literals in a clause are allowed, as in (¬ <i>x</i><sub>2</sub> ∨ ¬ <i>x</i><sub>2</sub> ∨ <i>x</i><sub>3</sub>) and (<i>x</i><sub>2</sub> ∨ <i>x</i><sub>2</sub> ∨ <i>x</i><sub>2</sub>) above.
+
+<p>
+We can convert any 3-SAT instance to a VERSION instance with the same answer.
+About the package manager we will assume only that:
+<ol>
+<li>
+A package can list zero or more packages or specific package versions as dependencies.
+<li>
+To install a package, all its dependencies must be installed.
+<li>
+Each version of a package can have different dependencies.
+<li>
+Two different versions of a package cannot be installed simultaneously.</ol>
+
+
+<p>
+We'll abbreviate package <code>P</code> version <code>V</code> as <code>P:V</code>
+(now using fixed-width font for packages to distinguish from the standard math italics for formulas).
+A dependency on <code>P:V</code> must be satisfied by version <code>V</code> exactly, not <code>V</code>-1 and not <code>V</code>+1.
+
+<p>
+Given a 3-SAT formula, we can create a package <code>F</code> representing the whole formula,
+packages <code>C1</code>, <code>C2</code>, ..., <code>C<i>n</i></code> representing each clause,
+and packages <code>X1</code>, <code>X2</code>, ..., <code>X<i>m</i></code> representing each variable.
+
+<p>
+Each package <code>X<i>j</i></code> has two versions <code>X<i>j</i>:0</code> and <code>X<i>j</i>:1</code>.
+As assumed above, <code>X<i>j</i>:0</code> and <code>X<i>j</i>:1</code> conflict and cannot both be installed.
+<code>X<i>j</i>:1</code> being installed corresponds to <i>x</i><sub><i>j</i></sub> = 1 in the original formula.
+
+<p>
+Package <code>C<i>i</i></code> has three versions numbered 0, 1, 2, each of which depends on a literal from the corresponding clause.
+For example, if <i>C</i><sub>5</sub> is (<i>x</i><sub>1</sub> ∨ ¬ <i>x</i><sub>2</sub> ∨ <i>x</i><sub>4</sub>), then <code>C5:0</code> depends on <code>X1:1</code>, <code>C5:1</code> depends on <code>X2:0</code>, and <code>C5:2</code> depends on <code>X4:1</code>.
+<code>C<i>i</i>:<i>k</i></code> being installed corresponds to <i>C</i><sub><i>i</i></sub>'s <i>k</i>’th literal being true (and therefore <i>C<sub>i</sub></i> being true) in the original formula.
+
+<p>
+Package <code>F</code> depends on <code>C1</code>, <code>C2</code>, ..., <code>C<i>n</i></code>.
+<code>F</code> being installed implies that all the <code>C<i>i</i></code> are installed, which corresponds to all the <i>C</i><sub><i>i</i></sub> being true and therefore to <i>F</i> being true.
+
+<p>
+If the package manager can find a way to install package <code>F</code>, then a satisfying assignment for the
+original formula can be read out from the install status of <code>X<i>j</i>:1</code> for each variable <i>x</i><sub><i>j</i></sub>.
+Similarly, if the formula is satisfiable, the satisfying assignment gives one way the package manager
+could successfully install <code>F</code>.
+Therefore, we've converted the 3-SAT instance into a corresponding VERSION instance with the same answer,
+which establishes that 3-SAT can be solved using VERSION, so VERSION is NP-hard.
+
+<p>
+Since VERSION is in NP and is NP-hard, VERSION is NP-complete.
+<a class=anchor href="#implementations"><h2 id="implementations">Implementations</h2></a>
+
+
+<p>
+The assumptions above are quite minimal:
+packages have a list of dependencies,
+a package's dependencies can change with its own version to version,
+a package's dependencies can be restricted to specific versions of those dependencies,
+and it is possible for two versions of a package to conflict with each other.
+That may be the bare minimum for a package manager to be useful.
+Some package managers might not allow a dependency to list a specific version,
+instead requiring a range, but we can easily change the version requirements 0 and 1
+to ≤ 0 and ≥ 1.
+Some package managers might not assume that different versions of a package
+conflict by default, but it must be at least possible to specify such a conflict:
+there can't be two <code>/bin/bash</code> on a Unix system, or two definitions of <code>printf</code> built into a C program.
+
+<p>
+The assumptions are true of every package manager I have looked at:
+Debian's APT, RedHat's RPM, Rust's Cargo, Node's npmjs, Java's Maven, Haskell's Cabal, and more.
+The implication is that these package managers faces an NP-complete task.
+Each must choose between possibly taking a very long time
+to decide on an installation strategy or possibly reporting an installable
+package as uninstallable.
+(Of course, a given implementation may inadvertently do both.)
+
+<p>
+Knuth writes in <a href="http://ptgmedia.pearsoncmg.com/images/9780134397603/samplepages/9780134397603.pdf">Volume 4, Fascicle 6</a>:<blockquote>
+
+<p>
+The story of satisfiability is the tale of a triumph of software engineering,
+blended with rich doses of beautiful mathematics. Thanks to elegant new data
+structures and other techniques, modern SAT solvers are able to deal routinely
+with practical problems that involve many thousands of variables, although such
+problems were regarded as hopeless just a few years ago.</blockquote>
+
+<p>
+In practice, it does seem that modern package managers are moving toward using SAT solvers:
+
+<p>
+<a href="http://0install.net/"><b>0install</b></a> started with heuristics but <a href="https://mail.mozilla.org/pipermail/rust-dev/2012-February/001378.html">found it necessary</a> to switch to <a href="http://0install.net/solver.html">a SAT solver</a>.
+
+<p>
+<a href="https://chef.io"><b>Chef</b></a>, a systems integration framework, uses the <a href="https://github.com/chef/dep-selector">dep-selector Ruby bindings</a> for the <a href="http://www.gecode.org/">Gecode constraint solver</a>.
+
+<p>
+<a href="https://pub.dartlang.org/"><b>Dart's pub</b></a> includes a <a href="https://github.com/dart-lang/pub/blob/master/lib/src/solver/backtracking_solver.dart">backtracking solver</a> that <a href="https://github.com/dart-lang/pub/issues/912">often takes a long time</a>.
+
+<p>
+<a href="https://wiki.debian.org/apt-get"><b>Debian's apt-get</b></a> uses heuristics by default but can <a href="http://www.dicosmo.org/MyOpinions/index.php?post/2014/10/30/139-saved-yet-another-time-by-an-external-solver-for-apt">invoke a SAT solver</a>
+and can
+<a href="http://www.dicosmo.org/MyOpinions/index.php?post/2014/03/05/137-user-preferences-for-dependency-solvers-a-short-survey-and-new-features-added-in-the-latest-aspcud-solver">take user preferences into account</a>.
+The Debian Quality Assurance team also <a href="http://www.dicosmo.org/MyOpinions/index.php?post/2014/05/21/138-static-analysis-of-software-component-repositories-from-debian-to-opam">runs a solver</a> to identify uninstallable packages in their repos.
+
+<p>
+<a href="https://www.eclipse.org/"><b>Eclipse</b></a> uses the <a href="http://www.sat4j.org/">sat4j SAT solver</a> to <a href="https://forge.ow2.org/forum/forum.php?forum_id=1369">manage installation of its plugins</a>.
+
+<p>
+<a href="https://lwn.net/Articles/503581/"><b>Fedora's DNF</b></a> (“Dandified yum”) uses <a href="https://fedoraproject.org/wiki/Features/DNF#Detailed_Description">a SAT solver</a> in an experimental mode.
+
+<p>
+<a href="https://github.com/freebsd/pkg"><b>FreeBSD's pkg</b></a>, also used by DragonflyBSD, uses <a href="https://github.com/freebsd/pkg/tree/master/external/picosat">the picosat SAT solver</a>.
+
+<p>
+<a href="https://opam.ocaml.org/"><b>OCaml's OPAM</b></a> can <a href="https://opam.ocaml.org/doc/Specifying_Solver_Preferences.html">invoke a SAT solver locally or remotely over a network</a>. Like with Debian's apt-get, OPAM's solver can take user preferences into account,
+and the OPAM repos are scanned for uninstallable packages.
+
+<p>
+<a href="https://www.opensuse.org/"><b>OpenSUSE</b></a>'s package manager uses <a href="https://github.com/openSUSE/libsolv">libsolv</a>, “a free package dependency solver using a satisfiability algorithm.” There is also OpenSUSE's zypper, which uses its own <a href="https://en.opensuse.org/openSUSE:Libzypp_satsolver">libzypp</a> SAT solver.
+
+<p>
+<a href="https://www.continuum.io/anaconda-overview"><b>Python's Anaconda</b></a> uses a <a href="https://www.continuum.io/blog/developer/new-advances-conda-0">SAT solver</a> but can <a href="https://groups.google.com/a/continuum.io/forum/#!topic/anaconda/CT7viK-fFDI">take a long time</a>.
+
+<p>
+<a href="https://blog.rust-lang.org/2016/05/05/cargo-pillars.html"><b>Rust's Cargo</b></a> uses a <a href="https://github.com/rust-lang/cargo/blob/8b5aec111926d1d03d2da32dd494e0fff073f870/src/cargo/core/resolver/mod.rs#L426">basic backtracking solver</a>. It also allows multiple versions of a crate to be linked into the final binary.
+
+<p>
+<a href="https://docs.oracle.com/cd/E36784_01/html/E36856/docinfo.html#scrolltoc"><b>Solaris's pkg</b></a>, also used by Illumos and sometimes known as IPS, <a href="https://blogs.oracle.com/barts/entry/satisfaction">uses the minisat SAT solver</a>.
+
+<p>
+<a href="https://github.com/apple/swift-package-manager"><b>Swift's package manager</b></a> uses a <a href="https://github.com/apple/swift-package-manager/blob/master/Sources/PackageGraph/DependencyResolver.swift#L518">basic backtracking solver</a>.
+
+<p>
+[I would like to add more package managers here. If you know details for one (or something here is wrong), please <a href="mailto:rsc@swtch.com">email me</a> or <a href="https://twitter.com/_rsc">send a tweet</a>. Thanks.]
+<a class=anchor href="#alternatives"><h2 id="alternatives">Alternatives?</h2></a>
+
+
+<p>
+How should we react to the fact that package version selection is NP-complete?
+One reaction is to embrace the complexity and be thankful that
+SAT solvers are as good as they are.
+Another reaction is to ask whether this can possibly be a good idea.
+Maybe we should not be building tools that require solving this problem.
+Maybe something has gone wrong in the way we develop software.
+
+<p>
+If package version selection is NP-complete, that means
+the search space of possible package combinations
+is too large and intricate for efficient systematic analysis;
+what about efficient systematic testing?
+If a search finds a conflict-free combination, why should we believe the combination will work?
+The absence of a version conflict may indicate only that the combination is untested.
+If a search doesn't find a conflict-free combination, how can that failure
+be explained to a developer in a way that makes it clear
+what to do next?
+Software is hard enough to get right without admitting
+NP-complete problems into our software configuration decisions.
+Let's reexamine how we got here and how we might escape.
+
+<p>
+The proof above depends on these of assumptions, copied from above:
+<ol>
+<li>
+A package can list zero or more packages or specific package versions as dependencies.
+<li>
+To install a package, all its dependencies must be installed.
+<li>
+Each version of a package can have different dependencies.
+<li>
+Two different versions of a package cannot be installed simultaneously.</ol>
+
+
+<p>
+The conventional wisdom, as I suggested above, is that these are roughly
+the “the bare minimum for a package manager to be useful,”
+but maybe we can find a way to reduce them after all.
+
+<p>
+One way to avoid NP-completeness is to attack assumption 1:
+what if, instead of allowing a dependency to list specific package versions,
+a dependency can only specify a minimum version?
+Then there is a trivial algorithm for finding the packages to use:
+start with the newest version of what you want to install,
+and then get the newest version of all its dependencies,
+recursively.
+In the original diamond dependency at the beginning of this article,
+A needs B and C, and B and C need different versions of D.
+If B needs D 1.5 and C needs D 1.6, the build can use D 1.6 for both.
+If B doesn't work with D 1.6,
+then either the version of B we're considering is buggy or D 1.6 is buggy.
+The buggy version should be removed from circulation entirely,
+and then a new released version should fix the problem.
+Adding a conflict to the dependency graph instead
+is like documenting a bug instead of fixing it.
+
+<p>
+Another way to avoid NP-completeness is to attack assumption 4:
+what if two different versions of a package could be installed
+simultaneously?
+Then almost any search algorithm will find a combination of
+packages to build the program; it just might not be the
+smallest possible combination (that's still NP-complete).
+If B needs D 1.5 and C needs D 2.2, the build can include both
+packages in the final binary, treating them as distinct packages.
+I mentioned above that there can't be two definitions of <code>printf</code> built into a C program,
+but languages with explicit module systems should have no
+problem including separate copies of D (under different fully-qualified names) into a program.
+
+<p>
+Another way to avoid NP-completeness is to combine the previous two.
+As the examples already hint at,
+if packages follow <a href="http://semver.org/">semantic versioning</a>,
+a package manager might automatically use the newest version
+of a dependency within a major version but then treat
+different major versions as different packages.
+
+<p>
+One rationale for such restrictions is that developers are likely not thinking
+about the entire space of all possible package combinations when building
+or testing software. It would help for the developers and their tools to
+agree about how software is built.
+If any of these approaches can be made to work in practice,
+it could go a long way toward simplifying the operation
+and understandability of language package managers.
+<a class=anchor href="#related"><h2 id="related">Related Work</h2></a>
+
+
+<p>
+Proofs that Debian and RedHat package installation are both NP-complete are given in
+“<a href="https://hal.inria.fr/hal-00697463">EDOS deliverable WP2-D2.1: Report on Formal Management of Software Dependencies</a>” (2005), pages 49-50.
+The difficult step in the reduction of 3-SAT to package installation
+is how to construct a disjunction.
+The EDOS proofs encode the disjunction using the package manager's
+ability to specify a list of alternatives for a single dependency,
+either directly (in Debian) or using “provides” directives (in RedHat).
+For example, these systems allow a pseudo-package <code>text-editor</code>
+to be defined that is considered installed when any of the real packages
+<code>ed</code>, <code>vi</code>, or <code>acme</code> is installed.
+
+<p>
+The dependency specifications for a language package manager
+like Rust's Cargo are dramatically simpler than those for Debian and RedHat,
+and so the EDOS proofs do not apply.
+One might therefore hope that language package managers face
+an easier (not NP-complete) job.
+The new proof above dashes that hope.
+(One way to view the proof above is that it simulates the “provides” directive
+in the last example by defining a <code>text-editor</code> package with three versions,
+one of which depends on <code>ed</code>, one on <code>vi</code>, and one on <code>acme</code>.)
+
+<p>
+By encoding the disjunction in the changing dependencies
+of different versions of a package, the new proof works without modification
+for both Debian's and RedHat's package managers but also applies to essentially
+any foreseeable operating system or language package manager.
+I suspect that most language package manager authors assumed
+the problem they faced was NP-complete, but I've been unable to find
+prior written proofs of that fact.
+
+<p>
+A few dependency systems use constraint solvers instead of SAT solvers,
+but the underlying problem is <a href="https://en.wikipedia.org/wiki/Schaefer%27s_dichotomy_theorem">still NP-complete</a>.
+
+<p>
+In 2008, Daniel Burrows wrote a blog post about <a href="http://web.archive.org/web/20160326062818/http://algebraicthunk.net/~dburrows/blog/entry/package-management-sudoku/">using dpkg to solve Sudoku problems</a>.
+
+<p>
+Thanks to Sam Boyer for pointing me at the EDOS report
+and for his excellent <a href="https://medium.com/@sdboyer/so-you-want-to-write-a-package-manager-4ae9c17d9527">overview of package management</a>.
+
+<p>
+Roberto Di Cosmo has written a number of followups to the EDOS report,
+<a href="http://www.dicosmo.org/Publications/publi-by-topic.html">listed here</a>, in particular,
+“<a href="http://www.dicosmo.org/Articles/2012-AbateDiCosmoTreinenZacchiroli-Jss.pdf">Dependency solving: a separate concern in component evolution management</a>,”
+which contains an updated proof.
+That line of research applies SAT solvers but also works to take user preferences into account.
+
+<p>
+Another related line of work is “<a href="https://cseweb.ucsd.edu/~lerner/papers/opium.pdf">OPIUM: Optimal Package Install/Uninstall Manager</a>” by Tucker et al., ICSE 2007. OPIUM was the <a href="http://0install.net/solver.html#idp172528">starting point for 0install's solver</a>.
+
+<p>
+Jaroslav Tulach discovered the <a href="http://wiki.apidesign.org/wiki/LibraryReExportIsNPComplete">same proof as above in 2009</a>.
+Thanks to HN reader <a href="https://news.ycombinator.com/item?id=13167981">edwintorok for the link</a>.
+
+<p>
+The <a href="http://lambda-the-ultimate.org/node/3588">discussion of Tulach's proof on LtU</a> mentions Daniel Burrows's 2005 paper “<a href="https://people.debian.org/~dburrows/model.pdf">Modelling and Resolving Software Dependencies</a>,” but that paper's proof is more like the EDOS proof than Tulach's proof / the proof above.
+
+<p>
+Many readers sent additional links to references and to package managers with SAT solvers. Thanks to all.
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

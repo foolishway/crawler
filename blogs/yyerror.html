@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: Generating Good Syntax Errors</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>Generating Good Syntax Errors
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Wednesday, January 27, 2010.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+<p><p class=lp>
+One of the great religious debates in compiler writing is whether
+you should use parser generators like yacc and its many 
+descendants or write parsers by hand, usually using 
+recursive descent.  
+On the one hand, using parser generators means you
+have a precise definition of the language that you are
+parsing, and a program does most of the grunt work for you.
+On the other hand, the proponents of hand-written
+recursive descent parsers argue that parser generators
+are overkill, that parsers are easy enough to write by hand,
+and that the result is easier to understand, more efficient, and
+can give better error messages when presented with
+syntactically invalid programs.
+</p>
+
+<p class=pp>
+Like in most religious debates, the choice
+of side seems to be determined by familiarity more than anything else.
+I knew how to use yacc before
+I knew how to write a parser by hand,
+which put me solidly on the parser generator side of the fence.
+Now that I do know how to apply both techniques, I'd still
+rather use a parser generator.
+In fact, I've worked on projects where I've written parser
+generators rather than write a parser by hand.
+Good notation counts for a lot, as we shall see.
+</p>
+
+<p class=pp>
+In <i><a href="http://books.google.com/books?id=nneBa6-mWfgC&printsec=frontcover&dq=coders+at+work&ei=RNRfS5fzMIO-zATqi-WlBw&cd=1#v=onepage&q=yacc&f=false">Coders at Work</a></i>,
+Ken Thompson talks to Peter Seibel about <i>yacc</i> and <i>lex</i>:
+</p>
+
+<blockquote>
+<p class=lp>
+<b>Seibel:</b> And are there development tools that just make you happy to program?</p>
+
+<p class=lp>
+<b>Thompson:</b> I love yacc.  I just love yacc.  It just does exactly what you
+want done.  Its complement, lex, is horrible.  It does nothing you want done.
+</p>
+
+<p class=lp>
+<b>Seibel:</b> Do you use it anyway or do you write your lexers by hand?
+</p>
+
+<p class=lp>
+<b>Thompson:</b>  I write my lexers by hand.  Much easier.
+</p>
+</blockquote>
+
+<p class=lp>
+Many of the objections raised by the hand-written parser camp
+are similar to Thompson's objection to lex&#8212;the tool doesn't do what you want&#8212;but
+there's no fundamental reason a tool can't.
+For example, the spurious conflicts that an LALR(1) algorithm produces
+are definitely hard to understand, but if you replace it with 
+LR(1) or GLR(1), you get a more useful tool.
+And if you do learn how to work within the LALR(1) algorithm,
+even yacc is very powerful.
+</p>
+
+<p class=pp>
+The objection to parser generates that seems to resonate most is that 
+generators like yacc produce inadequate error messages,
+little more than &ldquo;syntax error.&rdquo;
+Better error messages were one of the key benefits hoped for
+when <a href="http://gcc.gnu.org/ml/gcc/2000-10/msg00573.html">g++ converted</a>
+from a yacc-based C++ parser to a hand-written one
+(and to be fair, C++ syntax is nearly impossible to parse
+with any tool; the many special cases cry out for hand-written code).
+Here the objection seems harder to work around: the parser
+internally gets compiled into an automaton&#8212;usually a big table of numbers&#8212;that
+moves from state to state as it processes input tokens.
+If at some point it can't find a next state to go to, it reports an error.
+How could you possibly turn that into a good message?
+</p>
+
+<p class=pp>
+Clinton Jeffery showed how in a paper published in ACM TOPLAS in 2003
+titled &ldquo;<a href="http://people.cs.vt.edu/~haebang//coursework/PL/summary.pdf">Generating LR Syntax Error Messages from Examples</a>.&rdquo;  As you can guess from the title,
+the idea is to introduce a training stage after the parser is generated
+but before it is used for real.
+In that stage, you feed examples of syntax errors into the parser
+and look at what state it ends up in when it detects the error,
+and maybe also what the next input token is.
+If the automaton hits an error in that state (and with that input token) during real use,
+you can issue the message appropriate to the example.
+The important part is that the parser states are basically
+an abstract summary of the surrounding context, so it's
+reasonable to treat errors in a particular state with a single message.
+For example, suppose you find that this Go program
+</p>
+
+<pre class=indent>
+package main
+
+import (
+ "fmt",
+ "math"
+)
+</pre>
+
+<p class=lp>causes a syntax error at the comma, in state 76.
+In the parser, that state means that you're in the middle of
+an import block and expecting to see a string constant.
+The state abstracts that context, so you'd end up in the same
+state if you were parsing this erroneous program:
+</p>
+
+<pre class=indent>
+package fmt
+
+import ( "strings"; "testing", "xgb" )
+</pre>
+
+<p class=lp>
+Having told the parser that the appropriate error message
+for the first program is &ldquo;unexpected , during import block,&rdquo;
+the parser will use the same message for the second program.
+</p>
+
+<p class=pp>
+It's an elegant idea, and the implementation can be kept
+on the side, without adding any complexity to the grammar itself.
+I heard about this idea through the grapevine years ago
+(in 2000, I think) but had never gotten a chance to try it
+until this week.
+</p>
+
+<p class=pp>
+There are three Go parsers: Ian Lance Taylor wrote a hand-written
+recursive descent parser in C++ for gccgo,
+Robert Griesemer wrote a hand-written recursive descent parser
+in Go (<code>import "<a href="http://golang.org/pkg/go/parser">go/parser</a>"</code>)
+for <a href="http://golang.org/cmd/godoc/">godoc</a> and 
+<a href="http://golang.org/cmd/gofmt/">gofmt</a>,
+and Ken Thompson wrote a yacc-based parser in C for the
+gc compiler suite.
+</p>
+
+<p class=pp>
+On Monday night, I <a href="http://code.google.com/p/go/source/detail?r=7427b07b504271532d96c630d3dc37aef4d06c7d">implemented Jeffery's idea in the gc compiler suite</a>.
+The gc compilers use bison, the GNU implementation of yacc.
+Bison doesn't support this kind of error management natively,
+but it is not hard to adapt.
+Changing bison would require distributing a new version
+of bison; instead, my implementation post-processes bison's output.
+</p>
+
+<p class=pp>
+The examples are in a new file <code><a href="http://code.google.com/p/go/source/browse/src/cmd/gc/go.errors?spec=svn7427b07b504271532d96c630d3dc37aef4d06c7d&r=7427b07b504271532d96c630d3dc37aef4d06c7d">go.errors</a></code>.
+Because the lexer is written by hand, it's not available in the
+simulation, so the examples are token name sequences
+rather than actual program fragments.  In token lists, the
+program above and its corresponding error message are:
+</p>
+
+<pre class=indent>
+% loadsys package LIMPORT '(' LLITERAL import_package import_there ','
+"unexpected , during import block",
+</pre>
+
+<p class=lp>
+Understanding the tokens on the first line requires knowing what the various 
+grammar token names mean, but they basically mimic the
+syntax, and this tool is targeted at the people working on
+the grammar anyway.
+An <a href="http://code.google.com/p/go/source/browse/src/cmd/gc/bisonerrors?spec=svn7427b07b504271532d96c630d3dc37aef4d06c7d&r=7427b07b504271532d96c630d3dc37aef4d06c7d">awk program</a> loads bison's tables 
+from its debugging dump <code>y.output</code> and
+then processes the <code>go.errors</code> file, replacing
+each line like the above with the number of the offending
+state and input token.
+That produces a table that can be linked into the compiler
+and consulted when a syntax error is encountered.
+If the state and input token match an entry in the table,
+the better error is used instead of a plain <code>syntax error</code>.
+</p>
+
+<p class=pp>
+That was an outsized amount of work to <a href="http://code.google.com/p/go/issues/detail?id=522">close one bug</a>, but now
+it's easy to add better messages for other common situations.
+For example, the fact that only the short <code>:=</code> declaration
+form is allowed in <code>for</code> initializers sometimes trips up 
+new Go programmers.  When presented with this program:
+</p>
+
+<pre class=indent>
+package main
+
+import "fmt"
+
+func main() {
+ fmt.Printf("hello, world\n")
+ for var i = 0; i &lt; 10; i++ {
+  fmt.Println(i)
+ }
+}
+</pre>
+
+<p class=lp>the compiler used to just say there was a syntax error on line 7, but
+now it explains:</p>
+
+<pre class=indent>
+$ 6g x.go
+x.go:7: syntax error: var declaration not allowed in for initializer
+</pre>
+
+<p class=lp>because of this stanza in <code>go.errors</code>:</p>
+
+<pre class=indent>
+% loadsys package imports LFUNC LNAME '(' ')' '{' LFOR LVAR LNAME '=' LNAME
+"var declaration not allowed in for initializer",
+</pre>
+
+<p class=lp>Gccgo and gofmt give more traditional
+token-based errors:
+</p>
+
+<pre class=indent>
+$ gccgo x.go
+x.go:7:6: error: expected operand
+...
+
+$ gofmt x.go
+x.go:7:6: expected operand, found 'var'
+</pre>
+
+<p class=lp>
+What's interesting isn't that neither has bothered to handle this
+as a special case yet.  What's interesting is to consider the work
+required to do so.  Changing either would require 
+understanding the corresponding hand-written parser well enough to
+find the right place to put the special case.
+With the example-based approach, you just write an example,
+and the tool figures out where in the parser it needs to go.
+</p></p>
+
+
+
+
+
+<div class="comments">
+  <div class="comments-header old">
+    <p>(Comments originally posted via Blogger.)</p>
+  </div>
+  <div class="comments-body">
+    <div id="plus-comments">
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/10559947643606684495'>Barry Kelly</a> <span class="comment-when">(January 27, 2010 6:36 PM)</span> Another argument for hand-writing your parser is when extending the language in ways that create syntax ambiguities that are resolved using semantic tests. Parser generators that have semantic predicates do exist, but there comes a point when you need to have a really intimate knowledge of exactly what the compiler compiler is doing and what output it&#39;s going to generate, so that you can create the right input to generate just so. At that point, the compiler compiler isn&#39;t saving you much work.<br /><br />The objection I have to compiler compilers is more along these lines. It&#39;s the ickiness of having little pieces of code being pasted into a template by a tool that has no semantic knowledge of that code, much like a dumb string processor, and having to deal with the auto-generated code. Making sure that the right pieces of text flow to the right locations starts feeling like a plumbing job, where a tool is doing the pipe layout, but you still need to be a plumber.<br /><br />The best of both worlds, if it can be called that, would be something along the lines of an embedded DSL. Consider parser combinators in functional programming languages, for example. An idiom where you can both use a concise notation for the syntax, but also in the same language that&#39;s used for semantic checking and processing, etc. This would be my preferred model. It doesn&#39;t work out particularly well in C or C++, though, hacks like Boost Spirit aside.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/16120300424669884662'>AKS</a> <span class="comment-when">(January 28, 2010 3:47 AM)</span> Another question I had on using parser generator is about languages that evolve over time.<br /><br />for eg. version 2 of the language might introduce a new keyword and that keyword was an identifier in the original language. <br />Now we have two slightly different languages to parse (we , of course assume that we are not abandoning all the code written in version 1 of the language)<br />After several such language iterations , wouldn&#39;t the parser generator &quot;input file&quot; would be difficult to maintain.<br />or we might be forced to maintain multiple versions of the parser.<br />An error in one version of language might not be an error in another version of language.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/15376943686783326713'>LKRaider</a> <span class="comment-when">(February 3, 2010 8:53 AM)</span> &quot;An error in one version of language might not be an error in another version of language.&quot;<br /><br />That how it should be. Or would you prefer a code full of exceptional cases to maintain, each version getting more intricate and complex? Doesn&#39;t seem like a good way forward to me.</p>
+ </li></ul></div>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

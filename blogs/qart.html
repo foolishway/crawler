@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: QArt Codes</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>QArt Codes
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Thursday, April 12, 2012.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+<style type='text/css'>
+.matrix {
+	font-family: sans-serif;
+	font-size: 0.8em;
+}
+table.matrix {
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+.matrix td {
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	border-left: 2px solid white;
+	border-right: 2px solid white;
+	text-align: center;
+	color: #aaa;
+}
+.matrix td.gray {
+	color: black;
+	background-color: #ddd;
+}
+</style>
+
+<p class=pp>
+QR codes are 2-dimensional bar codes that encode arbitrary
+text strings.  A common use of QR codes is to encode URLs so
+that people can scan a QR code (for example, on an advertising poster,
+<a href="http://www.brandchannel.com/home/post/QR-Marketing-Google-Maps.aspx">building roof</a>, <a href="http://www.dailymail.co.uk/femail/article-2023726/Beach-volleyball-stars-sign-deal-advertising-bikini-clad-behinds.html">volleyball bikini</a>, <a href="http://www.flickr.com/photos/fluidforms/3524861901/">belt buckle</a>, or <a href="http://wtfqrcodes.com/post/18551054478/look-in-the-sky-its-a-bird-its-a-plane-its-the">airplane banner</a>)
+to load a web site on a cell phone
+instead of having to &ldquo;type&rdquo; in a URL.
+</p>
+
+<p class=pp>
+QR codes are encoded using <a href="/field">Reed-Solomon error-correcting codes</a>, so that
+a QR scanner does not have to see every pixel correctly in order
+to decode the content.  The error correction makes it possible
+to introduce a few errors (fewer than the maximum that the algorithm
+can fix) in order to make an image.
+For example, in 2008, <a href="http://whomwah.com/2008/03/12/more-fun-with-qr-codes-and-the-bbc-logo/">Duncan Robertson</a> took a QR code for &ldquo;http://bbc.co.uk/programmes&rdquo; (left) and introduced errors in the form of a BBC logo (right):
+</p>
+
+<center>
+<img src="qr-bbc.png" />
+</center>
+
+<p class=lp>
+That's a neat trick and a pretty logo, but it's uninteresting from
+a technical standpoint.  Although the BBC logo pixels look like QR code
+pixels, they are not contribuing to the QR code.
+The QR reader can't tell much difference between the
+BBC logo and the Union Jack.
+There's just a bunch of noise in the middle either way.
+</p>
+
+<center>
+<img src="qr-bbc1.png" />
+</center>
+
+<p class=lp>
+Since the BBC QR logo appeared, there have been many imitators.
+Most just slap an obviously out-of-place logo in the middle of the
+code.  This <a href="http://blog.cliffano.com/2009/05/18/qr-code-usage-in-japan/">Disney poster</a>
+is notable for being more in the spirit of the BBC code.
+</p>
+
+<p class=pp>
+There's a different way to put pictures in QR codes.
+Instead of scribbling on redundant pieces and relying on error
+correction to preserve the meaning, we can engineer the
+encoded values to create the picture in a code with no inherent errors,
+like these:
+</p>
+
+<center>
+
+<img src="qart1.png" />
+<img src="qart2.png" />
+<img src="qart3.png" />
+<img src="qart4.png" />
+
+</center>
+
+<p class=lp>
+This post explains the math behind making codes like these, which I call QArt codes.
+I have published the Go programs that generated these codes at
+<a href="http://code.google.com/p/rsc/source/browse/qr">code.google.com/p/rsc</a>
+and created a <a href="/qr/draw">web site for creating these codes</a>.
+</p>
+
+<h3>
+Background
+</h3>
+
+<p class=lp>For error correction, QR uses Reed-Solomon coding
+(like nearly everything else).
+For our purposes, Reed-Solomon coding has two important properties.
+First, it is what coding theorists call a <i>systematic code</i>: you can
+see the original message in the encoding.
+That is, the Reed-Solomon encoding of &ldquo;hello&rdquo; is &ldquo;hello&rdquo; followed by some error-correction bytes.
+Second, Reed-Solomon encoded messages can be XOR'ed:
+if we have two different Reed-Solomon encoded blocks
+b<sub>1</sub> and b<sub>2</sub> corresponding to messages m<sub>1</sub> and m<sub>2</sub>, 
+b<sub>1</sub> ⊕ b<sub>2</sub> is also a Reed-Solomon encoded block; it corresponds
+to the message m<sub>1</sub> ⊕ m<sub>2</sub>.  (Here, ⊕ means XOR.)
+If you are curious about why these two properties are true,
+see my earlier post, <a href="field">Finite Field Arithmetic and Reed-Solomon Coding</a>.
+</p>
+
+<h3>QR Codes</h3>
+
+<p class=lp>
+A QR code has a distinctive frame that help both people and computers
+recognize them as QR codes.  The details of the frame depend on the
+exact size of the code—bigger codes have room for more bits—but you
+know one when you see it: the outlined squares are the giveaway.
+Here are QR frames for a sampling of sizes:
+</p>
+
+<center>
+
+<img src="qart16.png" />
+</center>
+
+<p class=lp>
+The colored pixels are where the Reed-Solomon-encoded data bits go.
+Each code may have one or more Reed-Solomon blocks, depending on
+its size and the error correction level.  The pictures show the bits from
+each block in a different color.
+The L encoding is the lowest amount of redundancy, about 20%.
+The other three encodings increase the redundancy, using 38%, 55%, and 65%.
+</p>
+
+<center>
+
+<img src="qart17.png">
+</center>
+
+<p class=lp>(By the way, you can read the redundancy level from
+the top pixels in the two leftmost columns.  If black=0 and white=1, then
+you can see that 00 is L, 01 is M, 10 is Q, and 11 is H.
+Thus, you can tell that the QR code <a href="http://www.flickr.com/photos/johncarney/3515851216/">on the T-shirt in this picture</a>
+is encoded at the highest redundancy level,
+while <a href="http://store.xkcd.com/xkcd/#QRCodeShirt">this shirt</a> uses the lowest level and therefore might take longer or be harder to scan.
+</p>
+
+<p class=pp>
+As I mentioned above, the original message bits are included directly
+in the message's Reed-Solomon encoding.
+Thus, each bit in the original message corresponds to a pixel in the QR code.
+Those are the lighter pixels in the pictures above.
+The darker pixels are the error correction bits.
+The encoded bits are laid down in a vertical boustrophedon pattern in
+which each line is two columns wide, starting at the bottom right corner
+and ending on the left side:
+</p>
+
+<center>
+
+<img src="qart18.png" />
+</center>
+
+<p class=lp>
+We can easily work out where each message bit ends up in the QR code.
+By changing those bits of the message, we can change those pixels and draw a picture.
+There are, however, a few complications that make things interesting.
+</p>
+
+<h3>QR Masks</h3>
+
+<p class=lp>
+The first complication is that the encoded data is XOR'ed with an obfuscating
+mask to create the final code.  There are eight masks:
+</p>
+
+<center>
+
+<img src="qart19.png" />
+</center>
+
+<p class=lp>An encoder is supposed to choose the mask that best hides
+any patterns in the data, to keep those patterns from being mistaken
+for framing boxes.  In our encoder, however, we can choose
+a mask before choosing the data.  This violates the spirit of the spec
+but still produces legitimate codes.
+</p>
+
+<h3>QR Data Encoding</h3>
+
+<p class=lp>The second complication is that we want the QR code's message
+to be intelligible.
+We could draw arbitrary pictures using arbitrary 8-bit data, but when
+scanned the codes would produce binary garbage.
+We need to limit ourselves to data that produces sensible messages.
+Luckily for us, QR codes allow messages to be written using a few
+different alphabets.  One alphabet is 8-bit data, which would require binary
+garbage to draw a picture.  Another is numeric data, in which every
+run of 10 bits defines 3 decimal digits.  That limits our choice of 
+pixels slightly: we must not generate a 10-bit run with a value above 999.
+That's not complete flexibility, but it's close: 9.96 bits of freedom out of 10.
+If, after encoding an image, we find that we've generated an invalid number,
+we pick one of the 5 most significant bits at random—all of them must be 1s
+to make an invalid number—hard wire that bit to zero, and start over.
+</p>
+
+<p class=pp>Having only decimal messages would still not be very interesting:
+the message would be a very large number.
+Luckily for us (again), QR codes allow a single message to be
+composed from pieces using different encodings.  The codes I have
+generated consist of an 8-bit-encoded URL ending in a #
+followed by a numeric-encoded number that draws the actual picture:
+</p>
+
+<center>
+http://swtch.com/pjw/#123456789...
+</center>
+
+<p class=lp>
+The leading URL is the first data encoded; it takes up the right
+side of the QR code.  The error correction bits take up the left side.
+</p>
+
+<p class=pp>When the phone scans the QR code, it sees a URL; loading it in a 
+browser visits the base page and then looks for an internal anchor on
+the page with the given number.  The browser won't find such an anchor,
+but it also won't complain.</p>
+
+<p class=pp>The techniques so far let us draw codes like this one:</p>
+
+<center>
+<img src="qart5.png" />
+<img src="qart6.png" />
+</center>
+
+<p class=lp>The second copy darkens the pixels that we have no
+control over: the error correction bits on the left and the URL prefix on the right.
+I appreciate the cyborg effect of Peter melting into the binary noise,
+but it would be nice to widen our canvas.
+</p>
+
+<h3>Gauss-Jordan Elimination</h3>
+
+<p class=lp>
+The third complication, then, is that we want to draw using
+more than just the slice of data pixels in the middle of the image.
+Luckily, we can.
+</p>
+
+<p class=pp>
+I mentioned above that Reed-Solomon
+messages can be XOR'ed:
+if we have two different Reed-Solomon encoded blocks
+b<sub>1</sub> and b<sub>2</sub> corresponding to messages m<sub>1</sub> and m<sub>2</sub>, 
+b<sub>1</sub> ⊕ b<sub>2</sub> is also a Reed-Solomon encoded block; it corresponds
+to the message m<sub>1</sub> ⊕ m<sub>2</sub>.
+(In the notation of the <a href="/field">previous post</a>, this happens because
+Reed-Solomon blocks correspond 1:1 with multiples of g(x).
+Since b<sub>1</sub> and b<sub>2</sub> are multiples of g(x), their sum is
+a multiple of g(x) too.)
+This property means that we can build up a valid Reed-Solomon block
+from other Reed-Solomon blocks.
+In particular, we can construct the sequence of blocks
+b<sub>0</sub>, b<sub>1</sub>, b<sub>2</sub>, ..., where b<sub>i</sub> is the block whose data bits are
+all zeros except for bit i and whose error correction bits
+are then set to correspond to a valid Reed-Solomon block.
+That set is a <a href="http://en.wikipedia.org/wiki/Basis_(linear_algebra)">basis</a> for the entire vector space of valid Reed-Solomon blocks.
+Here is the basis matrix for the space of blocks with 2 data bytes and 2 checksum bytes:
+</p>
+
+<center>
+<table class='matrix' cellspacing=0 cellpadding=0 border=0>
+<tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td>1<td><td>1<td><td><td>1<td>1<td>1<td><td><td>1<td><td><td>1<td>1<td>1<tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td>1<td>1<td><td>1<td>1<td>1<td><td>1<td>1<td><td><td>1<td>1<td>1<td><td>1<tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td>1<td>1<td>1<td><td><td><td><td><td>1<td>1<td><td><td><td><td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td><td>1<td>1<td>1<td><td><td><td><td><td>1<td>1<td><td><td><td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td><td><td>1<td>1<td>1<td><td><td><td><td><td>1<td>1<td><td><td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td><td><td><td>1<td>1<td>1<td><td><td><td><td><td>1<td>1<td><td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td><td><td><td><td>1<td>1<td>1<td><td><td><td><td><td>1<td>1<td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td><td><td><td><td><td>1<td>1<td>1<td><td><td><td><td><td>1<td>1<td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td>1<td><td><td>1<td>1<td>1<td><td>1<td><td><td><td>1<td>1<td>1<td><td>1<tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td>1<td>1<td><td><td><td><td><td><td>1<td><td><td><td><td><td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td><td>1<td>1<td><td><td><td><td><td><td>1<td><td><td><td><td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td><td><td>1<td>1<td><td><td><td><td><td><td>1<td><td><td><td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td class='gray'><td><td><td><td>1<td>1<td><td><td><td><td><td><td>1<td><td><td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td class='gray'><td><td><td><td><td>1<td>1<td><td><td><td><td><td><td>1<td><td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td class='gray'><td><td><td><td><td><td>1<td>1<td><td><td><td><td><td><td>1<td><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'><td class='gray'>1<td><td><td><td><td><td><td>1<td>1<td><td><td><td><td><td><td>1<td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+</table>
+</center>
+
+<p class=lp>
+The missing entries are zeros.  The gray columns highlight the
+pixels we have complete control over: there is only one row 
+with a 1 for each of those pixels.
+Each time we want to change such a pixel,
+we can XOR our current data with its row to change that pixel,
+not change any of the other controlled pixels, and
+keep the error correction bits up to date.
+</p>
+
+<p class=pp>
+So what, you say.  We're still just twiddling data bits.
+The canvas is the same.
+</p>
+
+<p class=pp>
+But wait, there's more!
+The basis we had above lets us change individual
+data pixels, but we can XOR rows together to create 
+other basis matrices that trade data bits for error correction bits.
+No matter what, we're not going to increase
+our flexibility—the number of pixels we have direct control over
+cannot increase—but we can redistribute that flexibility throughout
+the image, at the same time smearing the uncooperative noise
+pixels evenly all over the canvas.
+This is the same procedure as Gauss-Jordan elimination,
+the way you turn a matrix into row-reduced echelon form.
+</p>
+
+<p class=pp>
+This matrix shows the result of trying to assert control
+over alternating pixels (the gray columns):
+</p>
+
+<center>
+<table class='matrix' cellspacing=0 cellpadding=0 border=0>
+<tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'>1<td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'>1<td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td>1<td class='gray'>1<td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'>1<td>1<td class='gray'><td>1<td class='gray'><td>1<tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'>1<td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'>1<td><td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td><td class='gray'><td><td class='gray'><td><td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'>1<td><td class='gray'><td><td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'>1<td><td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'>1<td>1<td class='gray'><td>1<td class='gray'><td><td class='gray'><td>1<td class='gray'>1<td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'><td>1<tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td><td class='gray'><td><td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'>1<td><td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'>1<td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'>1<td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td>1<td class='gray'><td>1<td class='gray'><td>1<tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+<tr>
+<td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><td class='gray'><td>1<td class='gray'><td><td class='gray'><td><td class='gray'><td><tr height=1 bgcolor='#bbbbbb'><td colspan=32>
+</table>
+</center>
+
+<p class=lp>
+The matrix illustrates an important point about this trick:
+it's not completely general.
+The data bits are linearly independent, but there are 
+dependencies between the error correction bits
+that mean we often can't have every pixel we ask for.
+In this example, the last four pixels we tried to get
+were unavailable: our manipulations of the rows to
+isolate the first four error correction bits zeroed out
+the last four that we wanted.
+</p>
+
+<p class=pp>
+In practice, a good approach is to create
+a list of all the pixels in the Reed-Solomon block sorted by
+how useful it would be to be able to set that pixel.
+(Pixels from high-contrast regions of the image are less
+important than pixels from low-contrast regions.)
+Then, we can consider each pixel in turn, and if the basis matrix 
+allows it, isolate that pixel.
+If not, no big deal, we move on to the next pixel.
+</p>
+
+<p class=pp>
+Applying this insight, we can build wider but noisier
+pictures in our QR codes:
+</p>
+
+<center>
+<img src="qart7.png">
+<img src="qart8.png">
+</center>
+
+<p class=lp>
+The pixels in Peter's forehead and on his right side have
+been sacrificed for the ability to draw the full width of the picture.
+</p>
+
+<p class=pp>
+We can also choose the pixels we want to control at random,
+to make Peter peek out from behind a binary fog:
+</p>
+
+<center>
+<img src="qart9.png">
+<img src="qart10.png">
+<img src="qart11.png">
+</center>
+
+<h3>Rotations</h3>
+
+<p>
+One final trick.  QR codes have no required orientation. 
+The URL base pixels
+that we have no control over are on the right side in the
+canonical orientation, but we can rotate the QR code to 
+move them to other edges.
+</p>
+
+<center>
+<img src="qart12.png">
+<img src="qart13.png">
+<br>
+<img src="qart14.png">
+<img src="qart15.png">
+</center>
+
+<h3>Further Information</h3>
+
+<p class=lp>
+The source code for this post, including the web server, is at 
+<a href="https://godoc.org/rsc.io/swtch/qrweb">rsc.io/swtch/qrweb</a>;
+the App Engine integration is at
+<a href="https://godoc.org/rsc.io/swtch/app/blog">rsc.io/swtch/app/blog</a> in <code>qr.go</code>.
+If you liked this, you might also like
+<a href="http://research.swtch.com/2010/03/zip-files-all-way-down.html">Zip Files All The Way Down</a>.
+
+<h3>Acknowledgements</h3>
+
+<p class=lp>
+Alex Healy pointed out that valid Reed-Solomon encodings are closed under XOR,
+which is the key to spreading the picture into the error correction pixels.
+Peter Weinberger has been nothing but gracious about the overuse of his binary likeness.
+Thanks to both.
+</p>
+
+      </div>
+      
+      <div class="comments">
+        <div class="comments-header">
+          <p>Comments?  Please join the <a href="https://plus.google.com/116810148281701144465/posts/htgyJ4pMhna">Google+ discussion</a>.</p>
+        </div>
+        <div class="comments-body">
+          <div id="plus-comments">
+          </div>
+        </div>
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+    
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script>
+
+
+
+function plusComments(me, postid, key) {
+$.ajax({
+type: 'GET',
+url: 'https://www.googleapis.com/plus/v1/activities/'+postid+'/comments?alt=json&maxResults=100&pp=1&key='+key,
+dataType: 'jsonp',
+success: function(z, textStatus)
+{
+
+var items = z.items;
+var countitems = 0;
+for(Object in items) countitems++;
+for (var i = 0; i < countitems; i++) {
+
+var nam = z.items[i].actor.displayName;                    
+var pid = z.items[i].actor.url;                           
+var img = z.items[i].actor.image.url;           
+var text = z.items[i].object.content;                   
+
+
+(function(d){d.timeago=function(g){if(g instanceof Date){return a(g)}else{if(typeof g==="string"){return a(d.timeago.parse(g))}else{return a(d.timeago.datetime(g))}}};var f=d.timeago;d.extend(d.timeago,{settings:{refreshMillis:60000,allowFuture:false,strings:{prefixAgo:null,prefixFromNow:null,suffixAgo:"ago",suffixFromNow:"from now",seconds:"less than a minute",minute:"about a minute",minutes:"%d minutes",hour:"about an hour",hours:"about %d hours",day:"a day",days:"%d days",month:"about a month",months:"%d months",year:"about a year",years:"%d years",numbers:[]}},inWords:function(l){var m=this.settings.strings;var i=m.prefixAgo;var q=m.suffixAgo;if(this.settings.allowFuture){if(l<0){i=m.prefixFromNow;q=m.suffixFromNow}l=Math.abs(l)}var o=l/1000;var g=o/60;var n=g/60;var p=n/24;var j=p/365;function h(r,t){var s=d.isFunction(r)?r(t,l):r;var u=(m.numbers&&m.numbers[t])||t;return s.replace(/%d/i,u)}var k=o<45&&h(m.seconds,Math.round(o))||o<90&&h(m.minute,1)||g<45&&h(m.minutes,Math.round(g))||g<90&&h(m.hour,1)||n<24&&h(m.hours,Math.round(n))||n<48&&h(m.day,1)||p<30&&h(m.days,Math.floor(p))||p<60&&h(m.month,1)||p<365&&h(m.months,Math.floor(p/30))||j<2&&h(m.year,1)||h(m.years,Math.floor(j));return d.trim([i,k,q].join(" "))},parse:function(h){var g=d.trim(h);g=g.replace(/\.\d\d\d+/,"");g=g.replace(/-/,"/").replace(/-/,"/");g=g.replace(/T/," ").replace(/Z/," UTC");g=g.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2");return new Date(g)},datetime:function(h){var i=d(h).get(0).tagName.toLowerCase()==="time";var g=i?d(h).attr("datetime"):d(h).attr("title");return f.parse(g)}});d.fn.timeago=function(){var h=this;h.each(c);var g=f.settings;if(g.refreshMillis>0){setInterval(function(){h.each(c)},g.refreshMillis)}return h};function c(){var g=b(this);if(!isNaN(g.datetime)){d(this).text(a(g.datetime))}return this}function b(g){g=d(g);if(!g.data("timeago")){g.data("timeago",{datetime:f.datetime(g)});var h=d.trim(g.text());if(h.length>0){g.attr("title",h)}}return g.data("timeago")}function a(g){return f.inWords(e(g))}function e(g){return(new Date().getTime()-g.getTime())}document.createElement("abbr");document.createElement("time")}(jQuery));
+
+var publi = ($.timeago($.trim(z.items[i].published))); 
+
+
+
+
+var meclass = "";
+if (pid === 'https://plus.google.com/'+me){
+  meclass = " me";
+}
+
+var comment = '<div class="plus-comment'+meclass+'"><img class="plus-img" src="'+img+'" /><p><a href="'+pid+'" target="blank" title="'+nam+'\'s Google+ profile">'+nam+'</a> <span class="comment-when">('+publi+')</span> '+text+'</p><div class="plus-clear"></div></div>';
+
+$('#plus-comments').append(comment);
+
+}
+
+}});
+}
+</script>
+
+    <script>plusComments("116810148281701144465", "z12luphjgv3rftjbo04ce545ymaigp1zoec", "AIzaSyB_JO6hyAJAL659z0Dmu0RUVVvTx02ZPMM")</script>
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

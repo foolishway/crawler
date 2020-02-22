@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: The Generic Dilemma</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>The Generic Dilemma
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Thursday, December 3, 2009.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+<p><p class=lp>
+Generic data structures (vectors, queues, maps, trees, and so on) seem to be the hot topic
+if you are evaluating a new language.
+One of the <a href="https://golang.org/doc/faq#generics">most frequent questions</a> we've had about Go
+is where the generics are.
+It seems like there are three basic approaches to generics:
+</p>
+
+<ol>
+<li>(The C approach.)  Leave them out.  
+<br>This slows programmers.
+<br>But it adds no complexity to the language.</li>
+<li>(The C++ approach.)  Compile-time specialization or macro expansion.
+<br>This slows compilation.
+<br>It generates a lot of code, much
+of it redundant, and needs a good linker to eliminate duplicate copies.
+The individual specializations may be efficient but
+the program as a whole can suffer due to poor use of the instruction cache.
+I have heard of simple libraries having text segments
+shrink from megabytes to tens of kilobytes by revising
+or eliminating the use of templates.
+</li>
+<li>(The Java approach.)  Box everything implicitly.
+<br>This slows execution.
+<br>Compared to the implementations
+the C programmer would have written or the C++ compiler would
+have generated, the Java code is smaller but less efficient in both
+time and space, because of all the implicit boxing and unboxing.
+A vector of bytes uses significantly more than one byte per byte.
+Trying to hide the boxing and unboxing may also
+complicate the type system.
+On the other hand, it probably makes better use of the
+instruction cache, and a vector of bytes can be written
+separately.
+</li>
+</ol>
+
+<p class=lp>The generic dilemma is this: <i>do you want
+slow programmers, slow compilers and bloated binaries,
+or slow execution times?</i>
+</p>
+
+<p class=pp>I would be happy to learn about implementations
+that somehow manage to avoid all three of these
+bad outcomes, especially if there were good written
+descriptions (papers, blog posts, etc.) about what was
+hard and why it's a good approach.
+I'd also be interested to see good written descriptions
+of trying one of those approaches and what went wrong
+(or right).
+</p>
+
+<p class=pp>Please leave comments with pointers.
+Thanks.
+</p></p>
+
+
+
+
+
+<div class="comments">
+  <div class="comments-header old">
+    <p>(Comments originally posted via Blogger.)</p>
+  </div>
+  <div class="comments-body">
+    <div id="plus-comments">
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/15226462280828485140'>yuku</a> <span class="comment-when">(December 3, 2009 9:54 AM)</span> How about C# implementation? It lets you use primitive types.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/10559947643606684495'>Barry Kelly</a> <span class="comment-when">(December 3, 2009 10:00 AM)</span> The massive gaping hole in your list of approaches is .NET: reified generics, but in a reference-type oriented language.<br /><br />C++ suffers because it has lots of support for value-oriented programming, with &quot;clever&quot; tricks like copy constructors, assignment operators, implicit conversions, etc. The lack of GC encourages flirting with almost-but-not-quite-good-enough smart pointers, and storing smart pointers in collections means every collection needs to call the appropriate copy constructors, destructors, etc. for internal operations. It makes it hard to share code.<br /><br />.NET has reified generics, but all generic instantiations with reference types use the same actual instantiation behind the scenes, using the hidden type &quot;System.__Canon&quot; as the type argument. This requires smuggling in the actual type argument list in certain locations - e.g. a hidden argument to generic method calls, a field in the type descriptor for distinct instantiated types, etc.<br /><br />.NET generics are also instantiated at runtime, which means it can share instantiations across multiple dynamically-linked libraries. That&#39;s somewhat harder to get right in a precompiled environment; a few indirections and you may be able to get most of the benefit by having only one instantiation active and in caches, leaving the others cold and not paged in.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://andrewducker.livejournal.com/'>andrewducker</a> <span class="comment-when">(December 3, 2009 10:15 AM)</span> http://msdn.microsoft.com/en-us/library/ms379564(VS.80).aspx talks about the .Net Generic implementation in a bit more detail.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01862832764185349715'>Paul Snively</a> <span class="comment-when">(December 3, 2009 10:51 AM)</span> I would also take a look at BitC&#39;s <a href="http://bitc-lang.org/docs/bitc/polyinst.pdf" rel="nofollow">polyinstantiation</a> system. In fact, in general, I would take as much inspiration from BitC as you can without sacrificing whatever specific goals you may have (e.g. blinding compilation speed) that BitC doesn&#39;t necessarily share.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00275501056310821335'>newt0311</a> <span class="comment-when">(December 3, 2009 11:11 AM)</span> Super-compilers would solve this problem but making them work effectively requires some major developments in compiler research. Its one of the few areas of academic CS that is useful.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00577573410818964827'>CCs</a> <span class="comment-when">(December 3, 2009 11:19 AM)</span> C# don&#39;t let you use &quot;int&quot; or other basic type as a parameter for generics.<br /><br />I think C++ choose the &quot;least bad&quot; solution - you compile once your app, but run it many times.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/11722347898057818306'>Mikhail</a> <span class="comment-when">(December 3, 2009 11:46 AM)</span> @CC: not sure if I understand you correctly but with C# you can do following:<br /><br />// Declare a list of type int.<br />GenericList&lt;int&gt; list1 = new GenericList&lt;int&gt;();</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/04628223255570601432'>David</a> <span class="comment-when">(December 3, 2009 11:52 AM)</span> Yes it does, e.g. Action[int], a type representing a function that takes an integer argument and returns no value.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/10482944964078869642'>drhodes</a> <span class="comment-when">(December 3, 2009 11:53 AM)</span> This paper might be worth a gander:<br /><br />http://www.osl.iu.edu/publications/prints/2003/comparing_generic_programming03.pdf<br /><br />A snippet from the abstract: ...  a comprehensive comparison of generics in six programming languages: C++, Standard ML, Haskell, Eiffel, Java (with its proposed generics extension), and Generic C#. ...<br /><br />There&#39;s a newer paper (2007) though it&#39;s behind a paywall.<br /><br />A cursory glance at the table on page 3 shows how comprehensive haskell&#39;s feature set is, with respect to every other language listed.  <br /><br />Composable typeclasses would fit Go&#39;s orthogonal philosophy like a glove, IMHO.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://andrewducker.livejournal.com/'>andrewducker</a> <span class="comment-when">(December 3, 2009 12:55 PM)</span> That paper is based on a prototype of generics in C#, before the final version was completed - implicit typing is mentioned as lacking, whereas the final version supported it (for instance).</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03996590425188586871'>David Andersen</a> <span class="comment-when">(December 3, 2009 1:28 PM)</span> Hi, Russ - not a comment about your questions, but a meta-point:  Your post didn&#39;t address the question of whether the containers are statically type-safe.  While one could imagine this being done orthogonally to how the code works (e.g., static type checking, but then box/unbox with the same impl), in practice, it seems that most of the time the generics also provide the type safety, and the boxing/unboxing approaches provide only runtime type checking.  In practice, the question seems to be:  slow compilers, bloated binaries, but more static type safety.  Still a question, of course.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 3, 2009 1:53 PM)</span> [2-part post]<br /><br />Go should definitely try and support the Generic Programming paradigm as envisioned by Stepanov, which most closely is accomplished with C++ templates, overloading, and specialization (which is why the STL was implemented in C++ to begin with). His recent book &quot;Elements of Programming&quot; does a great job of walking through Generic Programming, which I highly recommend all programmers read, no matter their language background.<br /><br />That&#39;s not to say that Go needs templates in the C++ sense, all it needs is type functions, a way to specify <i>true</i> Generic Programming concepts (including  associated types and what would have been C++0x concept_maps, etc. not just the basic name/function signature matching of Go interfaces), and a way to specialize/overload algorithms based on concept refinements and specific models of concepts.<br /><br />Keep in mind that C++&#39;s templates with respect to generic algorithms and datastructures have much more of an advantage than being &quot;fast&quot;, they figure out dispatching at compile-time and are able to deal with type/concept information at compile-time meaning more errors caught before the program is even run. As well, as you bring more relationships to compile-time, certain complicated operations such as a subset of the occasions you&#39;d resort to multi-dispatch in a Java or C# world are instead resolved at compile-time via simple overloading and/or specialization. Being generic and being fast are not mutually exclusive as other languages seem to make people think. It is possible to get abstraction with no extra runtime overhead.<br /><br />To Barry Kelly, I argue that C++ does not &quot;suffer&quot; because of value-oriented programming, by which I believe you mean that it emphasizes Regular Types, but it&#39;s really its strongest suit and an area that most other mainstream languages simply get wrong. Copy-constructors, assignment operators, move operations, and deterministic destruction are not &quot;clever tricks&quot;, they are the natural and generic way to represent operations on Regular Types. Garbage collection and <i>nondeterministic</i> disposal are the &quot;clever tricks&quot; of the programming world used because, despite being more complex for a compiler implementor, are easier for more programmers to work with and provide results that are acceptable for many applications. What&#39;s more is, Regular Types don&#39;t make it harder to share and write generic code, they make it easier, which is actually the entire point. It is why you are able to have generic containers and libraries that work with built-in types and user-defined types just as easily and without sacrificing speed. This is already a needless disability of Go with respect to maps.<br /><br />[continued in next post]</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 3, 2009 1:54 PM)</span> [continued from previous post]<br /><br />Now it&#39;s true that I&#39;m a C++ programmer and enthusiast, but I&#39;ll let you in on a little secret. We use template metaprogramming, exploit SFINAE, and do all sorts of the idiomatic C++ stuff that outsiders think of as voodoo and overly complicated <i>not</i> because we like the challenge, but because despite the complexity it more fully, more generically, more safely, and more efficiently represents concepts, types and generic algorithms than just about any other language out there. The secret is that you can get that end result <i>without</i> a complex feature like templates and without many of the hairier parts of C++. Generic Programmers program in C++ because we <i>have</i> to. There simply aren&#39;t other options that allow you to express generic libraries as fully and efficiently in a statically-typed world.<br /><br />Languages like Java and C# miss the boat on that and I fear that Go may do so as well. Generics and even Go interfaces in their current form do not let you employ the mathematical approach that Stepanov and Boost programmers use all of the time to create generic code. If you can&#39;t program a library as generic and efficient as Boost&#39;s Graph Library then you are simply missing something if your goal is to create a language that supports Generic Programming.<br /><br />In my opinion, if Go is to be relevant to the Generic Programmers of C++, it needs to support the Generic Programming paradigm more concisely than C++ templates without sacrificing functionality, which while is difficult, is far from an impossible task. This is particularly important as C++0x has dropped direct support for concepts meaning that if Go beats C++ to its own game it will truly be in a league of its own. As I mentioned early, really all you need to satisfy most Generic Programmers needs are a way to represent concepts, type functions, a way to specialize/overload algorithms based on concept requirements, and preferably something like what would have been C++0x concept_maps. These are all that it takes to make a statically-typed language that supports libraries like the STL, and yet other mainstream languages miss that.<br /><br />Again, Stepanov&#39;s &quot;Elements of Programming&quot; is a great place to look to get a more mathematical view of Generic Programming and I encourage you to please read it. Go&#39;s interfaces are a tiptoe in the right direction and if they can be expanded to encompass concepts you will begin to see many more programmers migrating over to Go from C++.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00577573410818964827'>CCs</a> <span class="comment-when">(December 3, 2009 2:43 PM)</span> C# generics with basic type (like int)<br /><br />Yes, you can declare it.<br />But T = T+1; will not work in C#. It works in C++.<br /><br />(There are some workarounds, but no real solution.)</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/13086247873171140062'>NoiseEHC</a> <span class="comment-when">(December 3, 2009 2:46 PM)</span> There is a 4. option you did not think about:<br /><br />Implement some meta-programming instead and leave it to the programmer whether he use it to create a 2. or a 3. solution... In this case the interfaces to dynamically loaded modules (like core libraries) will be like 1.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/13615410426974691647'>Levi</a> <span class="comment-when">(December 3, 2009 3:25 PM)</span> @inproceedings{ harper95compiling,<br />    author = &quot;Robert Harper and Greg Morrisett&quot;,<br />    title = &quot;Compiling Polymorphism Using Intensional Type Analysis&quot;,<br />    booktitle = &quot;Conference Record of {POPL} &#39;95: 22nd {ACM} {SIGPLAN}-{SIGACT} Symposium on Principles of Programming Languages&quot;,<br />    address = &quot;San Francisco, California&quot;,<br />    pages = &quot;130--141&quot;,<br />    year = &quot;1995&quot;,<br />    url = &quot;citeseer.ist.psu.edu/harper95compiling.html&quot; }<br /><br /><br />@article{ jones98transformationbased,<br />    author = &quot;Simon L. {Peyton Jones} and Andr{\&#39;e} L. M. Santos&quot;,<br />    title = &quot;A transformation-based optimiser for {Haskell}&quot;,<br />    journal = &quot;Science of Computer Programming&quot;,<br />    volume = &quot;32&quot;,<br />    number = &quot;1--3&quot;,<br />    pages = &quot;3--47&quot;,<br />    year = &quot;1998&quot;,<br />    url = &quot;citeseer.ist.psu.edu/peytonjones98transformationbased.html&quot; }</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/11083609636462293755'>Andrew</a> <span class="comment-when">(December 3, 2009 5:51 PM)</span> Have you looked at how D does templates? It has fast compile times with C++ style templates. I don&#39;t know well it does with code bloat, but are there any actual examples of C++ code bloat causing slowdowns outside of extremely contrived cases?</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/13327224520746535437'>Joe Schafer</a> <span class="comment-when">(December 3, 2009 8:00 PM)</span> Maybe take a peek at <a href="http://en.wikibooks.org/wiki/Ada_Programming/Generics" rel="nofollow">Ada Generics</a>.  The generic instances are shared, and there is no boxing of types.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/07408170618420648277'>malkia</a> <span class="comment-when">(December 3, 2009 9:18 PM)</span> How about this, if you have @ in front of a type, then delay compilation of the function, until it&#39;s first being used, then generate for the compiler the same body but with ?type changed with the real-type. <br /><br />func sum(a @type, b @type) @type<br />{<br />   return a + b;<br />}<br /><br />func test()<br />{<br />   a, b int8;<br />   c, d int16;<br />   sum(a, b);<br />   sum(c, d);<br />   sum(a, d); // error, but look at the the other way to do sum below<br />   sum(a, int16(d)); //ok<br />}<br /><br />func sum(a @typeA, b @typeB) @typeC<br />{<br />   ca := @typeC(a); // if possible<br />   cb := @typeC(b); // if possible<br />   return ca + cb;<br />}<br /><br />not complete as in C++, but still</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/04312659663582995721'>Dethe Elza</a> <span class="comment-when">(December 3, 2009 10:07 PM)</span> The Self language, which inspired Java, Javascript, and others would compile specialized versions of methods and structures as needed. Kind of super-generics or dynamic type safety. There is a good paper on it here: http://research.sun.com/self/papers/implementation.html</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00839344798030831980'>rog peppe</a> <span class="comment-when">(December 4, 2009 4:27 AM)</span> Vita Nuova&#39;s Limbo does generics, but only on pointer types. This can be frustrating, but they&#39;re still very useful and it doesn&#39;t result in any code bloat.<br /><br />This can be a starting point - if you can do this well (and it&#39;s not easy to get it totally right), then it&#39;s &quot;just&quot; a matter of generating code to deal with value-type instantiations. There I don&#39;t think there&#39;s any way around the huge-code vs. slow-speed tradeoff, but you could generate code for N optimised cases (e.g. pointer, 32-bit word) and one general case (arbitrary sized pointer-int layout) so at least  it would all work, and there&#39;s the capability to generate more optimised code if necessary.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01115506275519545033'>Julian Morrison</a> <span class="comment-when">(December 4, 2009 9:37 AM)</span> <span class='deleted-comment'>This post has been removed by the author.</span></p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01115506275519545033'>Julian Morrison</a> <span class="comment-when">(December 4, 2009 9:45 AM)</span> Ignore my previous comment if you saw it, it was a bad idea.<br /><br />I think I support the &quot;leave it out&quot; camp. You can box explicitly with interface{} parameters, and unbox safely with a type switch. If you need the extra speed of a specialized implementation, write one.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/06774308600854594267'>diabolikmachine</a> <span class="comment-when">(December 4, 2009 11:05 AM)</span> instead of having a generic system that you can use anywhere in your code, what about a generics that you instantiate?<br /><br />type string_hash is new Generic_Hash(string);<br /><br />this is sort of how Ada does it, one of the few things in ada that makes sense.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00724441893784184431'>Jonathan Amsterdam</a> <span class="comment-when">(December 5, 2009 10:13 PM)</span> First of all, option 3 doesn&#39;t make sense for a language with Go&#39;s aspirations to efficiency. I don&#39;t even think it makes sense for Java -- it was forced on them by the need to keep both the language and the VM architecture backwards-compatible with tons of existing code.  That illustrates the danger of waiting too long to add generics to a language.<br /><br />Option 1, leaving out generics, is going to result in one or more of the following: greatly reduced market share; use of unsafe pointers to simulate the void* style of generics you often see in C; and a variety of marginally useful and incompatible macro-based solutions.<br /><br />So effort should be focused on option 2, correcting C++&#39;s deficiencies.<br /><br />First, speed: is C++ template instantiation slow because headers are constantly being reparsed and templates are instantiated multiple times with the same arguments? Go doesn&#39;t have those problems: it doesn&#39;t need to reparse headers, and it can adopt a repository-based solution from the outset, where instantiated templates are remembered somewhere and only generated once.  Or is C++ slow because templates are so heavily used, e.g. for smart pointers, strings, etc?  Go already has built-in features that obviate the need for some common C++ generics (e.g. GC makes smart pointers pointless), and by making Go&#39;s generics weaker than C++&#39;s -- eliminating the ability to do meta-programming, for instance -- you&#39;ll reduce the number of templates that actually get written.<br /><br />Second, space: can the number of instantiations be reduced?  It seems that for at least some templates, you could generate only one version for all pointer types, and possibly one additional version per size of value type.  C# does something like this, and this paper on Ada would probably show how the Intermetrics compiler dealt with the problem: &quot;Implementation implications of Ada generics,&quot; by Gary Bray. (http://doi.acm.org/10.1145/989971.989974) Unfortunately, the ACM wants you to pay them to read it. (BTW, Joe Schafer: &quot;The generic instances are shared, and there is no boxing of types&quot; -- I don&#39;t think that&#39;s true, I suspect there would be two distinct instances for 32-bit ints and 64-bit floats.)</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 6, 2009 2:49 PM)</span> I agree with Jonathan except for a couple of issues:<br /><br /><i>&quot;Go already has built-in features that obviate the need for some common C++ generics (e.g. GC makes smart pointers pointless)&quot;</i><br /><br />The above is not entirely true. If programmers want deterministic disposal they are still going to have to resort to smart-pointers when shared ownership is desired.<br /><br /><i>&quot;...by making Go&#39;s generics weaker than C++&#39;s -- eliminating the ability to do meta-programming, for instance -- you&#39;ll reduce the number of templates that actually get written.&quot;</i><br /><br />The issue is that compile-time metaprogramming is an emergent property of fully capable concepts and templates. Merely by having a complete concept or template system <i>implies</i> being able to do metaprogramming in some form. The only way around that is to handicap the system in a way which would affect the originally intended use.<br /><br />As well, even if it were doable, I don&#39;t agree with the rationale of eliminating a useful feature for the fact that it can affect compile-times when used. If a programmer needs fast compiles then he simply won&#39;t use the feature. Even in C++ there are programmers who don&#39;t do metaprogramming because of compile-times, but (thankfully) their choice does not impact those who require it.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00724441893784184431'>Jonathan Amsterdam</a> <span class="comment-when">(December 6, 2009 7:23 PM)</span> Rivorus - I understand what you mean when you talk about a complete concept/template system implying metaprogramming.  (Haven&#39;t read Stepanov yet, but I&#39;m eager to do so.) But it doesn&#39;t follow that any template system that falls short is &quot;handicapped.&quot;  The generics of C#, Haskell, Eiffel and Ada relate to the theory of parametric polymorphism, where the idea is simply to parameterize types over types.  In a sense, any such system is weaker than full metaprogramming, just as regular expressions are weaker than Turing machines.  But that doesn&#39;t mean that they are deficient.  They are just solving a different problem.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 6, 2009 11:41 PM)</span> True, I suppose &quot;handicapped&quot; is a more harsh term than I intended. What I mean to say is that it rules out a particular approach to programming that is becoming more common, and for good reason, particularly in generic libraries of modern C++. There is a lot of potential for creating extremely powerful and generic libraries when you have facilities for type functions and ways to specialize algorithms and datastructures based on compile-time type and concept information.<br /><br />The Boost Graph Library is a great example of that, and to a similar but lesser extent the STL. If languages are to advance in the direction of supporting more generic code I think that we need to focus on taking those ideas and translating them into something simpler than what currently exists as C++ templates but without removing overall functionality.<br /><br />The paper linked by drhodes is a good reference to go by. If Go can be made to support the programming of a library like the Boost Graph Library better than all the languages listed it will be a step ahead for generic programming. In my opinion, anything else is a step back or at the very least unnecessary stagnation.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/14572755603419046111'>sambeau</a> <span class="comment-when">(December 7, 2009 3:44 PM)</span> &gt;&quot;Composable typeclasses would fit Go&#39;s orthogonal philosophy like a glove, IMHO.&quot;<br /><br />+1</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00831355954619691739'>ncm</a> <span class="comment-when">(December 11, 2009 2:44 PM)</span> <i>&quot;Go already has built-in features that obviate the need for some common C++ generics (e.g. GC makes smart pointers pointless)&quot;</i><br /><br />Built-in features that duplicate library constructs in another language indicate weakness, not strength.  They imply that the language is not strong enough to address those needs without special-casing.  We might therefore point out instead that C++&#39;s destructors make GC pointless, and (further) illustrate GC&#39;s weakness.  GC can only manage memory, but not the numerous other resources that are also routinely managed with destructors.  (We might add that exceptions are weakened, as an architectural aid, by the lack of destructors, to the point of near uselessness.)<br /><br />It betrays fundamental confusion to group Haskell among C#, Eiffel, and Ada.  C++ and Haskell can express what these other languages cannot.  Regular expressions really are deficient, unless you have resolved to ignore any problem your language is not up to addressing.  &quot;Handicapped&quot; is simply accurate.  <br /><br />A simpler language that is as powerful as C++ is long overdue.  Go, sadly, isn&#39;t it.  Go will grow, but it&#39;s fatally handicapped by unfortunate early design choices.  C++ will get concepts and modules in 2015.  Those won&#39;t make it a simpler language, but it will be simpler to program in, and compile times will come down.  That will carry us until a plausible successor emerges.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01115506275519545033'>Julian Morrison</a> <span class="comment-when">(December 11, 2009 3:06 PM)</span> ncm, you forget that GC also manages ownership and allows all code to share the same ownership/destruction policy, which is vital for Java-style glue code that links together assortments of libraries.<br /><br />&quot;finally&quot; blocks or Go&#39;s &quot;defer&quot; take care of deterministic resource reclamation.</p>
+ </li></ul></div>
+ <div class="plus-comment me"><ul><li class="plus-text">
+    <p><a href="http://swtch.com/~rsc/">Russ Cox</a> <span class="comment-when">(December 11, 2009 3:12 PM)</span> <i>C++ will get concepts and modules in 2015.</i><br /><br />Is your suggestion that we sit on our hands until then?</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00831355954619691739'>ncm</a> <span class="comment-when">(December 11, 2009 3:42 PM)</span> &quot;Finally&quot; blocks are the inadequate response to the fatal weakening of exceptions. They wipe out the centralization of error handling that was the architectural purpose of exceptions in the first place.  <br /><br />rsc: You may sit on your hands if you like, or start developing a simpler language powerful to do what people are doing with C++ today. We haven&#39;t got one, and Go won&#39;t evolve to be it.  Few people are equipped to develop a powerful new language, either intellectually or institutionally.</p>
+ </li></ul></div>
+ <div class="plus-comment me"><ul><li class="plus-text">
+    <p><a href="http://swtch.com/~rsc/">Russ Cox</a> <span class="comment-when">(December 11, 2009 3:44 PM)</span> <i>Go won&#39;t evolve to be it.</i><br /><br />This would be a more useful comment if you explained why.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00831355954619691739'>ncm</a> <span class="comment-when">(December 11, 2009 9:31 PM)</span> Ask <i>them</i>.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 12, 2009 1:11 AM)</span> <i>&quot;Is your suggestion that we sit on our hands until then?&quot;</i><br /><br />Not at all, we&#39;d hope that Go can do it right and get it done before then since you guys don&#39;t have to deal with a long standardization process as we do (neither concepts nor modules have made the cut for C++0x). Go is still in its infancy and if you can get as much as you can correct now you&#39;re going to save yourself from becoming irrelevant or in need of duct tape in the future. It&#39;s true that C++ is a mess but the reason we use it is because it can more fully express very high level, generic, and efficient libraries.<br /><br />If you want Go to truly be a great language and pull more C++ users you&#39;re going to have to understand why C++ is as powerful as it is. Much moreso than the fact that it allows you to be as low level as C, it provides some of the best support for generic programming, especially when compared to other mainstream languages and Go. The C++ community has a love-hate relationship with the language. We love what it can do and we hate that it&#39;s a mess. Making a language as powerful as C++ is a matter of understanding generic programming and preferably being able to accomplish what it can do in a much more concise way.<br /><br />As the paradigm has become better understood and libraries like the STL, Adobe/Boost&#39;s Generic Image Library, and the Boost Graph Library have come about, we have learned what fundamental functionality should exist to allow proper generic programming. Despite the onslaught of features that get thrown into languages like C# they still simply don&#39;t get it. In particular, you should have the ability to express concepts with associated types, concept refinement, overloading/specialization of algorithms based on which concepts arguments model, and the ability to produce type functions. C++ strives because it is powerful enough to hackishly represent many of these features through templates to some degree. All you have to do is support this functionality directly and you will be a step ahead with respect to generic programming.</p>
+ </li></ul></div>
+ <div class="plus-comment me"><ul><li class="plus-text">
+    <p><a href="http://swtch.com/~rsc/">Russ Cox</a> <span class="comment-when">(December 12, 2009 6:47 AM)</span> I am going to try one more time.<br /><br /><i> Go, sadly, isn&#39;t it. Go will grow, but it&#39;s fatally handicapped by unfortunate early design choices.</i><br /><br /><i>Go won&#39;t evolve to be it.</i><br /><br />These comments would be more helpful if you explained what you perceive those unfortunate early desgin choices to be and why Go can&#39;t evolve to be &quot;it&quot;.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 12, 2009 12:55 PM)</span> [multipart post]<br /><br /><i>&quot;These comments would be more helpful if you explained what you perceive those unfortunate early desgin choices to be and why Go can&#39;t evolve to be &quot;it&quot;.&quot;</i><br /><br />I&#39;m not ncm and I&#39;m a little more optimistic than he is. I do think that Go <i>can</i> evolve to be a solid language for generic programming, although certain things as they already exist would need to change. It&#39;s a matter of whether or not you as the language designers want to take it in that direction. ncm is probably just saying that Go has already gone in the &quot;wrong&quot; direction with a flawed rationale for certain fundamental ideas of the language, and while I do agree, from the looks of the FAQs you sound very open to change. Anyway, I don&#39;t want to put words in ncm&#39;s mouth, I&#39;m sure he&#39;ll respond soon. <br /><br />Here&#39;s my personal take on things, in no particular order. One &quot;problem&quot; that jumps out at me personally, in reference to the language FAQ, is in the question <a href="http://golang.org/doc/go_lang_faq.html#references" rel="nofollow"><i>&quot;Why are maps, slices, and channels references while arrays are values?&quot;</i></a>. The rationale provided is very weak -- it talks about how early on the implementation of maps were &quot;syntactically&quot; pointers and that you couldn&#39;t create a non-dynamic instance. Further, it goes on to say <i>&quot;...we struggled with how arrays should work.&quot;</i> Neither of these are answers to the question.<br /><br />I&#39;ll try to shed some light on this from a C++ perspective. In C++, maps, and all other containers, are values. In fact, with only some embarrassing exceptions, all object types in C++ have proper semantics of regular types (those exceptions notably being legacy C-arrays, which is one reason why the TR1/boost array template exists, and std::auto_ptr which exists as-is because of the lack of move semantics in the current standard and the need to efficiently and safely return dynamically allocated data from functions). Consistent semantics for regular types are extremely important to generic programming and that is why generic datastructures in C++ are as powerful as they are. You need a generic way of efficiently working with the fundamental capabilities of all types with a consistent high level menaing (for example, a single interface for copyability and what that means with respect to equality).<br /><br />Similarly, the FAQ states:<br /><br /><i>&quot;Map lookup requires an equality operator, which structs and arrays do not implement. They don&#39;t implement equality <b>because equality is not well defined on such types</b>; there are multiple considerations involving shallow vs. deep comparison, pointer vs. value comparison, how to deal with recursive structures, and so on. We may revisit this issue&#8212;and implementing equality for structs and arrays will not invalidate any existing programs&#8212;but without a clear idea of what equality of structs and arrays should mean, it was simpler to leave it out for now.&quot;</i><br /><br />As I touched on in the previous paragraph, you need to represent the concept of regular types. You have a notion of copyability of arrays already and that should give hint as to how equality should be implemented. By very definition, making a copy of something means making another instance with the same value. Referential equality is a separate concern and should not be confused. The act of copying implies that the values of each object are now equal as should be reflected by a well-defined equality operator. If after a copy the two objects do not compare as equal either the copy operation wasn&#39;t truely a copy operation or the equality operation wasn&#39;t correctly defined.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 12, 2009 12:58 PM)</span> [multipart post continued]<br /><br />Another decision that I am in much disagreement with is the lack of what C++ programmers know as destructors. This is very briefly mentioned <a href="http://golang.org/doc/go_for_cpp_programmers.html" rel="nofollow">here</a>, and a rationale is virtually nonexistent. I am left to believe that such functionality was left out simply because the designers of Go do not understand how important destructors really are. <a href="http://blogs.msdn.com/hsutter/archive/2004/07/31/203137.aspx" rel="nofollow">Herb Sutter</a> has covered this topic already fairly well and explains why destructors should be a preferred default over features like Go&#39;s &quot;defer.&quot; That&#39;s not to say that defer is bad, it&#39;s just that it is no replacement for destructors. Using &quot;defer&quot; has to be done explicitly whenever a type is used rather than being specified once in a type&#39;s definition and used implicitly from then on.<br /><br />In the <a href="http://golang.org/doc/go_spec.html#Defer_statements" rel="nofollow">Go language specification</a> you can see a great example of where destructors are better suited than defer statements. When you create a lock, it would be a very bad idea to never unlock or to unlock at some nondeterministic time. A destructor makes this automatic and implicit. There is no defer statement that you can forget to write because unlocking is already implied. In fact, this is exactly how locks are implemented in Boost and how they are implemented in the next C++ standard. A similar need for destructors exists with any type that manages resources, which is many if not most non-trivial types. RAII is important and constructors/destructors are the key way these are implemented in C++. There is currently no simple way to do this implicitly in Go.<br /><br />That alone is already a solid argument for destructors, but what does that lack of destructors mean specifically with respect to generic programming? A lot, actually. Whenever you use a type with a generic datastructure or algorithm and that code is responsible for creating instances of your type, you should hope that resources are deterministically cleaned up when an instance of the type leaves scope. You can&#39;t write a defer statement in generic code if you don&#39;t know what exactly needs to be cleaned up. This is an implementation detail that generic code doesn&#39;t (and shouldn&#39;t) know about. With features like destructors, the correct behavior happens implicitly.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 12, 2009 1:04 PM)</span> [multipart post continued]<br /><br />Finally, there is the issue of overloading. Once again, the <a href="http://golang.org/doc/go_lang_faq.html#methods_on_basics" rel="nofollow">FAQ</a> has a very weak rationale, talking about the fact that it makes implementation of the language simpler and that it can be &quot;confusing.&quot; Certain things might be tough to understand at first but that doesn&#39;t mean that they aren&#39;t <i>important</i> to understand. For many programmers, overloading is already second nature. Not only that, but it is extremely important to generic programming and leaving it out means not being able to create efficient and generic libraries.<br /><br />In a statically-typed language, overloads dispatch based on data types, and in an ideal world, on what concepts they model. In a well-designed generic program in a statically-typed language you have high level generic algorithms built around smaller and smaller algorithms, each operating on models of concepts. If there is a more refined concept or a particular type that can have a more efficient implementation of a given algorithm, then that algorithm is overloaded for that type or concept. In C++, since all of the overloading is based purely on type/concept data, which functions are dispatched is decided at compile time and you get zero overhead.<br /><br />The reason why this type of overloading is so necessary to generic programming and why simply naming functions differently doesn&#39;t cut it is because of the hierarchical nature of algorithms. A calls B which calls C which calls D and E, etc. each one with a generic implementation that can work on anything that models a particular concept, for instance, any container or range with access to any element taking linear time. Now imagine that algorithm &quot;C&quot; can be written in a way that is more efficient when it is passed a range that allows accessing of arbitrary elements in constant time rather than linear time. If you can overload C based on this type information, then you in effect make it so that algorithms A and B are also each automatically more efficient when you pass in a range with constant-time access to any element.<br /><br />Without this ability to overload based on the type system you cannot get composable and efficient generic code. In reference to the example above, making a differently named &quot;C&quot; for the special case optimized situation rather than overloading implies having to make a differently named &quot;A&quot; and &quot;B&quot; as well if you want them to take advantage of your optimized code. This means that more algorithms have to be written if they need to be efficient rather than getting it for free and anyone using your algorithms now has to know to call your special case algorithm with the new name if he wants the more optimal implementation. If their code is already written, that potentially means they&#39;d have to rewrite it if they need it to be faster simply because an implementation detail changed at some arbitrary location down the chain. It&#39;s just bad news for everyone. All of that is possible in C++ because of the type system, overloading and SFINAE. While the concept-like facility in Go is nice, without overloading and associated types it&#39;s only half-way there.<br /><br />Those are just some of the issues I personally have with Go as it is. A lot of that can be changed and the FAQ makes it sound like you are very open to the possibility of such changes. The fact that you have taken the bold stride towards what you call &quot;interfaces&quot; (which again are basically just stripped down versions of &quot;concepts&quot; in generic programming) and away from traditional religious OOP shows a lot. I have faith that you guys are trying hard to provide a solid language -- one that compares to C++ in efficiency and the ability to write generic code. If that actually is your goal, I think you need to definitely pay attention to the things that C++ has done right and how that can be altered or improved to provide something better. Right now it seems you are not learning the lessons that C++ and its generic libraries have taught.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00724441893784184431'>Jonathan Amsterdam</a> <span class="comment-when">(December 12, 2009 5:47 PM)</span> Rivorus, I admire your passion but your optimism is misplaced. It is extremely unlikely that the Go designers are unaware of your arguments.  I imagine they just feel that the benefit of generic programming is not proportional to the weight it adds to the language.  Or, to use a word that they use a lot, it would not make the language more &quot;fun&quot;.  It&#39;s about as likely you&#39;ll see these features in Go as it is that you&#39;d see static typing added to Scheme.  Everyone gets the issues; it comes down to a matter of taste.  I think that the best one could hope for is a simple generic type facility.<br /><br />You&#39;ll notice that the Go designers did add complexity where they felt that it was worth it. For example, their reflection facility is much more powerful than C++&#39;s, and one could argue that for many typical modern programming tasks, like XML serialization (see Russ&#39;s post later in this blog), that power is more helpful than the power of generic programming. (I&#39;ve little doubt that you could find a way to parse XML  into C++ structs using template metaprogramming, but I don&#39;t think it would be pretty, and of course the I/O time would dominate anyway, so it wouldn&#39;t be measurably more efficient.)<br /><br />A technical point: you can achieve destructor-style resource management in Go like so:<br />------<br />interface Disposable { Dispose() }<br /><br />func using(r Disposable, f func()) {<br />   defer r.Dispose();<br />   f();<br />}<br /><br />// example<br />conn := db.NewConnection(connString);<br />using(conn, func() { <br />    ... conn ...<br />});<br />--------<br />Thanks to the interface, this could be done generically as well.  It also illustrates another powerful feature of Go, anonymous closures, that C++ is only just getting.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 12, 2009 6:07 PM)</span> <i>&quot;I&#39;ve little doubt that you could find a way to parse XML into C++ structs using template metaprogramming, but I don&#39;t think it would be pretty, and of course the I/O time would dominate anyway, so it wouldn&#39;t be measurably more efficient.</i><br /><br />Very true, however with the Boost.Spirit library in C++ you can do it very nicely and it&#39;s surprisingly intuitive as well. Of course, you don&#39;t want to look at all of the library code that makes it possible unless you are really into metaprogramming as you have pointed out.<br /><br /><i>&quot;A technical point: you can achieve destructor-style resource management in Go like so:&quot;</i><br /><br />That&#39;s actually exactly what I am talking about. What you posting is exactly the type of thing that destructors accomplish implicitly and with less code. As well, with just defer the &quot;incorrect&quot; solution happens by default if you forget. The code you posted is analogous to the C# or Java code mentioned in the post by Herb Sutter that I linked to. Everything he states when talking about Java and C# there applies to Go with respect to defer, minus the part about exceptions since Go doesn&#39;t [currently] have exceptions.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00724441893784184431'>Jonathan Amsterdam</a> <span class="comment-when">(December 13, 2009 8:57 AM)</span> First, let&#39;s keep hold of the thread of the argument. Your claim was that defer interfered with generic programming. I demonstrated that that was false, assuming everyone adopted a certain convention. (You could now argue that Go has done nothing to foster such a convention, and I would agree with you.)<br /><br />Now let&#39;s talk about destructors vs. using for resource management:<br /><br />Some minor points about Sutter&#39;s post: He writes the Java version of Transfer incorrectly. In a correct version, the commenter&#39;s point about exceptions thrown by Dispose would not apply. (You&#39;d nest the try blocks.) And I don&#39;t know why he thinks you&#39;d have to wait for a GC to release the queues&#39; resources.  Dispose() would do it immediately.<br /><br />But I agree with Sutter&#39;s main point: destructors are better when applicable. Most of my day-to-day programming is in C++, and I love this aspect of the language. But we should consider how often they are applicable. Definitely for file I/O, since the most common pattern is to read or write completely. Not at all for locks, because locks are always longer-lived than the scope in which you lock them; so in C++ you need a wrapper class for RAII, and the code is about the same as you&#39;d get with &quot;using&quot;.  Sometimes for network connections; but often you want to hold on to a connection for a while before tearing it down, and you may want to free it asynchronously, say after it has been idle for a while. You end up with some sort of connection pool, and then I don&#39;t think the code looks very different in C++ vs. C#. <br /><br />It&#39;s worth pointing out that garbage-collected languages have the disadvantage that there is no delete, and typical garbage collectors may run at some arbitrarily distant point in time after a resource is released. I think Limbo had a great solution to that: it used reference counting for non-cyclic structures, and guaranteed that they would be freed immediately upon becoming unreferenced. As a practical matter, resource-holding objects are almost never cyclic, so the idea should work well (though I have no practical experience with it).<br /><br />As for Go, I don&#39;t see it adopting destructors, because that would lead down the path of constructors, assignment operators and the like, and the Go designers are very clear that they don&#39;t want to go down that route. It&#39;s plausible that Go will adopt GC finalizers, but beyond that I think we should not expect any help from the language.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01115506275519545033'>Julian Morrison</a> <span class="comment-when">(December 13, 2009 11:37 AM)</span> I really don&#39;t see the advantage in immediate deallocation of memory. &quot;free&quot; isn&#39;t free. You are shuffling memory in itty bitty slices, when a compacting GC could clear and release it in bulk.<br /><br />If you need to access a resource which needs cleanup through an interface, perhaps you should have a &quot;Release()&quot; method as part of the interface, which you can defer.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00831355954619691739'>ncm</a> <span class="comment-when">(December 13, 2009 11:39 AM)</span> Thank you, Rivorus and Jonathan, for taking the time to express more thoroughly and diplomatically, and at least as thoughfully, what I would have tried to write.<br /><br />Jonathan, I think you miss the point about the limits of &quot;defer&quot;. In R.&#39;s ABCD example, if something in C calls for defer code, there&#39;s no way for the person coding A to know that, so it can&#39;t be written.  A destructor is the only place where it could be put.  <br /><br />The point that language built-ins enforce cross- library conventions is a good one, although I disagree on the implications.<br /><br />We&#39;ve seen examples in the C++ Standard Library of conventions imposed on user code dictated not by the language, but by compatibility with that library, e.g. no throwing from destructors.  The more powerful a language is, and the more of what might have been built-ins are instead put in the standard library, the more it is necessary for somebody to be able to dictate such conventions.  This isn&#39;t an argument for built-ins, it&#39;s an argument for formalizing cross-library requirements.<br /><br />The C++ community has been on the forefront of the effort to learn how to express such requirements.   In a more powerful language than C++, more of what we consider built-ins (argument lists, loop control structures, vtables?) could be extracted to the standard library, and depend correspondingly more on such compatibility requirements.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 13, 2009 12:40 PM)</span> [2-part again]<br /><br /><i>&quot;Your claim was that defer interfered with generic programming. I demonstrated that that was false, assuming everyone adopted a certain convention.&quot;</i><br /><br />You did nothing of the sort. You showed exactly what I was saying, you have to jump through hoops and be explicit every single time you create an object with nontrivial disposal when in actuality you should get the <i>correct</i> behavior <i>implicitly</i> by default and with no chance of error. The language is Turing complete, no one is saying that you can&#39;t reach the same end goal for a given application both with and without destrutors, only that it is needlessly more difficult without them and more error prone.<br /><br /><i>&quot;I don&#39;t know why he thinks you&#39;d have to wait for a GC to release the queues&#39; resources. Dispose() would do it immediately.&quot;</i><br /><br />He didn&#39;t say that Dispose wouldn&#39;t do it, he said that if you as the programmer do not explicitly Dispose then you get resources released at a noneterministic time after the object leaves scope (finalization). This simply cannot happen when you use destructors since the correct behavior happens automatically.<br /><br /><i>&quot;He writes the Java version of Transfer incorrectly. In a correct version, the commenter&#39;s point about exceptions thrown by Dispose would not apply. (You&#39;d nest the try blocks.)&quot;</i><br /><br />He is writing the simplest code whose end result is comparable to the corresponding C++/CLI code that he posted to illustrate his point about having to be explicit. He could have nested try blocks but it would have just made the code even more complicated than it already is. If you want to really be pedantic, you are also running into the fundamental differences between how exceptions are dealt with in C++ and in Java -- in C++, exceptions thrown but never caught in the destructor do not propagate, they cause a terminate, meaning that if you really wanted to make the code as closely comparable to C++ as possible, not only would you need all those try/cathes, but you&#39;d be terminating rather than propagating if a dispose let an exception leak through. All of this is beyond the point of his post but only further argues in favor of the approach with destructors. Again, destructors are automatically called whereas &quot;defer&quot; or the dispose pattern of Java and C# require you to be explicit every time a type with non-trivial disposal is instantiated.<br /><br /><i>&quot;But we should consider how often they are applicable. Definitely for file I/O, since the most common pattern is to read or write completely. Not at all for locks, because locks are always longer-lived than the scope in which you lock them; so in C++ you need a wrapper class for RAII, and the code is about the same as you&#39;d get with &quot;using&quot;. Sometimes for network connections; but often you want to hold on to a connection for a while before tearing it down, and you may want to free it asynchronously, say after it has been idle for a while. You end up with some sort of connection pool, and then I don&#39;t think the code looks very different in C++ vs. C#. &quot;</i><br /><br />All of those cases are perfect examples of where destructors are applicable, and in fact I use RAII in those situations all of the time and would certainly not trade it for &quot;defer&quot;. In the hypothetical cases you are talking about, for instance where locks are unlocked after the locking object goes out of scope (which I don&#39;t know why you claim is always the case, it&#39;s actually almost never the case), you are exhibiting times where you either declare the lock object at one scope and lock later on, or, less likely, you want shared ownership of the lock object. With C++ you are able to very easily and automatically handle both cases and still get deterministic unlocking immediately after all of the objects end their lifetime with virtually no chance of error. Further, I&#39;m not sure what you are even trying to point out here since you are providing no example of a better approach with &quot;defer&quot;.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 13, 2009 12:42 PM)</span> [continued]<br /><br />Keep in mind I never said &quot;defer&quot; wasn&#39;t useful, only that destructors are much better suited for almost all common cases and are automatic rather than explicit and error prone. The times you&#39;d want to use a &quot;defer&quot; like feature over destructors are when you need to do something unique to that particular scope. That does happen and it is why &quot;defer&quot; is very useful. The two features are in no way mutually exclusive.<br /><br />Since you seem adamant that RAII is not applicable to threading or networking, please see <a href="http://www.boost.org/doc/libs/1_41_0/doc/html/thread.html" rel="nofollow">Boost.Thread</a> and <a href="http://www.boost.org/doc/libs/1_41_0/doc/html/boost_asio.html" rel="nofollow">Boost.ASIO</a> (asynchronous input output library), which are both fantastic libraries that correctly make use of RAII like most other C++ programs in the domains where you claim it is generally not applicable.<br /><br /><i>&quot;As for Go, I don&#39;t see it adopting destructors, because that would lead down the path of constructors, assignment operators and the like, and the Go designers are very clear that they don&#39;t want to go down that route. It&#39;s plausible that Go will adopt GC finalizers, but beyond that I think we should not expect any help from the language.&quot;</i><br /><br />Well then I&#39;m sorry but I feel they are making a very fundamental mistake in the design of the language as I can&#39;t condone decisions that make it harder to program correctly rather than easier because they want to make the language &quot;simple&quot;. Simplify as much as possible but no further.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 13, 2009 12:44 PM)</span> To Julian:<br /><br /><i>&quot;I really don&#39;t see the advantage in immediate deallocation of memory. &quot;free&quot; isn&#39;t free. You are shuffling memory in itty bitty slices, when a compacting GC could clear and release it in bulk.&quot;</i><br /><br />We are not specifically talking about freeing memory, we are talking about releasing important resources, closing files, closing connections, releasing locks, etc.<br /><br /><i>&quot;If you need to access a resource which needs cleanup through an interface, perhaps you should have a &quot;Release()&quot; method as part of the interface, which you can defer.&quot;</i><br /><br />Again, that is explicit and incorrect by default if not used. Destructors are automatic and correct.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 13, 2009 1:10 PM)</span> Back to Russ, <a href="http://www.osl.iu.edu/publications/prints/2005/siek05:_fg_pldi.pdf" rel="nofollow">here</a> is another good paper concerning generic programming. In particular, it talks much more about &quot;concepts&quot;.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01115506275519545033'>Julian Morrison</a> <span class="comment-when">(December 13, 2009 1:13 PM)</span> You&#39;re complaining it&#39;s explicit. I don&#39;t think that&#39;s a bug, I think it&#39;s a feature.<br /><br />If I am looking at C++ (and to some extent Java, Ruby, etc) code, and I want to ask &quot;where can it return? where can it suddenly decide to do an expensive operation?&quot; The answer is <i>anywhere</i>. And if it doesn&#39;t do that now, who knows what the next library version will bring?<br /><br />If I am looking at Go code, and I want to ask the same questions, the answers are: it returns where it says &quot;return&quot;, or at the end of the function. It does cleanup at the end of a function in which you said &quot;defer x.Cleanup()&quot;. <i>That&#39;s it</i>. The search can end. No need to dig arbitrarily deep or (as I&#39;ve had to in Java in a huge codebase) rely blindly on an IDE that can dig for you.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 13, 2009 2:34 PM)</span> <i>&quot;You&#39;re complaining it&#39;s explicit. I don&#39;t think that&#39;s a bug, I think it&#39;s a feature.&quot;</i><br /><br />What you&#39;re saying is it&#39;s a &quot;feature&quot; that you can incorrectly use your objects. Call it what you want, that doesn&#39;t change what it is. If you want it explicit then fine, go and make it explicit, but also make it a compiler error if you don&#39;t have it written. What little have you now gained?<br /><br /><i>&quot;If I am looking at C++ (and to some extent Java, Ruby, etc) code, and I want to ask &quot;where can it return? where can it suddenly decide to do an expensive operation?&quot; The answer is anywhere. And if it doesn&#39;t do that now, who knows what the next library version will bring?&quot;</i><br /><br />It can go into an &quot;expensive operation&quot; in the same places. When a function is run. The only difference is that functions are correctly run automatically when the lifetime of an object ends. If an essential function that should be run is not run there then that is a mistake. Forcing the programmer to explicitly write a &quot;defer&quot; statement only means that they may forget to or do so incorrectly.<br /><br />If you&#39;re saying the programmer looks for &quot;defer&quot; and the corresponding end of scope, a programmer can just as easily do the same with respect to the instantiation of types. If I see no &quot;defer&quot; when a type other than something like a built-in arithmetic type is instantiated, instead of saying &quot;there&#39;s no &#39;defer&#39; statement, nothing is going on at the end of the function,&quot; I&#39;d be more likely to say &quot;there&#39;s no &#39;defer&#39; statement, is disposal trivial or did the programmer forget to write &#39;defer&#39;.&quot; With automatic destruction the correct behavior happens in either case.<br /><br />There is nothing horribly complicated about this -- what <i>is</i> complicated is trying to correctly simulate that behavior explicitly every time you instantiate a type. That is what creates bugs.<br /><br />Here is a better example since you say:<br /><br /><i>&quot;... who knows what the next library version will bring&quot;</i><br /><br />The situation with destructors is both automatic and much safer with respect to future development. Imagine that type &quot;A&quot; has trivial disposal so the programmer decides to have no &quot;defer&quot; statement when it is instantiated. Later on in development -- weeks, months, or years -- the type &quot;A&quot; grows and implementation details change to where it now should close down resources. All of a sudden there should be a deferred disposal when you instantiate &quot;A&quot;.<br /><br />So what happens to that previous code that was written? Since &quot;defer&quot; wasn&#39;t used, you now have to go back and insert it everywhere, otherwise nothing is properly cleaned up.<br /><br />The way around this horrible scenario would be to have made the original type &quot;A&quot; have an empty &quot;dispose&quot; method and the places that instantiate it have a &quot;defer&quot; statement that calls the empty dispose, postulating that sometime in the future &quot;A&quot; may evolve to have nontrivial disposal. If you abide by this pattern you now you have an explicit &quot;defer&quot; everywhere you instantiate a scope-bound instance of your type even though its dispose currently does nothing.<br /><br />What then is the benefit of that over having it automatic? If every time you instantiate your type you should be defering disposal, you lose absolutely nothing by combining the operations implicitly. You have now made the type impossible to misuse.<br /><br />This does not even cover places with shared ownership, where disposal happens deterministically after it has no more owners. You still have to do extra management -- management which is done automatically in C++ because of RAII with respect to smart pointers. Doing this with only a feature like &quot;defer&quot; is far from feasible.<br /><br />It&#39;s very easy to stray down the road of oversimplification as many languages do. Everyone wants their language to be simple but you are only losing by taking away features that make tedious and error prone operations automatic. You can have a simple language without it being gimped.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01115506275519545033'>Julian Morrison</a> <span class="comment-when">(December 13, 2009 3:04 PM)</span> &quot;x = NewX(); defer x.Destroy()&quot; is an idiom - the defer immediately following the instantiation. Anyone who&#39;s read some example code would be surprised to see no defer. It would be a &quot;loud silence&quot;.<br /><br />There are reasons you might not want to destroy x. It might be captured in a closure. It might be included in a return value. It might be passed down a channel. Seeing no defer, one would know to look for x&#39;s escape.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03014588465653251422'>Rivorus</a> <span class="comment-when">(December 13, 2009 3:30 PM)</span> The times you don&#39;t want it to be destroyed are when you are logically dealing through indirection. You either have multiple objects &quot;owning&quot; the same object through indirection, possibly with some that reference it weakly, or you may always have exactly one owner where that ownership is traded between objects, etc.<br /><br />In all of these cases RAII is still perfectly fine and still provides automatic and safe solutions and in all cases you are still trying to achieve the goal of deterministic disposal. What&#39;s more is, because of the fact that how life time is managed is a property of the type through which you are achieving the indirection, you provide readers of the code with much more information than &quot;there is no defered dispose, someone else disposes of it&quot;, you tell them &quot;this is precisely how lifetime of this object is managed&quot;. That is much more telling than the &quot;loud silence&quot; you describe and there&#39;s no chance that the programmer simply forgot to dispose.<br /><br />As horrible as it sounds to those who dislike C++, this is all exemplified by smart pointers.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00831355954619691739'>ncm</a> <span class="comment-when">(December 13, 2009 8:33 PM)</span> By the way, Russ, it weakens the whole discussion to bring up the old &quot;bloat&quot; slander about templates.  It wasn&#39;t true in the old days (it seemed like it ought to be, and that&#39;s good enough for slander), and it isn&#39;t true today. Not only &quot;good&quot; linkers fold together duplicate instantiations.  <i>Every</i> linker does it, and they have since the beginning.<br /><br />There certainly are plenty of bloated programs about, in Java and C# as much so as anywhere, but the bloat doesn&#39;t come from template instantiation.  We will always have bloat, because bloat comes from the same place it always has -- bad coders -- and we will always have far too many of them.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00724441893784184431'>Jonathan Amsterdam</a> <span class="comment-when">(December 14, 2009 12:30 PM)</span> @ ncm: Russ mentioned &quot;libraries,&quot; not executables.  I think the compiler would output multiple instantiations of vector&lt;int&gt;, one per .o, and this would result in the library being larger.  However, I don&#39;t know why this would be a concern to anyone unless they were actually *developing* on an embedded device, rather than just *deploying* to one.  (I just bought a 1TB disk for $114.)</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/00724441893784184431'>Jonathan Amsterdam</a> <span class="comment-when">(December 14, 2009 12:49 PM)</span> @ Rivorus:<br />I agree that in theory destructors are better than defer, but I don&#39;t think in practice that you see many abstractable patterns that generically acquire and release a resource, and don&#39;t know that it is a resource.  For one thing, the constructors of such resource-acquiring classes are particular to each resource (files, db connections, etc.) and are never (well, never say never, but basically never) the no-arg constructor. So I think that in the real world, very little generic code would be unsure about whether to use defer.  In theory your way is clearly superior, but is it worth the added complexity in practice? That is what the Go folks are thinking, I believe.<br /><br />About threading, I think we&#39;re misunderstanding each other.  I never claimed RAII wasn&#39;t useful. Maybe some code would help:<br /><br />class Counter {<br />private:<br />    int c;<br />    mutex m;<br />public:<br />    Counter(): c(0) {}<br />    void inc() { lock(m); c++; }<br />};<br /><br />Here there are two objects, the mutex and the lock wrapper, named lock.  You need both. My point is that it takes the same amount of brain to write &quot;lock(m)&quot; as it does to write &quot;using (m) {..}&quot; or &quot;m.lock(); defer m.unlock()&quot;, so RAII doesn&#39;t buy you anything over the explicit way.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/16569074120665954195'>Tarun Elankath</a> <span class="comment-when">(September 17, 2010 5:25 PM)</span> I randomly fall across  this old post a year later and Rivorus&#39;s wonderful arguments and insightful comments have inspired me to brush the dust off my C++ templates book and look for Stepanov&#39;s book as well... :)</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p>Anonymous <span class="comment-when">(January 4, 2011 10:23 PM)</span> Most people that earn money being an affiliate sign up with several Affiliate Programs. In fact, you have to experiment with several before you find those that will make you as much as possible. One of the important aspects to consider elect to promote products as an affiliate is to choose worthwhile products. If you wouldn&#39;t buy it or have any use for it chances are your customers won&#39;t either. Remember, even though you&#39;re selling over the web and not in person, irrespective of whether you truly believe in the products you are promoting will show through in your marketing efforts. Choose products that you truly believe in if you intend to persuade others to buy them.<br /><br />Regards,<br />[url=George (The IT Guy)[/url]</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/10773876428711731299'>Carsten Milkau</a> <span class="comment-when">(May 27, 2011 5:35 AM)</span> You forgot<br /><br />4. (The python way) Make types first-class objects. That means, type factories are full-fledged ordinary functions instead of lexical patterns.<br /><br />It&#39;s certainly not fair to compare an interpreted, weakly-typed language to a compiled, strongly-typed one. Still, Go has already gone quite a bit into this direction with the Reflect package.<br /><br />To put it straight, generics are actually a specialized means for computation on types. There are many cases where they are easy and straightforward, but Python shows that first-class types can do it just as well, and the rapid evolution of the boost libraries shows that there is actually a great demand in general type computation (and also that generics are inferior for this purpose). Compilation is a computation, and it only makes sense to use the same language for compile-time computation as for runtime computation doesn&#39;t it? <br /><br />I don&#39;t say this would be easy, not at all. Yet I think following this path would make Go even more useful, productive and original.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p>Anonymous <span class="comment-when">(June 6, 2011 7:30 PM)</span> <i>&quot;x = NewX(); defer x.Destroy()&quot; is an idiom - the defer immediately following the instantiation. Anyone who&#39;s read some example code would be surprised to see no defer. It would be a &quot;loud silence&quot;.</i><br /><br />Oh, so it&#39;s an &quot;idiom&quot; that every object is destroyed when the function that allocated it returns? Do people who write such things actually program for a living? Shudder. I sure hope I&#39;m not using any of their code. The same goes for Jonathan Amsterdam, who commits the even worse sin of disposing of an object allocated in the caller -- and manually, yet; how quickly he forgets that the whole point of defer is to <i>guarantee</i> that the object is destroyed when it will no longer be used. Of course, these examples together make the point -- the only way to get it right in all cases is with dtors (RAII).<br /><br />Also, Jonathan&#39;s code example highlights a fatal weakness of Go&#39;s interfaces -- they aren&#39;t composable. Suppose I want to dispose of r after passing it to a function that expects a Foobler -- how do I declare r to be both <br />Disposable and a Foobler? I can&#39;t ... and I never will be able to, because composability would contradict Go&#39;s simple(-minded) design of no type hierarchies, and the type syntax is designed in a rigid way that makes it awkward to add such features. <br /><br /><i>Rivorus, I admire your passion but your optimism is misplaced.</i><br /><br />Ditto.<br /><br /><i>It is extremely unlikely that the Go designers are unaware of your arguments.</i><br /><br />The evidence strongly suggests the opposite. This very thread, by one of the designers, is counterevidence.<br /><br /><i>Is your suggestion that we sit on our hands until then?</i><br /><br />Nice strawman that turns reality on its head. ncm made no such suggestion, but rather drew a conclusion from an observation about Go -- &quot;unfortunate early design choices&quot;. It&#39;s not just choices seen in the language, but choices <i>about</i> the language -- basic design philosophy. It is now mid-2011 with no glimmer of a generic facility. One can predict, from that design philosophy and from seeing Go&#39;s incredibly weak version of exceptions, that if it has generics by 2015 they too will be incredibly weak. Getting generics right takes a lot of careful work, by people who actually <i>believe</i> in them and are aware of their power and the wealth of accumulated experience in  programming language design. Take a look, for instance, at D, Scala, and Jade -- a spinoff of Emerald, which as you know has interfaces much like Go&#39;s.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/03666405309296128681'>dral</a> <span class="comment-when">(August 22, 2011 9:36 AM)</span> Hi Russ,<br />Almost two years have passed since this post was published and go still don&#39;t have support for generic programming.<br />What is the status of generics in go today? Is this still something you are thinking about?<br />It&#39;d be interesting to know what is your conclusion after all this discussion on generics.<br />Thanks.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p>Anonymous <span class="comment-when">(October 25, 2011 5:03 AM)</span> http://www.bluebytesoftware.com/blog/2011/10/23/OnGenericsAndSomeOfTheAssociatedOverheads.aspx</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p>Anonymous <span class="comment-when">(December 8, 2011 11:09 AM)</span> I don&#39;t see any advantage in having generics in Go. It&#39;ll make the language more complex without an obvious benefit.</p>
+ </li></ul></div>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

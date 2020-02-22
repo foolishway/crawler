@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: Visualizing TCP</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>Visualizing TCP
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Monday, December 13, 2010.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+<p><p class="lp">
+<a href="http://vimeo.com/14439742">This video</a> depicts an HTTP GET by showing
+packets as balls flying between client and server, slowed 40x compared to real time.
+It's pretty nice for getting a visceral sense of the underlying TCP session:
+you can see individual rounds at the start and then as the session stabilizes the rounds begin to overlap enough that they disappear.
+</p>
+
+<p class="pp">
+When I saw the video, it reminded me of the ever-present videos of sorting algorithms,
+like the ones on the Wikipedia
+<a href="http://en.wikipedia.org/wiki/Heapsort">heapsort</a> and
+<a href="http://en.wikipedia.org/wiki/Quicksort">quicksort</a> pages:
+</p>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Sorting_heapsort_anim.gif" />
+
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Sorting_quicksort_anim.gif" />
+
+
+
+<p class="lp">
+That in turn reminded me of a 2007 blog post
+by Aldo Cortesi about <a href="http://corte.si//posts/code/visualisingsorting/index.html">visualizing sorting algorithms</a> using graphs instead of videos.  He points out that the animations make time-based questions difficult to answer:
+</p>
+
+<blockquote style="color: #444444;">
+<p class="lp">[It] is my measured opinion that this animation has all the explanatory power of a glob of porridge flung against a wall. To see why I say this, try to find rough answers to the following set of simple questions with reference to it:</p>
+
+<ul>
+<li>After what percentage of time is half of the array sorted?
+
+</li><li>Can you find an element that moved about half the length of the array to reach its final destination?
+
+</li><li>What percentage of the array was sorted after 80% of the sorting process? How about 20%?
+
+</li><li>Does the number of sorted elements grow linearly or non-linearly with time (i.e. logarithmically or exponentially)?
+</li></ul>
+
+<p class="lp">If you thought that was harder than it needed to be, blame animation. First, while humans are great at estimating distances in space, they are pretty bad at estimating distances in time. This is why you had to watch the animation two or three times to answer the first question. When we translate time to a geometric length, as is done in any scientific diagram with a time dimension, this estimation process becomes easy. Second, many questions about sorting algorithms require us to actively compare the sorting state at two or more different time points. Since we don't have perfect memories, this is very, very hard in all but the simplest cases. This leaves us with a strangely one-dimensional view into an animation - we can see what's on screen at any given moment, but we have to strain to answer simple questions about, say, rates of change. Which is why the final question is hard to answer accurately.
+</p>
+</blockquote>
+
+<p class="lp">
+Instead, he suggests plotting static graphs showing the paths of
+individual array elements over time.
+Here are his original visualizations of heapsort and quicksort:
+</p>
+
+<a href="https://corte.si/posts/code/visualisingsorting/"><img src="https://corte.si/posts/code/visualisingsorting/heap.png" />
+
+<img src="http://research.swtch.com/quick.png" /></a>
+
+<p class="lp">
+The blog post is worth reading in full.  It has much more detail and links to many other interesting blog posts and a new site dedicated to those visualizations, <a href="http://sortvis.org/">sortvis.org</a>.
+</p>
+
+<p class="pp">
+Remembering this made me wonder if the lesson of the sorting
+animations applied to the TCP animations too, so I collected my
+own tcpdumps of both sides of an HTTP GET, pulled out the
+trusty (but neglected) Unix tool <a href="http://swtch.com/plan9port/man/man1/join.html"><i>join</i>(1)</a>
+to produce a dump with two timestamps on each packet,
+and then used Perl to turn it into a graph (<a href="http://swtch.com/tcp.ps">raw PostScript</a>):
+</p>
+
+<img src="http://research.swtch.com/tcpviz.png" />
+
+<p class="lp">
+Time marches to the right, with each row picking up where
+the previous one left off.  Blue lines indicate packets from
+the client and black lines indicate packets from the server.
+</p>
+
+<p class="pp">
+I think this kind of graph has the same important benefits that
+Cortesi realized with his sorting graphs.  It's static, so you
+have time to study it, focus on anomalies, or notice patterns
+that aren't immediately apparent.  The geometry of the lines,
+with flatter slopes corresponding to slower packets, makes it
+easy to compare speeds.
+</p>
+
+<p class="pp">
+Here are just a few things I noticed.
+</p>
+
+<p class="pp">
+The connection starts with the usual 3-way TCP handshake.
+The client sends the third packet in the handshake and
+the first data packet back to back, one of its few back-to-back
+transmissions.  After the handshake and the initial GET,
+which probably fits entirely in that first packet, the client
+only receives data: the black lines are large payloads
+while the blue lines are ACK messages that trigger more
+payloads.
+Scanning across the client's view of the connection
+(the top edge of each row) we can see that the client
+is using the standard delayed ACKs, sending an ACK every two packets.
+Scanning across the server's view of the connection
+(the bottom edge of each row) we can see that the
+server usually responds to the acknowledgement of
+two packets by sending two more packets, leaving
+the TCP window size (the number of packets in flight) unchanged.
+Occasionally, though, the server grows the window size
+by responding with three packets instead of two.
+Three of these events are circled in rows 1 and 2.
+Occasionally the server only responds to an ACK with
+a single packet, but most of those appear to be times when
+the client was only acknowledging a single packet.
+</p>
+
+<p class="pp">
+We can count the number of packets in flight at any
+given time by counting the number of black lines that
+cross a particular blue line, plus the number of packets
+sent when the blue line reaches the server.
+For example, three black lines cross the last complete
+blue line on row 1, and the server sends two more packets
+in response, so the window size then is five packets.
+By the end of row 2, the window size is seven packets.
+</p>
+
+<p class="pp">
+The window size fluctuates a little once it stabilizes:
+at the end of row 10 it has grown to eight packets
+but at the end of row 20 it is back to seven.
+It's not clear what causes the server to
+shrink or grow the window size.  I couldn't find any
+evidence of packet loss in the traces.
+</p>
+
+<p class="pp">
+I set the time axis such that those initial packets travel
+on lines with a 2:1 slope.
+A glance down the page shows
+that while the packets sent by the client continue to
+travel at approximately that speed, the packets
+sent by the server gradually slow until row 3,
+where they appear to stabilize around a 1:2 slope,
+four times longer to send than the initial packets.
+Looking at the raw data, those later packets
+around 100 ms for a
+one-way trip compared to 20 ms during the original handshake,
+so our visual estimate is not far off.
+This is evidence of queueing along the path
+from server to client; the likely suspect is the server's
+upstream DSL connection.
+</p>
+
+<p class="pp">
+The circled fragment on row 11 is more evidence of
+queuing.  Something delays the ACK
+from client to server (note the more gradual slope)
+but the packets that the server sends in response
+are not noticeably delayed: they still had time to
+catch up with the bottlenecked packets.
+</p>
+
+<p class="pp">
+The circled fragment on row 24 shows the opposite case.
+Most of the time the packet arrivals at the client are
+evenly spaced, but if a few packets from the server to
+the client get delayed, that delays the corresponding
+ACKs, which throws the conversation into a bursty
+behavior that takes a few rounds to convert to
+a steady state.
+</p>
+
+<p class="pp">
+People more familiar with TCP might notice other
+interesting details in the plot.  If you find
+something, please leave a comment.
+</p>
+
+<p class="pp">
+Of course, the idea of plotting network packets
+against time in this way is not new: any class in network
+protocols uses diagrams like these.  However, I have
+never seen a diagram like this one made from real
+timings on both sides, so that you can see the actual speeds of
+individual packets and compare the relative speeds of
+different packets, and I've never seen a diagram
+that was this zoomed out, so that you can see macro
+effects like the occasional congestion burp of rows 11 and 24.
+It would be interesting to have a tool that generated these
+automatically, but I rarely have a need to examine
+protocols at this level so I'm not likely to spend more time on it.
+If you know of (or make) such a tool, please leave a comment.
+</p></p>
+
+
+
+
+
+<div class="comments">
+  <div class="comments-header old">
+    <p>(Comments originally posted via Blogger.)</p>
+  </div>
+  <div class="comments-body">
+    <div id="plus-comments">
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01015442161627966611'>Soapbox Cicero</a> <span class="comment-when">(December 13, 2010 12:19 PM)</span> Fascinating post as usual, Russ. But I found the chart a little hard to read, personally. I opened it up in gimp and switched the blue and red and found it much easier to follow:<br /><br />http://i.imgur.com/pCeyM.png</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p>Anonymous <span class="comment-when">(December 13, 2010 3:46 PM)</span> OPNET&#39;s ITGuru ACE product creates beautiful plots of packet&#39;s transmission/flight/reception times.<br /><br />They are used extensively in debugging networked application performance. I hadn&#39;t realized that the feature was uncommon.<br /><br />Bizarrely, I can&#39;t find any screenshots online.<br /><br />http://opnet.com is the main company site.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p>Anonymous <span class="comment-when">(December 13, 2010 3:50 PM)</span> I found an example of the packet-transmission screenshots I mentioned in my previous comment:<br /><br />See Page 6-5 (and others) of this PDF:<br />https://www.cisco.com/en/US/docs/net_mgmt/application_analysis_solution/1.0/tutorials_and_examples/tut_ace.pdf</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/01763502249229568232'>Jim</a> <span class="comment-when">(January 7, 2011 3:46 PM)</span> Interesting. Switching the colours helped; but with such a long transaction the very long X axis makes some comparisons difficult.<br /><br />I liked the interpretation of the window size; but for actual traffic analysis I think it would be useful to have data like that explicitly labelled on the graph, along with highlights for important packet types (SYN, FIN, and so on). Hopefully there are not so many of these that they swamp the labelling. Otherwise much of the useful interpretation of this graph is down to manually counting lines.<br /><br />Another possibility is charting the second order for window size, and showing the rate of change of window size over time (i.e. acceleration instead of velocity); that way we could see when changes from the ideal behaviour happen.<br /><br />Grabbing an explicit visualisation of the packet trip time/speed would also be interesting, as this impacts on the window size.</p>
+ </li></ul></div>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

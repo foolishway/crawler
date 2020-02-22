@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: UTF-8: Bits, Bytes, and Benefits</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>UTF-8: Bits, Bytes, and Benefits
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Friday, March 5, 2010.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+<p><p class=pp>
+UTF-8 is a way to encode Unicode code points&#8212;integer values from
+0 through 10FFFF&#8212;into a byte stream,
+and it is far simpler than many people realize.
+The easiest way to make it confusing or complicated
+is to treat it as a black box, never looking inside.
+So let's start by looking inside.  Here it is:
+</p>
+
+<center>
+<table cellspacing=5 cellpadding=0 border=0>
+<tr height=10><th colspan=4></th></tr>
+<tr><th align=center colspan=2>Unicode code points</th><th width=10><th align=center>UTF-8 encoding (binary)</th></tr>
+<tr height=10><td colspan=4></td></tr>
+<tr><td align=right>00-7F</td><td>(7 bits)</td><td></td><td align=right>0<i>tuvwxyz</i></td></tr>
+<tr><td align=right>0080-07FF</td><td>(11 bits)</td><td></td><td align=right>110<i>pqrst</i>&nbsp;10<i>uvwxyz</i></td></tr>
+<tr><td align=right>0800-FFFF</td><td>(16 bits)</td><td></td><td align=right>1110<i>jklm</i>&nbsp;10<i>npqrst</i>&nbsp;10<i>uvwxyz</i></td></tr>
+<tr><td align=right valign=top>010000-10FFFF</td><td>(21 bits)</td><td></td><td align=right valign=top>11110<i>efg</i>&nbsp;10<i>hijklm</i> 10<i>npqrst</i>&nbsp;10<i>uvwxyz</i></td>
+<tr height=10><td colspan=4></td></tr>
+</table>
+</center>
+
+<p class=lp>
+The convenient properties of UTF-8 are all consequences of the choice of encoding.
+</p>
+
+<ol>
+<li><i>All ASCII files are already UTF-8 files.</i><br>
+The first 128 Unicode code points are the 7-bit ASCII character set,
+and UTF-8 preserves their one-byte encoding.
+</li>
+
+<li><i>ASCII bytes always represent themselves in UTF-8 files.  They never appear as part of other UTF-8 sequences.</i><br>
+All the non-ASCII UTF-8 sequences consist of bytes
+with the high bit set, so if you see the byte 0x7A in a UTF-8 file,
+you can be sure it represents the character <code>z</code>.
+</li>
+
+<li><i>ASCII bytes are always represented as themselves in UTF-8 files.  They cannot be hidden inside multibyte UTF-8 sequences.</i><br>
+The ASCII <code>z</code> 01111010 cannot be encoded as a two-byte UTF-8 sequence
+11000001 10111010</code>.  Code points must be encoded using the shortest
+possible sequence.
+A corollary is that decoders must detect long-winded sequences as invalid.
+In practice, it is useful for a decoder to use the Unicode replacement
+character, code point FFFD, as the decoding of an invalid UTF-8 sequence
+rather than stop processing the text.
+</li>
+
+<li><i>UTF-8 is self-synchronizing.</i><br>
+Let's call a byte of the form 10<i>xxxxxx</i>
+a continuation byte.
+Every UTF-8 sequence is a byte that is not a continuation byte
+followed by zero or more continuation bytes.
+If you start processing a UTF-8 file at an arbitrary point,
+you might not be at the beginning of a UTF-8 encoding,
+but you can easily find one: skip over
+continuation bytes until you find a non-continuation byte.
+(The same applies to scanning backward.)
+</li>
+
+<li><i>Substring search is just byte string search.</i><br>
+Properties 2, 3, and 4 imply that given a string
+of correctly encoded UTF-8, the only way those bytes
+can appear in a larger UTF-8 text is when they represent the
+same code points.  So you can use any 8-bit safe byte at a time 
+search function, like <code>strchr</code> or <code>strstr</code>, to run the search.
+</li>
+
+<li><i>Most programs that handle 8-bit files safely can handle UTF-8 safely.</i><br>
+This also follows from Properties 2, 3, and 4.
+I say &ldquo;most&rdquo; programs, because programs that
+take apart a byte sequence expecting one character per byte
+will not behave correctly, but very few programs do that.
+It is far more common to split input at newline characters,
+or split whitespace-separated fields, or do other similar parsing
+around specific ASCII characters.
+For example, Unix tools like cat, cmp, cp, diff, echo, head, tail, and tee
+can process UTF-8 files as if they were plain ASCII files.
+Most operating system kernels should also be able to handle
+UTF-8 file names without any special arrangement, since the
+only operations done on file names are comparisons
+and splitting at <code>/</code>.
+In contrast, tools like grep, sed, and wc, which inspect arbitrary
+individual characters, do need modification.
+</li>
+
+<li><i>UTF-8 sequences sort in code point order.</i><br>
+You can verify this by inspecting the encodings in the table above.
+This means that Unix tools like join, ls, and sort (without options) don't need to handle
+UTF-8 specially.
+</li>
+
+<li><i>UTF-8 has no &ldquo;byte order.&rdquo;</i><br>
+UTF-8 is a byte encoding.  It is not little endian or big endian.
+Unicode defines a byte order mark (BOM) code point FFFE,
+which are used to determine the byte order of a stream of
+raw 16-bit values, like UCS-2 or UTF-16.
+It has no place in a UTF-8 file.
+Some programs like to write a UTF-8-encoded BOM
+at the beginning of UTF-8 files, but this is unnecessary
+(and annoying to programs that don't expect it).
+</li>
+</ol>
+
+<p class=lp>
+UTF-8 does give up the ability to do random
+access using code point indices.
+Programs that need to jump to the <i>n</i>th
+Unicode code point in a file or on a line&#8212;text editors are the canonical example&#8212;will
+typically convert incoming UTF-8 to an internal representation
+like an array of code points and then convert back to UTF-8
+for output,
+but most programs are simpler when written to manipulate UTF-8 directly.
+</p>
+
+<p class=pp>
+Programs that make UTF-8 more complicated than it needs to be
+are typically trying to be too general,
+not wanting to make assumptions that might not be true of
+other encodings.
+But there are good tools to convert other encodings to UTF-8,
+and it is slowly becoming the standard encoding:
+even the fraction of web pages
+written in UTF-8 is
+<a href="http://googleblog.blogspot.com/2010/01/unicode-nearing-50-of-web.html">nearing 50%</a>.
+UTF-8 was explicitly designed
+to have these nice properties.  Take advantage of them.
+</p>
+
+<p class=pp>
+For more on UTF-8, see &ldquo;<a href="http://plan9.bell-labs.com/sys/doc/utf.html">Hello World
+or
+Καλημέρα κόσμε
+or
+こんにちは 世界</a>,&rdquo; by Rob Pike
+and Ken Thompson, and also this <a href="http://www.cl.cam.ac.uk/~mgk25/ucs/utf-8-history.txt">history</a>.
+</p>
+
+<br>
+
+<font size=-1>
+<p class=lp>
+Notes: Property 6 assumes the tools do not strip the high bit from each byte.
+Such mangling was common years ago but is very uncommon now.
+Property 7 assumes the comparison is done treating
+the bytes as unsigned, but such behavior is mandated
+by the ANSI C standard for <code>memcmp</code>,
+<code>strcmp</code>, and <code>strncmp</code>.
+</p>
+</font></p>
+
+
+
+
+
+<div class="comments">
+  <div class="comments-header old">
+    <p>(Comments originally posted via Blogger.)</p>
+  </div>
+  <div class="comments-body">
+    <div id="plus-comments">
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/10803394131692968505'>Andrew Wooster</a> <span class="comment-when">(March 5, 2010 4:47 PM)</span> One nit on substring search: searching for series of bytes is almost never what you want when doing a substring search in Unicode. For most substring search needs, you&#39;ll need to take into account Unicode equivalence: http://en.wikipedia.org/wiki/Unicode_equivalence<br /><br />Additionally, there are more complications when doing case/diacritic-insensitive substring searches and the like.<br /><br />This is one of the reasons many languages/frameworks use normalized UTF-16 strings internally, as using UTF-8 as the internal representation can lead to subtle bugs when developers don&#39;t understand the same string can be represented in multiple different ways.</p>
+ </li></ul></div>
+ <div class="plus-comment me"><ul><li class="plus-text">
+    <p><a href="http://swtch.com/~rsc/">Russ Cox</a> <span class="comment-when">(March 5, 2010 5:52 PM)</span> That&#39;s not really true: many substring searches are for fixed ASCII strings, and those work just fine.  And a lot of the time you do care about finding a specific sequence of code points, not some equivalent ones.  So much of the time, it&#39;s fine.<br /><br />Even if you do want to do Unicode equivalence in the string search, that&#39;s not incompatible with UTF-8.  The output of a normalization process can be UTF-8 as easily as any other encoding.<br /><br />Also, one nit: I think (hope) you mean UCS-2 not UTF-16.  UTF-16 has all of the drawbacks of UTF-8 (no random indexing based on code points) without any of the benefits.<br /><br />A modern implementation would need UCS-4 instead to allow code points outside the BMP, so normalizing to UCS-4 would take 4x as much memory for mostly ASCII text as UTF-8 would.  Unless you need the random access, it&#39;s probably all pain and no gain.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/10803394131692968505'>Andrew Wooster</a> <span class="comment-when">(March 5, 2010 6:57 PM)</span> I actually meant UTF-16. If a developer knows enough to access the raw storage and chop off a byte, they probably know they shouldn&#39;t be doing it. (Yeah, lame, I know.) It also encodes the BMP directly. You still don&#39;t get random access, but it&#39;s a tradeoff. AFAIK (and I&#39;m not an expert), Java, .Net, and Cocoa/CoreFoundation all use UTF-16 internally.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://claimid.com/bdauvergne'>bdauvergne</a> <span class="comment-when">(March 7, 2010 1:51 AM)</span> Java, like NTFS and a lot of a &#39;let&#39;s make a half bad choice&#39; systems, use UCS2 internally, to keep pseudo performance/compatibility with C-string indexing logic, that&#39;s why its String does not really support Unicode (no support outside the BMP).</p>
+ </li></ul></div>
+ <div class="plus-comment me"><ul><li class="plus-text">
+    <p><a href="http://swtch.com/~rsc/">Russ Cox</a> <span class="comment-when">(March 7, 2010 12:14 PM)</span> Well, the Unicode consortium kind of stabbed everyone in the back on UCS-2.  In the early days people believed that Unicode would stop at 64k code points, so UCS-2 (== UTF-16 at the time) was a completely reasonable internal representation.  <br /><br />It was a big mistake, even then, to use it as an external representation, because then you have byte order-dependent ASCII-incompatible files.  I think Windows support for Unicode was set back at least five years if not more by the insistence on using UCS-2 in files and file names.<br /><br />And then when Unicode bloated beyond the BMP, that hurt people using UCS-2 both as internal and external representations, essentially dooming legacy programs to mishandling non-BMP code points.  It hurt the &quot;UCS-2 as external representation&quot; code more, but even changing an internal-only representation requires recompiling, discovering places where assumptions of internal==16-bits lie hidden, and so on.<br /><br />We converted the Plan 9 tools (http://swtch.com/plan9port) from UCS-2 to UCS-4 for internal representation recently, but it required recompiling the tools that were dependent on that (text editors, window systems, regular expressions, etc).  And we&#39;ve probably still missed a few places.  But it was far easier than if we had to convert all our text files and file names and system calls too.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/02863876217578588420'>DAGwyn</a> <span class="comment-when">(May 19, 2010 4:26 AM)</span> ISO 10646, predating the name &quot;Unicode&quot;, started out with a 31-bit universal code space and treated potential warts such as &quot;compositing&quot; characters as distinct points in the space.  I don&#39;t know why, at the time that Windows NT first adopted 16-bit characters, &quot;people believed that Unicode would stop at 64k code points&quot;; it was obviously not the intent of 10646, nor was it even plausible after one tallied up all the known glyphs in use.<br />Anyway, the original definition of UTF (aka FSS/UTF) included encodings up to the full 31 bits needed for 10646 (exercise: is that the maximum encodable using the obvious extension of the 21-bit UTF-8 scheme?), although I don&#39;t think the original implementation supported more than 16 bits.<br />I pushed FSS/UTF in an article long ago in JCLT, which may have help bring it to the attention of people who had been working on less desirable solutions.</p>
+ </li></ul></div>
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/02340731619715153384'>kkll2</a> <span class="comment-when">(January 5, 2011 6:33 AM)</span> @rsc: that&#39;s a red herring. Unicode equivalence problem is at codepoint level, not at byte level.<br /><br />No matter what encoding you use to represent codepoints, you still have to deal with alternative forms (NFC/NFD) and multi-*codepoint* (i.e. 8 bytes or more in UCS-4) characters.<br /><br />So using UCS-4 gives you only false sense of random access, but you won&#39;t be able to correctly index, say &#8220;Z&#782;&#874;&#786;&#849;&#847;&#796;&#851;&#818;&#805;&#825;&#857;&#854;&#797;&#799;&#792;&#806;&#839;&#826;&#814;&#769;A&#823;&#801;&#796;&#791;&#816;&#857;&#818;&#817;&#854;&#819;&#816;&#816;&#790;&#845;&#793;&#827;&#798;&#781;&#770;&#784;&#834;&#848;&#773;&#865;L&#795;&#852;&#819;&#806;&#811;&#812;&#809;&#803;&#813;&#797;&#875;&#838;&#776;&#769;&#831;&#780;&#869;&#777;&#834;&#785;&#781;&#871;&#829;&#842;&#863;G&#800;&#809;&#804;&#798;&#813;&#846;&#854;&#815;&#792;&#819;&#841;&#810;&#811;&#816;&#857;&#816;&#854;&#828;&#869;&#778;&#848;&#786;&#848;&#855;&#783;&#777;&#768;Ó&#8221;.<br /><br />So if you have to deal with non-indexable strings which can have characters represented in multiple ways, you can as well use UTF-8, because UCS-4 doesn&#39;t solve this at all!</p>
+ </li></ul></div>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

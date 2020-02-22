@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: Data Structures Go Programs</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>Data Structures Go Programs
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Tuesday, December 8, 2009.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+<p><p class="lp">I've been writing about Go internals, which I'll keep doing,
+but I also want to spend some time on Go programs.
+Go's <a href="http://golang.org/pkg/reflect/">reflect package</a> implements data reflection.
+Any value can be passed to <code>reflect.NewValue</code> (its argument type is
+<code>interface{}</code>, the empty interface) and then manipulated and
+examined by looking at the result, a <code>reflect.Value</code>.
+Typically, you use a <a href="http://golang.org/doc/go_spec.html#Type_switches">type switch</a> to determine what kind
+of value it is&#8212;a <code><a href="http://golang.org/pkg/reflect/#IntValue">*IntValue</a></code>, a <code><a href="http://golang.org/pkg/reflect/#StructValue">*StructValue</a></code>, a <code><a href="http://golang.org/pkg/reflect/#PtrValue">*PtrValue</a></code>, and so on&#8212;and then walk it further.
+This is how <a href="http://golang.org/src/pkg/fmt/print.go?h=doprint#L849"><code>fmt.Print</code></a>
+prints arbitrary data passed to it.
+</p>
+
+<p class="pp">Go allows programs to tag the fields in struct definitions with annotation strings.
+These annotations have no effect on the compilation but are recorded in the
+run-time type information and can be examined via reflection.
+The annotations can be hints for reflection-driven code
+traversing the data structures.
+This blog post shows two examples of such code: an XML parser
+that writes directly into data structures, and a template-based
+output generator that reads from them.
+</p>
+
+<h3>An XML Linked List</h3>
+
+<p class="lp">The Go <a href="http://golang.org/pkg/xml/">XML package</a> implements a
+function <code>Unmarshal</code> which parses XML directly into data structures.
+As a contrived but illustrative example, here is an XML encoding of a linked list:
+</p>
+
+<pre class="indent">
+var encoded = `
+   &lt;list&gt;&lt;value&gt;a&lt;/value&gt;
+       &lt;list&gt;&lt;value&gt;b&lt;/value&gt;
+           &lt;list&gt;&lt;value&gt;c&lt;/value&gt;
+           &lt;/list&gt;
+       &lt;/list&gt;
+   &lt;/list&gt;
+`
+</pre>
+
+<p class="lp">(That's a backquoted multi-line Go string literal.)</p>
+
+<p class="pp">Given this Go data structure definition:
+</p>
+
+<pre class="indent">
+type List struct {
+	Value string
+	List  *List
+}
+
+func (l *List) String() string {
+	if l == nil {
+		return "nil"
+	}
+	return l.Value + " :: " + l.List.String()
+}
+</pre>
+
+<p class="lp">we can invoke <code>xml.Unmarshal</code> to
+turn the XML above into an instance of this data structure:
+</p>
+
+<pre class="indent">
+func main() {
+	var l *List
+	if err := xml.Unmarshal(strings.NewReader(encoded), &amp;l); err != nil {
+		log.Exit("xml.Unmarshal: ", err)
+	}
+	fmt.Println(l)
+}
+</pre>
+
+<p class="lp">This program prints <code>a :: b :: c :: nil</code>.
+The call to <code>xml.Unmarshal</code> walked the XML
+and the data structure at the same time, matching
+the XML tags <code>&lt;value&gt;</code> and <code>&lt;list&gt;</code>
+against the names of the structure fields and allocating
+pointers where necessary.</p>
+
+<p class="pp">There are decisions to be made when matching
+XML against the data structure that aren't easily expressed
+with just the usual struct information.
+For example, we might want to make the value an
+attribute instead of a sub-element.  Because attributes
+and sub-elements might use the same names, the XML
+package requires struct fields holding attributes to be tagged
+with <code>"attr"</code>.
+This data structure and XML encoding would also work
+in the program above:
+</p>
+
+<pre class="indent">
+type List struct {
+	Value string "attr"
+	List  *List
+}
+
+var encoded = `
+   &lt;list value="a"&gt;
+       &lt;list value="b"&gt;
+           &lt;list value="c"/&gt;
+       &lt;/list&gt;
+   &lt;/list&gt;
+`
+</pre>
+
+<p class="pp">If a field has type <code>string</code>, it gets the
+character data from the element with that name,
+but sometimes you need to accumulate both
+character data and sub-elements.
+To do this, you can tag a field with <code>"chardata"</code>.
+This data structure and XML encoding would also work:
+</p>
+
+<pre class="indent">
+type List struct {
+	Value string "chardata"
+	List  *List
+}
+
+var encoded = `&lt;list&gt;a&lt;list&gt;b&lt;list&gt;c&lt;/list&gt;&lt;/list&gt;&lt;/list&gt;`
+</pre>
+
+<p class="pp">The annotations are trivial but important:
+where the encoding and the data structures are not a perfect
+match (and they rarely are), the annotations provide the hints
+necessary for the XML package to make them work together anyway.
+</p>
+
+<h3>Code Search Client</h3>
+
+<p class="lp">Let's look at real XML data. 
+Google's <a href="http://www.google.com/codesearch">Code Search</a>
+provides <a href="http://swtch.com/~rsc/regexp/regexp1.html">regular expression search</a>
+over the world's public source code.
+The search [<a href="http://www.google.com/codesearch?q=file:/usr/sys/ken/slp.c+expected">file:/usr/sys/ken/slp.c expected</a>] returns <a href="http://www.google.com/codesearch/p?hl=en#miRTe8ZyR0o/Archive/PDP-11/Trees/V6/usr/sys/ken/slp.c&amp;q=file:/usr/sys/ken/slp.c%20expected&amp;sa=N&amp;cd=1&amp;ct=rc&amp;l=264">a single, famous result</a>.
+Instead of using the web interface, though, we can issue the same query
+using the <a href="http://code.google.com/apis/codesearch/docs/2.0/reference.html">Code Search GData API</a> and get <a href="http://www.google.com/codesearch/feeds/search?q=file:/usr/sys/ken/slp.c+expected">this XML</a> back (simplified and highlighted for structure):
+</p>
+
+<pre class="indent" style="overflow: hidden;">
+<b>&lt;?xml</b> version="1.0" encoding="UTF-8"<b>?&gt;</b>
+<b>&lt;feed</b> xmlns="http://www.w3.org/2005/Atom"
+     xmlns:gcs="http://schemas.google.com/codesearch/2006"
+     xml:base="http://www.google.com"<b>&gt;</b>
+ <b>&lt;id&gt;</b>http://www.google.com/codesearch/feeds/search?q=file:/usr/sys/ken/slp.c+expected<b>&lt;/id&gt;</b>
+ <b>&lt;updated&gt;</b>2009-12-04T23:49:22Z<b>&lt;/updated&gt;</b>
+ <b>&lt;title</b> type="text"&gt;Google Code Search<b>&lt;/title&gt;</b>
+  <b>&lt;generator</b> version="1.0" uri="http://www.google.com/codesearch"<b>&gt;</b>Google Code Search<b>&lt;/generator&gt;</b>
+ <b>&lt;entry&gt;</b>
+   <b>&lt;gcs:package</b> name="http://www.tuhs.org" uri="http://www.tuhs.org"<b>&gt;</b><b>&lt;/gcs:package&gt;</b>
+   <b>&lt;gcs:file</b> name="Archive/PDP-11/Trees/V6/usr/sys/ken/slp.c"<b>&gt;</b><b>&lt;/gcs:file&gt;</b>
+   <b>&lt;gcs:match</b> lineNumber="325" type="text/html"<b>&gt;</b>&amp;lt;pre&amp;gt;  * You are not &amp;lt;b&amp;gt;expected&amp;lt;/b&amp;gt; to understand this.
+&amp;lt;/pre&amp;gt;<b>&lt;/gcs:match&gt;</b>
+ <b>&lt;/entry&gt;</b>
+<b>&lt;/feed&gt;</b>
+</pre>
+
+<p class="lp">From the API documentation or just by eyeballing, we can write
+data structures for the information we'd like to extract:
+</p>
+
+<pre class="indent">
+type Feed struct {
+	XMLName xml.Name "http://www.w3.org/2005/Atom feed"
+	Entry   []Entry
+}
+
+type Entry struct {
+	XMLName xml.Name "http://www.w3.org/2005/Atom entry"
+	Package Package
+	File    File
+	Match   []Match
+}
+
+type Package struct {
+	XMLName xml.Name "http://schemas.google.com/codesearch/2006 package"
+	Name    string   "attr"
+	URI     string   "attr"
+}
+
+type File struct {
+	XMLName xml.Name "http://schemas.google.com/codesearch/2006 file"
+	Name    string   "attr"
+}
+
+type Match struct {
+	XMLName    xml.Name "http://schemas.google.com/codesearch/2006 match"
+	LineNumber string   "attr"
+	Type       string   "attr"
+	Snippet    string   "chardata"
+}
+</pre>
+
+<p class="lp">
+The <code>XMLName</code> fields are not required.
+The XML package records the XML tag name in them.
+If there is a string annotation (as there is here),
+then the XML package requires that the XML element being
+considered has the given name space and tag name.
+That is, the annotation is both documentation and
+an assertion about what kind
+of XML goes into this structure.</p>
+
+<p class="pp">A full Atom GData feed has many other fields,
+but these are the only ones that we care about.
+The XML parser will throw away data that doesn't fit into
+our structures.</p>
+
+<p class="pp">We can fetch the feed via HTTP and unmarshal
+the HTTP response data directly into the data structures:
+</p>
+
+<pre class="indent">
+r, _, err := http.Get(`http://www.google.com/codesearch/feeds/search?q=` +
+	http.URLEscape(flag.Arg(0)))
+if err != nil {
+	log.Exit(err)
+}
+
+var f Feed
+if err := xml.Unmarshal(r.Body, &amp;f); err != nil {
+	log.Exit("xml.Unmarshal: ", err)
+}
+</pre>
+
+<p class="lp">and then print the results:</p>
+
+<pre class="indent">
+for _, e := range f.Entry {
+	fmt.Printf("%s\n", e.Package.Name)
+	for _, m := range e.Match {
+		fmt.Printf("%s:%s:\n", e.File.Name, m.LineNumber)
+		fmt.Printf("%s\n", cutHTML(m.Snippet))
+	}
+	fmt.Printf("\n")
+}
+</pre>
+
+<p class="lp">(The <code>cutHTML</code> function returns its argument
+with HTML tags stripped: the
+<code>m.Snippet</code> is HTML but we just want to print text.)
+</p>
+
+<p class="pp">Compared to the <code>xml.Unmarshal</code>, that loop
+with all the <code>fmt.Printf</code> calls sure looks clunky.
+We can use a reflection-driven process to print the data too.
+The <a href="http://golang.org/pkg/template/">template package</a> is a Go implementation
+of <a href="http://code.google.com/p/json-template/">json-template</a>.
+We can write a template like:
+</p>
+
+<pre class="indent">
+var tmpl = `{.repeated section Entry}
+{Package.Name}
+{.repeated section Match}
+{File.Name}:{LineNumber}:
+{Snippet|nohtml}
+{.end}
+
+{.end}`
+</pre>
+
+<p class="lp">and then print the data using that template:</p>
+
+<pre class="indent">
+t := template.MustParse(tmpl, template.FormatterMap{"nohtml": nohtml})
+t.Execute(&amp;f, os.Stdout)
+</pre>
+
+<p class="lp">The formatter map definitions arrange that the
+<code>{Snippet|nohtml}</code> in the template run the
+data through the <code>nohtml</code> function when printing.
+Both variants of our program produce the same output:
+</p>
+
+<pre class="indent">
+http://www.tuhs.org
+Archive/PDP-11/Trees/V6/usr/sys/ken/slp.c:325:
+ * You are not expected to understand this.
+
+</pre>
+
+
+
+<h3>Parsing HTML</h3>
+
+<p class="lp">I still have three more tricks up my sleeve.</p>
+
+<p class="pp">
+First, in a pinch and if the HTML is
+mostly well formatted or you're just lucky, the XML parser
+can handle HTML too.
+Second, when the XML parser walks into a struct field, if the field
+is a pointer and is nil, it allocates a new value, as we
+saw in the linked list example.  But if the field is a non-nil
+pointer already, the parser just follows the pointer.
+The same goes for growing slices.
+Third, if the XML parser cannot find a struct field for a particular
+subelement, before giving up it looks for a field named <code>Any</code>
+and uses that field instead.
+</p>
+
+<p class="pp">
+Combined, these three rules mean that this structure:
+</p>
+
+<pre class="indent">
+type Form struct {
+	Input []Field
+	Any   *Form
+}
+
+type Field struct {
+	Name  string "attr"
+	Value string "attr"
+}
+</pre>
+
+<p class="lp">can be used to save a tree of form and other
+information from a web page.  When you unmarshal into it,
+you get a tree showing the structure of the web page,
+with each element becoming a <code>*Form</code>
+because the parser used the <code>Any</code> field.
+</p>
+
+<p class="pp">But who wants to walk that tree just to
+find the form fields?
+Instead, we can set the <code>Any</code> pointer to
+point back at the <code>Form</code> it is in.
+Then as the XML parser thinks it is walking the data structure,
+in fact it will be visiting the same <code>Form</code>
+struct over and over.
+Each time it finds an <code>&lt;input&gt;</code>, the parser
+will append it to the <code>Input</code> slice.
+</p>
+
+<pre class="indent">
+func main() {
+	r, _, err := http.Get(`http://code.google.com/p/go/`)
+	if err != nil {
+		log.Exit(err)
+	}
+
+	var f Form
+	f.Any = &amp;f
+
+	p := xml.NewParser(r.Body)
+	p.Strict = false
+	p.Entity = xml.HTMLEntity
+	p.AutoClose = xml.HTMLAutoClose
+	if err := p.Unmarshal(&amp;f, nil); err != nil {
+		log.Exit("xml.Unmarshal: ", err)
+	}
+
+	for _, fld := range f.Input {
+		fmt.Printf("%s=%q\n", fld.Name, fld.Value)
+	}
+}
+</pre>
+
+<p class="lp">This program prints:</p>
+
+<pre class="indent">
+q=""
+projectsearch="Search projects"
+</pre>
+
+
+<h3>Further Reading</h3>
+
+<p class="lp">There are a few more examples of this technique in
+the standard Go libraries.
+The net package's <a href="http://golang.org/src/pkg/net/dnsmsg.go">DNS client</a>
+uses this technique to build generic packing and unpacking routines for DNS packets.
+The <a href="http://golang.org/pkg/json/">JSON package</a> provides approximately the same
+functionality as the XML package, but with JSON as the wire format.
+In fact, JSON is arguably <a href="http://golang.org/pkg/xml/#Bugs">more suited</a> to the task.
+(Remember: &#8220;the <a href="http://homepages.inf.ed.ac.uk/wadler/papers/xml-essence/xml-essence.pdf">essence of XML</a> is this: the problem it solves is not hard, and it does not solve the problem well.&#8221;)
+The <a href="http://golang.org/pkg/asn1/">ASN1 package</a> also works this way, though its generality
+is limited: it implements just enough to parse SSL/TLS certificates.
+There are also <a href="http://golang.org/search?q=NewValue">other ways to use reflection</a>, which will
+have to wait for future posts.</p>
+
+<p class="pp">It's actually a little surprising how often this technique gets
+used in the Go libraries.  Part of the reason is that it's a shiny new hammer,
+but it seems to be a very useful shiny new hammer,
+because so much of modern programming is talking to
+other programs over a variety of wire encodings.
+</p>
+
+<p class="pp">Unmarshalling directly into data structures via reflection, with just a few necessary
+hints as annotations, can be implemented in other languages,
+but the <a href="http://code.google.com/p/gdata-python-client/source/browse/trunk/src/gdata/codesearch/__init__.py">examples I've seen</a> are not
+nearly as elegant or as concise as the Go versions.
+</p>
+
+<p class="pp"><i><a href="http://books.google.com/books?id=kse_7qbWbjsC&amp;lpg=PA21&amp;ots=DfwZDUFT3s&amp;dq=%22data%20structures%20programs%22%20bentley&amp;pg=PA21#v=onepage&amp;q=&amp;f=false">Apologies to Jon Bentley</a>.</i></p></p>
+
+
+
+
+
+<div class="comments">
+  <div class="comments-header old">
+    <p>(Comments originally posted via Blogger.)</p>
+  </div>
+  <div class="comments-body">
+    <div id="plus-comments">
+ <div class="plus-comment"><ul><li class="plus-text">
+    <p><a href='http://www.blogger.com/profile/04562789893798531364'>bflm</a> <span class="comment-when">(December 8, 2009 12:18 PM)</span> Hello Russ,<br /><br />thanks for your inspiring blog posts as for your great involvement in Go.<br /><br />I&#39;ve been trying the xml.Unmarshal just a few days ago and had to give up this easy way due to a problem with attributes like some-attrib=&quot;something&quot;. The dash is obviously an illegal character for an identifier of a struct field in which such attrs I wanted to get stored by Unmarshal. Looking at the code of xml/read.go around line 272 it seems to me, that this situation is not addressed.<br /><br />One possible remedy could or may be introducing an attr tag &quot;syntax&quot; of &quot;attr attr-name&quot;, which is similar to encoding of the XMLName tag, with the &quot;real&quot; name at its end (after the namespace). By the way, does the later solve the analogous situation with dash-in-tagname xml tags also?<br /><br />I&#39;m aware that I&#39;ve maybe just misunderstood something.<br /><br />Thank you in advance for any hints/solutions and please forgive me my non-native-speaker English.</p>
+ </li></ul></div>
+    </div>
+  </div>
+</div>
+
+
+      </div>
+      
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

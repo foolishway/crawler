@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: How Many Go Developers Are There?</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>How Many Go Developers Are There?
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Thursday, July 13, 2017.<br>Updated Friday, November 1, 2019.
+            
+          
+        </div>
+        </div>
+        </h1>
+        
+
+<p>
+How many Go developers are there in the world? <i>At least a million, maybe two!</i>
+
+<p>
+As of November 2019, my best estimate is between 1.15 and 1.96 million.
+
+<p>
+Previously:<br>
+In July 2017, I estimated between half a million and a million.<br>
+In July 2018, I estimated between 0.8 and 1.6 million.
+<a class=anchor href="#approach"><h2 id="approach">Approach</h2></a>
+
+
+<p>
+My approach is to compute:
+<div class=fig>
+<center>
+<i>Number of Go Developers &nbsp;&nbsp;</i> = &nbsp;&nbsp; <i>Number of Software Developers</i> &nbsp; × &nbsp; <i>Fraction using Go</i>
+</center>
+</div>
+
+
+<p>
+Then we need to answer how many software developers there are in the world and what percentage of them are using Go.
+<a class=anchor href="#number_of_software_developers"><h2 id="number_of_software_developers">Number of Software Developers</h2></a>
+
+
+<p>
+How many software developers are there in the world?
+
+<p>
+In January 2014, <a href="https://www.infoq.com/news/2014/01/IDC-software-developers">InfoQ reported</a> that IDC published a report (no longer available online, it would seem) estimating that there were 11,005,000 “professional software developers” and 7,534,500 “hobbyist software developers,” giving a total estimate of 18,539,500.
+
+<p>
+In October 2016, Evans Data Corporation issued a <a href="https://evansdata.com/press/viewRelease.php?pressID=244">press release</a> advertising their “<a href="https://web.archive.org/web/20160730050104/http://www.evansdata.com/reports/viewRelease.php?reportID=9">Global Developer Population and Demographic Study 2016</a>” in which they estimated the total worldwide population of software developers to be 21 million.
+
+<p>
+Maybe the Evans estimate is too high. The details of their methodology are key to their business and therefore not revealed publicly, so we can’t easily tell how strict or loose their definition of developer is.
+In January 2017, PK of the DQYDJ blog posted an analysis titled “<a href="https://dqydj.com/number-of-developers-in-america-and-per-state/">How Many Developers are There in America, and Where Do They Live?</a>,” That post, which includes an admirably detailed methodology section, used data from the 2016 American Census Survey (ACS) and included these employment categories as “strict” software developers:
+<ul>
+<li>
+Computer Scientists and Systems Analysts / Network Systems Analysts / Web Developers
+<li>
+Computer Programmers
+<li>
+Software Developers, Applications and Systems Software
+<li>
+Database Administrators</ul>
+
+
+<p>
+Using that list, PK arrived at a total of 3,357,626 software developers in the United States.
+The post then added two less strict categories,
+which expanded the total to 4,185,114 software developers.
+A conservative estimate of the number of software developers worldwide would probably
+include only PK’s “strict” category, about 80% of the United States total.
+If we assume conservatively that the Evans estimate was similarly loose
+and that the 80% ratio holds worldwide,
+we can make the Evans estimate stricter by multiplying it by the same 80%, arriving at 16.8 million.
+
+<p>
+Maybe the Evans estimate is too low.
+In May 2017, RedMonk blogger <a href="http://redmonk.com/jgovernor/2017/05/26/just-how-many-darned-developers-are-there-in-the-world-github-is-puzzled/">James Governor reported</a> that, in a recent speech, GitHub CEO Chris Wanstrath claimed GitHub has 21 million active users and GitHub’s Atom editor has 2 million active users (who haven’t turned off metrics and tracking) and concluded that the IDC and Evans estimates are therefore too low. Governor went on to give a “wild assed guess” of 35 million developers worldwide.
+
+<p>
+<i>Based on all this (and ignoring wild-assed guesses), my estimate in July 2017 was that the number of software developers worldwide was likely to be in the range 16.8–21 million.</i>
+
+<p>
+The <a href="https://evansdata.com/press/viewRelease.php?pressID=268">2018 Evans Data Global Developer Population and Demographic Study</a> estimated 23 million developers worldwide, up from 21 million in the 2016 survey.
+
+<p>
+<i>Based on the confidence range in 2017 being 16.8–21 million, my estimate in July 2018 applied the Evans Data 10% growth to arrive at 18.4–23 million developers in 2018.</i>
+
+<p>
+The <a href="https://evansdata.com/press/viewRelease.php?pressID=278">2019 Evans Data Global Development Survey</a> estimated 23.9 million developers worldwide in May 2019, up from 23 million in the 2018 survey.
+
+<p>
+The <a href="https://www.idc.com/getdoc.jsp?containerId=US44363318">IDC Worldwide Developer Census, 2018</a> estimated 22.30 million developers worldwide, up from <a href="https://www.idc.com/getdoc.jsp?containerId=US44389218">21.25 million in 2017</a>.
+
+<p>
+SlashData’s <a href="https://slashdata-website-cms.s3.amazonaws.com/sample_reports/EiWEyM5bfZe1Kug_.pdf">Global Developer Population 2019</a> estimates 14.7 million developers in Q2 2017, 15.7 million in Q4 2017, 16.9 million in Q2 2018, and 18.9 million in Q4 2018, extrapolating to “at least 21M developers by the end of 2019 and possibly upwards of 23M.” Oddly, SlashData’s <a href="https://www.slashdata.co/free-resources/state-of-the-developer-nation-17th-edition">Developer Economics State of the Developer Nation 17th Edition</a> estimated “18 million active software developers in the world” as of Q2 2019. It is unclear if this was rounded down from the 18.9, if SlashData believes the number of developers decreased in the first half of 2019, or if the numbers are completely unrelated.
+
+<p>
+<i>Based on these, my estimate in November 2019 is that the number of developers worldwide is likely to be in the range 18.9–23.9 million developers.</i>
+<a class=anchor href="#fraction_using_go"><h2 id="fraction_using_go">Fraction using Go</h2></a>
+
+
+<p>
+What fraction of software developers use Go?
+
+<p>
+Stack Overflow has been running an annual developer survey for the past few years. In their <a href="https://insights.stackoverflow.com/survey/2017#technology">2017 survey</a>, 4.2% of all respondents and 4.6% of professional developers reported using Go.  Unfortunately, we cannot sanity check Go against the year before, because the <a href="https://insights.stackoverflow.com/survey/2016#technology">2016 survey report</a> cut off the list of popular technologies after Objective-C (6.5%).
+
+<p>
+O’Reilly has been running annual software developer salary surveys for the past few years as well, and their survey asks about language use.
+The <a href="https://www.oreilly.com/ideas/2016-software-development-salary-survey-report#id-kAiqtmuE">2016 worldwide survey</a> reports that Go is used by 3.9% of respondents, while the <a href="https://www.oreilly.com/ideas/2016-european-software-development-salary-survey#id-4xiji1CA">2016 European survey</a> reports Go is used by 3.3% of respondents. (I derived both these numbers by measuring the bars in the graphs.) The <a href="https://www.oreilly.com/ideas/2017-software-development-salary-survey#tools">2017 worldwide survey</a> reports in commentary that 4.5% of respondents say they use Go.
+
+<p>
+Maybe the 4.2–4.6% estimate is too high.
+Both of these are online surveys with a danger of self-selection bias among respondents,
+and that developers who don’t answer online surveys use Go much less than those who do.
+For example, perhaps the surveys are skewed by geography or experience
+in a way that affects the result.
+Suppose, I think quite pessimistically, that the survey respondents
+are only representative of half of the software developer population,
+and that in the other half, Go is only half as popular.
+Then if a survey found 4.2% of developers use Go, the real percentage would be three quarters as much, or 3.15%.
+
+<p>
+<i>Based on all this, my estimate in July 2017 was that the fraction of software developers using Go worldwide is at least 3% and possibly as high as 4.6%.</i>
+
+<p>
+The <a href="https://insights.stackoverflow.com/survey/2018/#most-popular-technologies">2018 Stack Overflow Developer Survey</a> reports that 7.1% of all developers and 7.2% of professional developers use Go. Applying the same pessimism as last year (multiplying by three quarters) suggests a lower bound of 5.3%, but I’ll be even more conservative and use last year’s 4.6% as a lower bound. (The O’Reilly surveys seem to have stopped being run.)
+
+<p>
+<i>Based on this, my estimate in July 2018 was that 4.6–7.1% of developers use Go.</i>
+
+<p>
+The <a href="https://insights.stackoverflow.com/survey/2019/#most-popular-technologies">2019 Stack Overflow Developer Survey</a> reports that 8.2% of all developers and 8.8% of professional developers use Go (compared with 7.1% and 7.2% in 2017).
+
+<p>
+The <a href="https://research.hackerrank.com/developer-skills/2019#skills2">HackerRank 2019 Developer Skills Report</a> reports that 8.8% of respondents know Go at the end of 2018 (compared with 6.08% at the end of 2017).
+
+<p>
+SlashData’s <a href="https://www.slashdata.co/free-resources/state-of-the-developer-nation-17th-edition">Developer Economics State of the Developer Nation 17th Edition</a> estimated 1.1 million active Go software developers, out of 18 million worldwide, or 6.15%. (That happens to match my usual “three quarters of Stack Overflow” conservative lower bound exactly.)
+
+<p>
+The <a href="https://www.jetbrains.com/lp/devecosystem-2019/">JetBrains Developer Ecosystem Survey 2019</a> reports that 18% of developers used Go in 2018. That number seems too high, so I will discount it for now.
+
+<p>
+Evans Data Corporation’s Global Development Survey reports even higher (and harder to believe) percentages for Go usage in the non-public part of the survey.
+
+<p>
+<i>Based on all this, my estimate in November 2019 is that 6.1–8.2% of developers use Go.</i>
+<a class=anchor href="#number_of_go_developers"><h2 id="number_of_go_developers">Number of Go Developers</h2></a>
+
+
+<p>
+How many Go developers are there? Multiply the low developer count and Go percentages and the high ones.
+
+<p>
+In July 2017, 3–4.6% of 16.8–21 million yielded an estimate of 0.50–0.97 million Go developers.
+
+<p>
+In July 2018, 4.6–7.1% of 18.4–23 million yielded an estimate of 0.85–1.63 million Go developers.
+
+<p>
+In November 2019, 6.1–8.2% of 18.9–23.9 million yields an estimate of 1.15–1.96 million Go developers.
+      </div>
+      
+      
+      <div id="disqus_thread"></div>
+      <script>
+      var disqus_config = function () {
+          this.page.url = "https://research.swtch.com/gophercount";  
+          this.page.identifier = "blog/gophercount"; 
+      };
+      (function() { 
+          var d = document, s = d.createElement('script');
+          s.src = '//swtch.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>research!rsc: Transparent Logs for Skeptical Clients</title>
+    <link rel="alternate" type="application/atom+xml" title="research!rsc - Atom" href="http://research.swtch.com/feed.atom" />
+    
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://use.typekit.com/skm6yij.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    font-family: 'Minion Pro';
+  }
+  @media print {
+    img {page-break-inside: avoid;}
+    div.nosplit {page-break-inside: avoid;}
+  }
+  img.center {
+    display: block;
+    margin: 0 auto;
+  }
+  .pad {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  a.anchor, a.back, a.footnote {
+    color: black !important;
+    text-decoration: none !important;
+  }
+  a.back {
+    font-size: 50%;
+  }
+  @media print {
+    a.back {display: none;}
+  }
+  .header {
+    height: 1.25em;
+    background-color: #dff;
+    margin: 0;
+    padding: 0.1em 0.1em 0.2em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #8ff;
+  }
+  .header h3 {
+    margin: 0;
+    padding: 0 2em;
+    display: inline-block;
+    padding-right: 2em;
+    font-style: italic;
+    font-size: 90%;
+  }
+  .rss {
+    float: right;
+    padding-top: 0.2em;
+    padding-right: 2em;
+    display: none;
+  }
+  .toc {
+    margin-top: 2em;
+  }
+  .toc-title {
+    font-family: "caflisch-script-pro";
+    font-size: 300%;
+    line-height: 50%;
+  }
+  .toc-subtitle {
+    display: block;
+    margin-bottom: 1em;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .toc-subtitle { display: none; } }
+  .header h3 a {
+    color: black;
+  }
+  .header h4 {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-weight: normal;
+    font-size: 83%;
+  }
+  @media only screen and (max-width: 550px) { .header h4 { display: none; } }
+  .main {
+    padding: 0 2em;
+  }
+  @media only screen and (max-width: 479px) { .article { font-size: 120%; } }
+  .article h1 {
+    text-align: center;
+    font-size: 200%;
+  }
+  .copyright {
+    font-size: 83%;
+  }
+  .subtitle {
+      font-size: 65%;
+  }
+  .normal {
+    font-size: medium;
+    font-weight: normal;
+  }
+  .when {
+    text-align: center;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .when p {
+    margin: 0;
+    padding: 0;
+  }
+  .article h2 {
+    font-size: 125%;
+    padding-top: 0.25em;
+  }
+  .article h3 {
+    font-size: 100%;
+  }
+  pre {
+    margin-left: 4em;
+    margin-right: 4em;
+  }
+  pre, code {
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%;
+  }
+  .footer {
+    margin-top: 10px;
+    font-size: 83%;
+    font-family: sans-serif;
+  }
+  .comments {
+    margin-top: 2em;
+    background-color: #ffe;
+    border-top: 1px solid #aa4;
+    border-left: 1px solid #aa4;
+    border-right: 1px solid #aa4;
+  }
+  .comments-header {
+    padding: 0 5px 0 5px;
+  }
+  .comments-header p {
+    padding: 0;
+    margin: 3px 0 0 0;
+  }
+  .comments-body {
+    padding: 5px 5px 5px 5px;
+  }
+  #plus-comments {
+    border-bottom: 1px dotted #ccc;
+  }
+  .plus-comment {
+    width: 100%;
+    font-size: 14px;
+    border-top: 1px dotted #ccc;
+  }
+  .me {
+    background-color: #eec;
+  }
+  .plus-comment ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+  .comment-when {
+    color:#999;
+    width:auto;
+    padding:0 5px;
+  }
+  .old {
+    font-size: 83%;
+  }
+  .plus-comment ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 0;
+  }
+  .plus-icon {
+    width: 45px;
+  }
+  .plus-img {
+    float: left;
+    margin: 4px 4px 4px 4px;
+    width: 32px;
+    height: 32px;
+  }
+  .plus-comment p {
+    margin: 0;
+    padding: 0;
+  }
+  .plus-clear {
+    clear: left;
+  }
+  .toc-when {
+    font-size: 83%;
+    color: #999;
+  }
+  .toc {
+    list-style: none;
+  }
+  .toc li {
+    margin-bottom: 0.5em;
+  }
+  .toc-head {
+    margin-bottom: 1em !important;
+    font-size: 117%;
+  }
+  .toc-summary {
+    margin-left: 2em;
+  }
+  .favorite {
+    font-weight: bold;
+  }
+  .article p, .article ol {
+    line-height: 144%;
+  }
+  sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    font-size: 83%;
+  }
+  sup {
+    bottom: 1ex;
+  }
+  sub {
+    top: 0.8ex;
+  }
+
+  .main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 900px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 959px) { .main { width: 708px; } }
+  @media only screen and (min-width: 640px) and (max-width: 767px) { .main { width: 580px; } }
+  @media only screen and (min-width: 480px) and (max-width: 639px) { .main { width: 420px; } }
+  @media only screen and (max-width: 479px) { .main { width: 300px; } }
+
+</style>
+
+  </head>
+  <body>
+    
+<div class="header">
+  <h3><a href="/">research!rsc</a></h3>
+  <h4>Thoughts and links about programming,
+    by <a href="https://swtch.com/~rsc/" rel="author">Russ Cox</a> </h4>
+  <a class="rss" href="/feed.atom"><img src="/feed-icon-14x14.png" /></a>
+</div>
+
+    <div class="main">
+      <div class="article">
+        <h1>Transparent Logs for Skeptical Clients
+        
+        <div class="normal">
+        <div class="when">
+          
+            Posted on Friday, March 1, 2019.
+            
+           <font size="-1"><a href="tlog.pdf">PDF</a></font>
+        </div>
+        </div>
+        </h1>
+        
+
+<p>
+Suppose we want to maintain and publish a public, append-only log of data.
+Suppose also that clients are skeptical about our correct implementation
+and operation of the log:
+it might be to our advantage to leave things out of the log,
+or to enter something in the log today and then remove it tomorrow.
+How can we convince the client we are behaving?
+
+<p>
+This post is about an elegant data structure we can use to publish
+a log of <i>N</i> records with these three properties:
+<ol>
+<li>
+For any specific record <i>R</i> in a log of length <i>N</i>,
+we can construct a proof of length
+<i>O</i>(lg <i>N</i>) allowing the client to verify that <i>R</i> is in the log.
+<li>
+For any earlier log observed and remembered by the client,
+we can construct a proof of length
+<i>O</i>(lg <i>N</i>) allowing the client to verify that the earlier log
+is a prefix of the current log.
+<li>
+An auditor can efficiently iterate over the records in the log.</ol>
+
+
+<p>
+(In this post, “lg <i>N</i>” denotes the base-2 logarithm of <i>N</i>,
+reserving the word “log” to mean only “a sequence of records.”)
+
+<p>
+The
+<a href="https://www.certificate-transparency.org/">Certificate Transparency</a>
+project publishes TLS certificates in this kind of log.
+Google Chrome uses property (1) to verify that
+an <a href="https://en.wikipedia.org/wiki/Extended_Validation_Certificate">enhanced validation certificate</a>
+is recorded in a known log before accepting the certificate.
+Property (2) ensures that an accepted certificate cannot later disappear from the log undetected.
+Property (3) allows an auditor to scan the entire certificate log
+at any later time to detect misissued or stolen certificates.
+All this happens without blindly trusting that
+the log itself is operating correctly.
+Instead, the clients of the log—Chrome and any auditors—verify
+correct operation of the log as part of accessing it.
+
+<p>
+This post explains the design and implementation
+of this verifiably tamper-evident log,
+also called a <i>transparent log</i>.
+To start, we need some cryptographic building blocks.
+<a class=anchor href="#cryptographic_hashes_authentication_and_commitments"><h2 id="cryptographic_hashes_authentication_and_commitments">Cryptographic Hashes, Authentication, and Commitments</h2></a>
+
+
+<p>
+A <i>cryptographic hash function</i> is a deterministic
+function H that maps an arbitrary-size message <i>M</i>
+to a small fixed-size output H(<i>M</i>),
+with the property that it is infeasible in practice to produce
+any pair of distinct messages <i>M<sub>1</sub></i> ≠ <i>M<sub>2</sub></i> with
+identical hashes H(<i>M<sub>1</sub></i>) = H(<i>M<sub>2</sub></i>).
+Of course, what is feasible in practice changes.
+In 1995, SHA-1 was a reasonable cryptographic hash function.
+In 2017, SHA-1 became a <i>broken</i> cryptographic hash function,
+when researchers identified and demonstrated
+a <a href="https://shattered.io/">practical way to generate colliding messages</a>.
+Today, SHA-256 is believed to be a reasonable cryptographic hash function.
+Eventually it too will be broken.
+
+<p>
+A (non-broken) cryptographic hash function provides
+a way to bootstrap a small amount of trusted data into
+a much larger amount of data.
+Suppose I want to share a very large file with you,
+but I am concerned that the data may not arrive intact,
+whether due to random corruption or a
+<a href="TODO">man-in-the-middle attack</a>.
+I can meet you in person and hand you,
+written on a piece of paper,
+the SHA-256 hash of the file.
+Then, no matter what unreliable path the bits take,
+you can check whether you got the right ones by
+recomputing the SHA-256 hash of the download.
+If it matches, then you can be certain,
+assuming SHA-256 has not been broken,
+that you downloaded the exact bits I intended.
+The SHA-256 hash <i>authenticates</i>—that is,
+it proves the authenticity of—the downloaded bits,
+even though it is only 256 bits and the download
+is far larger.
+
+<p>
+We can also turn the scenario around,
+so that, instead of distrusting the network,
+you distrust me.
+If I tell you the SHA-256 of a file I promise to send,
+the SHA-256 serves as a verifiable <i>commitment</i> to a particular sequence of bits.
+I cannot later send a different bit sequence and convince you
+it is the file I promised.
+
+<p>
+A single hash can be an authentication or commitment
+of an arbitrarily large amount of data,
+but verification then requires hashing the entire data set.
+To allow selective verification of subsets of the data,
+we can use not just a single hash
+but instead a balanced binary tree of hashes,
+known as a Merkle tree.
+<a class=anchor href="#merkle_trees"><h2 id="merkle_trees">Merkle Trees</h2></a>
+
+
+<p>
+A Merkle tree is constructed from <i>N</i> records,
+where <i>N</i> is a power of two.
+First, each record is hashed independently, producing <i>N</i> hashes.
+Then pairs of hashes are themselves hashed,
+producing <i>N</i>/2 new hashes.
+Then pairs of those hashes are hashed,
+to produce <i>N</i>/4 hashes,
+and so on, until a single hash remains.
+This diagram shows the Merkle tree of size <i>N</i> = 16:
+
+<p>
+<img name="tlog-16" class="center pad" width=518 height=193 src="tlog-16.png" srcset="tlog-16.png 1x, tlog-16@1.5x.png 1.5x, tlog-16@2x.png 2x, tlog-16@3x.png 3x, tlog-16@4x.png 4x">
+
+<p>
+The boxes across the bottom represent the 16 records.
+Each number in the tree denotes a single hash,
+with inputs connected by downward lines.
+We can refer to any hash by its coordinates:
+level <i>L</i> hash number <i>K</i>, which we will abbreviate h(<i>L</i>, <i>K</i>).
+At level 0, each hash’s input is a single record;
+at higher levels, each hash’s input is a pair of hashes from the level below.<blockquote>
+
+<p>
+h(0, <i>K</i>)	= H(record <i>K</i>)<br>
+h(<i>L</i>+1, <i>K</i>)	= H(h(<i>L</i>, 2 <i>K</i>), h(<i>L</i>, 2 <i>K</i>+1))</blockquote>
+
+<p>
+To prove that a particular record is contained in the tree
+represented by a given top-level hash
+(that is, to allow the client to authenticate a record, or verify a prior
+commitment, or both),
+it suffices to provide the hashes needed to recompute
+the overall top-level hash from the record’s hash.
+For example, suppose we want to prove that a certain bit string <i>B</i>
+is in fact record 9 in a tree of 16 records with top-level hash <i>T</i>.
+We can provide those bits along with the other hash inputs
+needed to reconstruct the overall tree hash using those bits.
+Specifically, the client can derive as well as we can that:<blockquote>
+
+<p>
+T	=	h(4, 0)<br>
+	=	H(h(3, 0), h(3, 1))<br>
+	=	H(h(3, 0), H(h(2, 2),		h(2, 3)))<br>
+	=	H(h(3, 0), H(H(h(1, 4),	h(1, 5)),	h(2, 3)))<br>
+	=	H(h(3, 0), H(H(H(h(0, 8), h(0, 9)),	h(1, 5)),	h(2, 3)))<br>
+	=	H(h(3, 0), H(H(H(h(0, 8), H(record 9)),	h(1, 5)),	h(2, 3)))<br>
+	=	H(h(3, 0), H(H(H(h(0, 8), H(<i>B</i>)),	h(1, 5)),	h(2, 3)))</blockquote>
+
+<p>
+If we give the client the values [h(3, 0), h(0, 8), h(1, 5), h(2, 3)],
+the client can calculate H(<i>B</i>) and then combine all those hashes
+using the formula and check whether the result matches <i>T</i>.
+If so, the client can be cryptographically certain
+that <i>B</i> really is record 9 in the tree with top-level hash <i>T</i>.
+In effect, proving that <i>B</i> is a record in the Merkle tree with hash <i>T</i>
+is done by giving a verifiable computation of <i>T</i> with H(<i>B</i>) as an input.
+
+<p>
+Graphically, the proof consists of the sibling hashes (circled in blue)
+of nodes along the path (highlighted in yellow)
+from the record being proved up to the tree root.
+
+<p>
+<img name="tlog-r9-16" class="center pad" width=518 height=202 src="tlog-r9-16.png" srcset="tlog-r9-16.png 1x, tlog-r9-16@1.5x.png 1.5x, tlog-r9-16@2x.png 2x, tlog-r9-16@3x.png 3x, tlog-r9-16@4x.png 4x">
+
+<p>
+In general, the proof that a given record is contained
+in the tree requires lg <i>N</i> hashes, one for each level
+below the root.
+
+<p>
+Building our log as a sequence of records
+hashed in a Merkle tree would give us a way to write
+an efficient (lg <i>N</i>-length) proof that a particular record
+is in the log.
+But there are two related problems to solve:
+our log needs to be defined for any length <i>N</i>,
+not just powers of two,
+and we need to be able to write
+an efficient proof that one log is a prefix of another.
+<a class=anchor href="#merkle_tree-structured_log"><h2 id="merkle_tree-structured_log">A Merkle Tree-Structured Log</h2></a>
+
+
+<p>
+To generalize the Merkle tree
+to non-power-of-two sizes, we can
+write <i>N</i> as a sum of decreasing powers of two,
+then build complete Merkle trees of those sizes
+for successive sections of the input,
+and finally hash the at-most-lg <i>N</i> complete trees together
+to produce a single top-level hash.
+For example, 13 = 8 + 4 + 1:
+
+<p>
+<img name="tlog-13" class="center pad" width=434 height=193 src="tlog-13.png" srcset="tlog-13.png 1x, tlog-13@1.5x.png 1.5x, tlog-13@2x.png 2x, tlog-13@3x.png 3x, tlog-13@4x.png 4x">
+
+<p>
+The new hashes marked “x” combine the complete trees,
+building up from right to left, to produce the overall tree hash.
+Note that these hashes necessarily combine trees of
+different sizes and therefore hashes
+from different levels;
+for example, h(3, x) = H(h(2, 2), h(0, 12)).
+
+<p>
+The proof strategy for complete Merkle trees applies
+equally well to these incomplete trees.
+For example, the proof that
+record 9 is in the tree of size 13
+is [h(3, 0), h(0, 8), h(1, 5), h(0, 12)]:
+
+<p>
+<img name="tlog-r9-13" class="center pad" width=437 height=202 src="tlog-r9-13.png" srcset="tlog-r9-13.png 1x, tlog-r9-13@1.5x.png 1.5x, tlog-r9-13@2x.png 2x, tlog-r9-13@3x.png 3x, tlog-r9-13@4x.png 4x">
+
+<p>
+Note that h(0, 12) is included in the proof because
+it is the sibling of h(2, 2) in the computation of h(3, x).
+
+<p>
+We still need to be able to write an efficient proof
+that the log of size <i>N</i> with tree hash <i>T</i>
+is a prefix of the log of size <i>N</i>′ (&gt; <i>N</i>) with tree hash <i>T</i>′.
+Earlier, proving that <i>B</i> is a record in the Merkle tree with hash <i>T</i>
+was done by giving a verifiable computation of <i>T</i> using H(<i>B</i>) as an input.
+To prove that the log with tree hash <i>T</i>
+is included in the log with tree hash <i>T</i>′,
+we can follow the same idea:
+give verifiable computations of <i>T</i> and <i>T</i>′,
+in which all the inputs to the computation of <i>T</i>
+are also inputs to the computation of <i>T</i>′.
+For example, consider the trees of size 7 and 13:
+
+<p>
+<img name="tlog-o7-13" class="center pad" width=437 height=193 src="tlog-o7-13.png" srcset="tlog-o7-13.png 1x, tlog-o7-13@1.5x.png 1.5x, tlog-o7-13@2x.png 2x, tlog-o7-13@3x.png 3x, tlog-o7-13@4x.png 4x">
+
+<p>
+In the diagram, the “x” nodes complete the tree of size 13 with hash <i>T</i><sub>1</sub><sub>3</sub>,
+while the “y” nodes complete the tree of size 7 with hash <i>T</i><sub>7</sub>.
+To prove that <i>T</i><sub>7</sub>’s leaves are included in <i>T</i><sub>1</sub><sub>3</sub>,
+we first give the computation of <i>T</i><sub>7</sub> in terms of complete subtrees
+(circled in blue):<blockquote>
+
+<p>
+<i>T</i><sub>7</sub>	=	H(h(2, 0), H(h(1, 2), h(0, 6)))</blockquote>
+
+<p>
+Then we give the computation of <i>T</i><sub>1</sub><sub>3</sub>,
+expanding hashes as needed to expose
+the same subtrees.
+Doing so exposes sibling subtrees (circled in red):<blockquote>
+
+<p>
+<i>T</i><sub>1</sub><sub>3</sub>	=	H(h(3, 0),	H(h(2, 2), h(0, 12)))<br>
+	=	H(H(h(2, 0), h(2, 1)),	H(h(2, 2), h(0, 12)))<br>
+	=	H(H(h(2, 0), H(h(1, 2), h(1, 3))),	H(h(2, 2), h(0, 12)))<br>
+	=	H(H(h(2, 0), H(h(1, 2), H(h(0, 6), h(0, 7)))),	H(h(2, 2), h(0, 12)))</blockquote>
+
+<p>
+Assuming the client knows the trees have sizes 7 and 13,
+it can derive the required decomposition itself.
+We need only supply the hashes [h(2, 0), h(1, 2), h(0, 6), h(0, 7), h(2, 2), h(0, 12)].
+The client recalculates the <i>T</i><sub>7</sub> and <i>T</i><sub>1</sub><sub>3</sub>
+implied by the hashes and checks that they match the originals.
+
+<p>
+Note that these proofs only use hashes for completed subtrees—that is, numbered hashes,
+never the “x” or “y” hashes that combine differently-sized subtrees.
+The numbered hashes are <i>permanent</i>,
+in the sense that once such a hash appears in a
+tree of a given size, that same hash will appear in all
+trees of larger sizes.
+In contrast, the “x” and “y” hashes are <i>ephemeral</i>—computed
+for a single tree and never seen again.
+The hashes common to the decomposition of two different-sized trees
+therefore must always be permanent hashes.
+The decomposition of the larger tree could make use of ephemeral
+hashes for the exposed siblings,
+but we can easily use only
+permanent hashes instead.
+In the example above,
+the reconstruction of <i>T</i><sub>1</sub><sub>3</sub>
+from the parts of <i>T</i><sub>7</sub>
+uses h(2, 2) and h(0, 12)
+instead of assuming access to <i>T</i><sub>1</sub><sub>3</sub>’s h(3, x).
+Avoiding the ephemeral hashes extends the maximum
+record proof size from lg <i>N</i> hashes to 2 lg <i>N</i> hashes
+and the maximum tree proof size from 2 lg <i>N</i> hashes
+to 3 lg <i>N</i> hashes.
+Note that most top-level hashes,
+including <i>T</i><sub>7</sub> and  <i>T</i><sub>1</sub><sub>3</sub>,
+are themselves ephemeral hashes,
+requiring up to lg <i>N</i> permanent hashes to compute.
+The exceptions are the power-of-two-sized trees
+<i>T</i><sub>1</sub>, <i>T</i><sub>2</sub>, <i>T</i><sub>4</sub>, <i>T</i><sub>8</sub>, and so on.
+<a class=anchor href="#storing_a_log"><h2 id="storing_a_log">Storing a Log</h2></a>
+
+
+<p>
+Storing the log requires only a few append-only files.
+The first file holds the log record data, concatenated.
+The second file is an index of the first,
+holding a sequence of int64 values giving the start offset
+of each record in the first file.
+This index allows efficient random access to any record
+by its record number.
+While we could recompute any hash tree from the record data alone,
+doing so would require <i>N</i>–1 hash operations
+for a tree of size <i>N</i>.
+Efficient generation of proofs therefore requires
+precomputing and storing the hash trees
+in some more accessible form.
+
+<p>
+As we noted in the previous section,
+there is significant commonality between trees.
+In particular, the latest hash tree includes all the
+permanent hashes from all earlier hash trees,
+so it is enough to store “only” the latest hash tree.
+A straightforward way to do this is to
+maintain lg <i>N</i> append-only files, each holding
+the sequence of hashes at one level of the tree.
+Because hashes are fixed size,
+any particular hash can be read efficiently
+by reading from the file at the appropriate offset.
+
+<p>
+To write a new log record, we must
+append the record data to the data file,
+append the offset of that data to the index file,
+and
+append the hash of the data to the level-0 hash file.
+Then, if we completed a pair of hashes in the level-0 hash file,
+we append the hash of the pair to the level-1 hash file;
+if that completed a pair of hashes in the level-1 hash file,
+we append the hash of that pair to the level-2 hash file;
+and so on up the tree.
+Each log record write will append a hash to at least one and
+at most lg <i>N</i> hash files,
+with an average of just under two new hashes per write.
+(A binary tree with <i>N</i> leaves has <i>N</i>–1 interior nodes.)
+
+<p>
+It is also possible to interlace lg <i>N</i> append-only hash files
+into a single append-only file,
+so that the log can be stored in only three files:
+record data, record index, and hashes.
+See Appendix A for details.
+Another possibility is to store the log in a pair of database tables,
+one for record data and one for hashes
+(the database can provide the record index itself).
+
+<p>
+Whether in files or in database tables, the stored form
+of the log is append-only, so cached data never goes stale,
+making it trivial to have parallel, read-only replicas of a log.
+In contrast, writing to the log is inherently centralized,
+requiring a dense sequence numbering of all records
+(and in many cases also duplicate suppression).
+An implementation using the two-table database representation
+can delegate both replication and coordination of writes
+to the underlying database,
+especially if the underlying database is globally-replicated and consistent,
+like
+<a href="https://ai.google/research/pubs/pub39966">Google Cloud Spanner</a>
+or <a href="https://www.cockroachlabs.com/docs/stable/architecture/overview.html">CockroachDB</a>.
+
+<p>
+It is of course not enough just to store the log.
+We must also make it available to clients.
+<a class=anchor href="#serving_a_log"><h2 id="serving_a_log">Serving a Log</h2></a>
+
+
+<p>
+Remember that each client consuming the log is skeptical about the log’s
+correct operation.
+The log server must make it easy for the client to
+verify two things: first, that any particular record is in the log,
+and second, that the current log is an append-only
+extension of a previously-observed earlier log.
+
+<p>
+To be useful, the log server must also make it easy to find a record
+given some kind of lookup key,
+and it must allow an auditor to iterate
+over the entire log looking for entries that don’t belong.
+
+<p>
+To do all this, the log server must answer five queries:
+<ol>
+<li>
+
+
+<p>
+<i>Latest</i>() returns the current log size and top-level hash, cryptographically signed by the server for non-repudiation.
+<li>
+
+
+<p>
+<i>RecordProof</i>(<i>R</i>, <i>N</i>) returns the proof that record <i>R</i> is contained in the tree of size <i>N</i>.
+<li>
+
+
+<p>
+<i>TreeProof</i>(<i>N</i>, <i>N</i>′) returns the proof that the tree of size <i>N</i> is a prefix of the tree of size <i>N</i>′.
+<li>
+
+
+<p>
+<i>Lookup</i>(<i>K</i>) returns the record index <i>R</i> matching lookup key <i>K</i>, if any.
+<li>
+
+
+<p>
+<i>Data</i>(<i>R</i>) returns the data associated with record <i>R</i>.</ol>
+<a class=anchor href="#verifying_a_log"><h2 id="verifying_a_log">Verifying a Log</h2></a>
+
+
+<p>
+The client uses the first three queries
+to maintain a cached copy of the most recent log it has observed
+and make sure that the server never removes anything
+from an observed log.
+To do this, the client caches the most recently observed
+log size <i>N</i> and top-level hash <i>T</i>.
+Then, before accepting data bits <i>B</i> as record number <i>R</i>,
+the client verifies that <i>R</i> is included in that log.
+If necessary (that is, if <i>R</i> ≥ its cached <i>N</i>),
+the client updates its cached <i>N</i>, <i>T</i>
+to those of the latest log, but only after verifying
+that the latest log includes everything from the current cached log.
+In pseudocode:
+<pre>validate(bits B as record R):
+    if R ≥ cached.N:
+        N, T = server.Latest()
+        if server.TreeProof(cached.N, N) cannot be verified:
+            fail loudly
+        cached.N, cached.T = N, T
+    if server.RecordProof(R, cached.N) cannot be verified using B:
+        fail loudly
+    accept B as record R
+</pre>
+
+
+<p>
+The client’s proof verification ensures that the log server is behaving
+correctly, at least as observed by the client.
+If a devious server can distinguish individual clients,
+it can still serve different logs to different clients,
+so that a victim client sees invalid entries
+never exposed to other clients or auditors.
+But if the server does lie to a victim,
+the fact that the victim requires any later log to
+include what it has seen before
+means the server must keep up the lie,
+forever serving an alternate log containing the lie.
+This makes eventual detection more likely.
+For example, if the victim ever arrived through a proxy
+or compared its cached log against another client,
+or if the server ever made a mistake about
+which clients to lie to,
+the inconsistency would be readily exposed.
+Requiring the server to sign the <i>Latest</i>() response
+makes it impossible for the server to disavow the inconsistency,
+except by claiming to have been compromised entirely.
+
+<p>
+The client-side checks are a little bit like how
+a Git client maintains its own
+cached copy of a remote repository and then,
+before accepting an update during <code>git</code> <code>pull</code>,
+verifies that the remote repository includes all local commits.
+But the transparent log client only needs to
+download lg <i>N</i> hashes for the verification,
+while Git downloads all <i>cached</i>.<i>N</i> – <i>N</i> new data records,
+and more generally, the transparent log client
+can selectively read and authenticate individual
+entries from the log,
+without being required to download and store
+a full copy of the entire log.
+<a class=anchor href="#tiling_a_log"><h2 id="tiling_a_log">Tiling a Log</h2></a>
+
+
+<p>
+As described above,
+storing the log requires simple, append-only storage
+linear in the total log size,
+and serving or accessing the log requires
+network traffic only logarithmic in the total log size.
+This would be a completely reasonable place to stop
+(and is where Certificate Transparency as defined in
+<a href="https://tools.ietf.org/html/rfc6962">RFC 6962</a> stops).
+However, one useful optimization can both cut the hash storage in half
+and make the network traffic more cache-friendly,
+with only a minor increase in implementation complexity.
+That optimization is based on splitting the hash tree into tiles,
+like
+<a href="https://medium.com/google-design/google-maps-cb0326d165f5#ccfa">Google Maps splits the globe into tiles</a>.
+
+<p>
+A binary tree can be split into tiles of fixed height <i>H</i>
+and width 2<sup><i>H</i></sup>.
+For example, here is the permanent hash tree for the log with 27 records,
+split into tiles of height 2:
+
+<p>
+<img name="tlog-tile-27" class="center pad" width=847 height=236 src="tlog-tile-27.png" srcset="tlog-tile-27.png 1x, tlog-tile-27@1.5x.png 1.5x, tlog-tile-27@2x.png 2x, tlog-tile-27@3x.png 3x, tlog-tile-27@4x.png 4x">
+
+<p>
+We can assign each tile a two-dimensional coordinate, analogous to the hash coordinates we’ve been using:
+tile(<i>L</i>, <i>K</i>) denotes the tile at tile level <i>L</i>
+(hash levels <i>H</i>·<i>L</i> up to <i>H</i>·(<i>L</i>+1)), <i>K</i>th from the left.
+For any given log size, the rightmost tile at each level
+may not yet be complete:
+the bottom row of hashes may contain only <i>W</i> &lt; 2<sup><i>H</i></sup> hashes.
+In that case we will write tile(<i>L</i>, <i>K</i>)/<i>W</i>.
+(When the tile is complete, the “/<i>W</i>” is omitted, understood to be 2<sup><i>H</i></sup>.)
+<a class=anchor href="#storing_tiles"><h2 id="storing_tiles">Storing Tiles</h2></a>
+
+
+<p>
+Only the bottom row of each tile needs to be stored:
+the upper rows can be recomputed by hashing lower ones.
+In our example, a tile of height two stores 4 hashes instead of 6,
+a 33% storage reduction.
+For tiles of greater heights,
+the storage reduction asymptotically approaches 50%.
+The cost is that reading a hash that has been optimized
+away may require reading as much as half a tile,
+increasing I/O requirements.
+For a real system, height four seems like a reasonable balance between storage costs and increased I/O overhead.
+It stores 16 hashes instead of 30—a 47% storage reduction—and
+(assuming SHA-256) a single 16-hash tile is only 512 bytes
+(a single disk sector!).
+
+<p>
+The file storage described earlier maintained lg <i>N</i> hash files,
+one for each level.
+Using tiled storage,
+we only write the hash files
+for levels that are a multiple of the tile height.
+For tiles of height 4, we’d only write the hash files
+for levels 0, 4, 8, 12, 16, and so on.
+When we need a hash at another level,
+we can read its tile and recompute the hash.
+<a class=anchor href="#serving_tiles"><h2 id="serving_tiles">Serving Tiles</h2></a>
+
+
+<p>
+The proof-serving requests
+<i>RecordProof</i>(<i>R</i>, <i>N</i>) and
+<i>TreeProof</i>(<i>N</i>, <i>N</i>′)
+are not particularly cache-friendly.
+For example, although <i>RecordProof</i>(<i>R</i>, <i>N</i>)
+often shares many hashes
+with both <i>RecordProof</i>(<i>R</i>+1, <i>N</i>)
+and <i>RecordProof</i>(<i>R</i>, <i>N</i>+1),
+the three are distinct requests that must be cached independently.
+
+<p>
+A more cache-friendly approach would be
+to replace <i>RecordProof</i> and <i>TreeProof</i> by a general
+request <i>Hash</i>(<i>L</i>, <i>K</i>),
+serving a single permanent hash.
+The client can easily compute which specific hashes it needs,
+and there are many fewer individual hashes
+than whole proofs (2 <i>N</i> vs <i>N</i><sup>2</sup>/2),
+which will help the cache hit rate.
+Unfortunately, switching to <i>Hash</i> requests is inefficient:
+obtaining a record proof used to take one request
+and now takes up to 2 lg <i>N</i> requests, while
+tree proofs take up to 3 lg <i>N</i> requests.
+Also, each request delivers only a single hash (32 bytes):
+the request overhead is likely significantly larger
+than the payload.
+
+<p>
+We can stay cache-friendly
+while reducing the number of requests
+and the relative request overhead,
+at a small cost in bandwidth,
+by adding a request <i>Tile</i>(<i>L</i>, <i>K</i>)
+that returns the requested tile.
+The client can request the tiles it needs for a given proof,
+and it can cache tiles, especially those higher in the tree,
+for use in future proofs.
+
+<p>
+For a real system using SHA-256, a tile of height 8 would be 8 kB.
+A typical proof in a large log of, say, 100 million records would
+require only three complete tiles, or 24 kB downloaded,
+plus one incomplete tile (192 bytes) for the top of the tree.
+And tiles of height 8 can be served directly from
+stored tiles of height 4 (the size suggested in the previous section).
+Another reasonable choice would be to both store and serve tiles of height 6 (2 kB each) or 7 (4 kB each).
+
+<p>
+If there are caches in front of the server,
+each differently-sized partial tile must be given
+a different name,
+so that a client that needs a larger partial tile
+is not given a stale smaller one.
+Even though the tile height is conceptually constant for a given system,
+it is probably helpful to be explicit about the tile height
+in the request, so that a system can transition from one
+fixed tile height to another without ambiguity.
+For example, in a simple GET-based HTTP API,
+we could use <code>/tile/H/L/K</code> to name a complete tile
+and <code>/tile/H/L/K.W</code> to name a partial tile with only
+<i>W</i> hashes.
+<a class=anchor href="#authenticating_tiles"><h2 id="authenticating_tiles">Authenticating Tiles</h2></a>
+
+
+<p>
+One potential problem with downloading and caching tiles
+is not being sure that they are correct.
+An attacker might be able to modify downloaded tiles
+and cause proofs to fail unexpectedly.
+We can avoid this problem by authenticating the tiles
+against the signed top-level tree hash after downloading them.
+Specifically, if we have a signed top-level tree hash <i>T</i>,
+we first download the at most (lg <i>N</i>)/<i>H</i> tiles storing
+the hashes for the complete subtrees that make up <i>T</i>.
+In the diagram of <i>T</i><sub>2</sub><sub>7</sub> earlier, that would be tile(2, 0)/1,
+tile(1, 1)/2, and tile(0, 6)/3.
+Computing <i>T</i> will use every hash in these tiles;
+if we get the right <i>T</i>, the hashes are all correct.
+These tiles make up the top and right sides
+of the tile tree for the given hash tree, and now we know they are correct.
+To authenticate any other tile,
+we first authenticate its parent tile
+(the topmost parents are all authenticated already)
+and then check that the result of hashing all the hashes
+in the tile produces the corresponding entry in the parent tile.
+Using the <i>T</i><sub>2</sub><sub>7</sub> example again,
+given a downloaded tile purporting to be tile(0, 1), we can compute<blockquote>
+
+<p>
+h(2, 1) = H(H(h(0, 4), h(0, 5)), H(h(0, 6), h(0, 7)))</blockquote>
+
+<p>
+and check whether that value matches the h(2, 1)
+recorded directly in an already-authenticated tile(1, 0).
+If so, that authenticates the downloaded tile.
+<a class=anchor href="#summary"><h2 id="summary">Summary</h2></a>
+
+
+<p>
+Putting this all together, we’ve seen how to publish a
+transparent (tamper-evident, immutable, append-only) log
+with the following properties:
+<ul>
+<li>
+A client can verify any particular record using <i>O</i>(lg <i>N</i>) downloaded bytes.
+<li>
+A client can verify any new log contains an older log using <i>O</i>(lg <i>N</i>) downloaded bytes.
+<li>
+For even a large log, these verifications can be done in 3 RPCs of about 8 kB each.
+<li>
+The RPCs used for verification can be made to proxy and cache well, whether for network efficiency or possibly for privacy.
+<li>
+Auditors can iterate over the entire log looking for bad entries.
+<li>
+Writing <i>N</i> records defines a sequence of <i>N</i> hash trees, in which the <i>n</i>th tree contains 2 <i>n</i> – 1 hashes, a total of <i>N</i><sup>2</sup> hashes. But instead of needing to store <i>N</i><sup>2</sup> hashes, the entire sequence can be compacted into at most 2 <i>N</i> hashes, with at most lg <i>N</i> reads required to reconstruct a specific hash from a specific tree.
+<li>
+Those 2 <i>N</i> hashes can themselves be compacted down to 1.06 <i>N</i> hashes, at a cost of potentially reading 8 adjacent hashes to reconstruct any one hash from the 2 <i>N</i>.</ul>
+
+
+<p>
+Overall, this structure makes the log server itself essentially untrusted.
+It can’t remove an observed record without detection.
+It can’t lie to one client without keeping the client on an alternate timeline forever,
+making detection easy by comparing against another client.
+The log itself is also easily proxied and cached,
+so that even if the main server disappeared,
+replicas could keep serving the cached log.
+Finally, auditors can check the log for entries that should not be there,
+so that the actual content of the log can be verified asynchronously
+from its use.
+<a class=anchor href="#further_reading"><h2 id="further_reading">Further Reading</h2></a>
+
+
+<p>
+The original sources needed to understand this data structure are
+all quite readable and repay careful study.
+Ralph Merkle introduced Merkle trees in his
+Ph.D. thesis,
+“<a href="http://www.merkle.com/papers/Thesis1979.pdf">Secrecy, authentication, and public-key systems</a>” (1979),
+using them to convert a digital signature scheme
+with single-use public keys into one with multiple-use keys.
+The multiple-use key was the top-level hash of a tree of 2<sup><i>L</i></sup> pseudorandomly
+generated single-use keys.
+Each signature began with a specific single-use key,
+its index <i>K</i> in the tree,
+and a proof (consisting of <i>L</i> hashes)
+authenticating the key as record <i>K</i> in the tree.
+Adam Langley’s blog post
+“<a href="https://www.imperialviolet.org/2013/07/18/hashsig.html">Hash based signatures</a>” (2013)
+gives a short introduction to
+the single-use signature scheme and
+how Merkle’s tree helped.
+
+<p>
+Scott Crosby and Dan Wallach
+introduced the idea of using a Merkle tree to store a verifiably append-only log
+in their paper,
+“<a href="http://static.usenix.org/event/sec09/tech/full_papers/crosby.pdf">Efficient Data Structures for Tamper-Evident Logging</a>” (2009).
+The key advance was the efficient proof
+that one tree’s log is contained as a prefix of a larger tree’s log.
+
+<p>
+Ben Laurie, Adam Langley, and Emilia Kasper
+adopted this verifiable, transparent log
+in the design for
+<a href="https://www.certificate-transparency.org/">Certificate Transparency (CT) system</a> (2012),
+detailed in
+<a href="https://tools.ietf.org/html/rfc6962">RFC 6962</a> (2013).
+CT’s computation of the top-level hashes
+for non-power-of-two-sized logs differs
+in minor ways from Crosby and Wallach’s paper;
+this post used the CT definitions.
+Ben Laurie's ACM Queue article, “<a href="https://queue.acm.org/detail.cfm?id=2668154">Certificate Transparency: Public, verifiable, append-only logs</a>” (2014),
+presents a high-level overview and additional motivation and context.
+
+<p>
+Adam Eijdenberg, Ben Laurie, and Al Cutter’s paper
+“<a href="https://github.com/google/trillian/blob/master/docs/papers/VerifiableDataStructures.pdf">Verifiable Data Structures</a>” (2015),
+presents Certificate Transparency’s log
+as a general building block—a transparent log—for use in a variety of systems.
+It also introduces an analogous transparent map
+from arbitrary keys to arbitrary values,
+perhaps a topic for a future post.
+
+<p>
+Google’s “General Transparency” server, <a href="https://github.com/google/trillian/blob/master/README.md">Trillian</a>,
+is a production-quality storage implementation
+for both transparent logs and transparent maps.
+The RPC service serves proofs, not hashes or tiles,
+but the server <a href="https://github.com/google/trillian/blob/master/docs/storage/storage.md">uses tiles in its internal storage</a>.
+
+<p>
+To authenticate modules (software packages)
+in the Go language ecosystem, we are
+<a href="https://blog.golang.org/modules2019">planning to use a transparent log</a>
+to store the expected cryptographic hashes of specific module versions,
+so that a client can be cryptographically certain
+that it will download the same software tomorrow
+that it downloaded today.
+For that system’s network service,
+we plan to serve tiles directly, not proofs.
+This post effectively serves as an extended explanation
+of the transparent log, for reference from
+<a href="https://golang.org/design/25530-notary">the Go-specific design</a>.
+<a class=anchor href="#appendix_a"><h2 id="appendix_a">Appendix A: Postorder Storage Layout</h2></a>
+
+
+<p>
+The file-based storage described earlier held the permanent hash tree
+in lg <i>N</i> append-only files, one for each level of the tree.
+The hash h(<i>L</i>, <i>K</i>) would be stored in the <i>L</i>th hash file
+at offset <i>K</i> · <i>HashSize</i>
+
+<p>
+Crosby and Wallach pointed out that it is easy to merge the lg <i>N</i> hash tree levels
+into a single, append-only hash file by using the postorder numbering of
+the binary tree, in which a parent hash is stored immediately after its
+rightmost child.
+For example, the permanent hash tree after writing <i>N</i> = 13 records is laid out like:
+
+<p>
+<img name="tlog-post-13" class="center pad" width=560 height=157 src="tlog-post-13.png" srcset="tlog-post-13.png 1x, tlog-post-13@1.5x.png 1.5x, tlog-post-13@2x.png 2x, tlog-post-13@3x.png 3x, tlog-post-13@4x.png 4x">
+
+<p>
+In the diagram, each hash is numbered
+and aligned horizontally according to its location in the interlaced file.
+
+<p>
+The postorder numbering makes the hash file append-only:
+each new record completes between 1 and lg <i>N</i> new hashes
+(on average 2),
+which are simply appended to the file,
+lower levels first.
+
+<p>
+Reading a specific hash from the file can still be done with a single read
+at a computable offset, but the calculation is no longer completely trivial.
+Hashes at level 0 are placed by adding in gaps for
+completed higher-level hashes,
+and a hash at any higher level immediately
+follows its right child hash:<blockquote>
+
+<p>
+seq(0, <i>K</i>) = <i>K</i> + <i>K</i>/2 + <i>K</i>/4 + <i>K</i>/8 + ... <br>
+seq(<i>L</i>, <i>K</i>) = seq(<i>L</i>–1, 2 <i>K</i> + 1) + 1 = seq(0, 2<sup><i>L</i></sup> (<i>K</i>+1) – 1) + <i>L</i></blockquote>
+
+<p>
+The interlaced layout also improves locality of access.
+Reading a proof typically means reading one hash
+from each level,
+all clustered around a particular leaf in the tree.
+If each tree level is stored separately,
+each hash is in a different file and there is no possibility of I/O overlap.
+But when the tree is stored in interlaced form,
+the accesses at the bottom levels will all be near each other,
+making it possible to fetch many of the needed hashes
+with a single disk read.
+<a class=anchor href="#appendix_b"><h2 id="appendix_b">Appendix B: Inorder Storage Layout</h2></a>
+
+
+<p>
+A different way to interlace the lg <i>N</i> hash files
+would be to use an inorder tree numbering,
+in which each parent hash is stored between its left
+and right subtrees:
+
+<p>
+<img name="tlog-in-13" class="center pad" width=602 height=157 src="tlog-in-13.png" srcset="tlog-in-13.png 1x, tlog-in-13@1.5x.png 1.5x, tlog-in-13@2x.png 2x, tlog-in-13@3x.png 3x, tlog-in-13@4x.png 4x">
+
+<p>
+This storage order does not correspond to append-only writes to the file,
+but each hash entry is still write-once.
+For example, with 13 records written, as in the diagram,
+hashes have been stored at indexes 0–14, 16–22 and 24,
+but not yet at indexes 15 and 23,
+which will eventually hold
+h(4, 0) and h(3, 1).
+In effect, the space for a parent hash is reserved
+when its left subtree has been completed,
+but it can only be filled in later, once its right subtree has also been completed.
+
+<p>
+Although the file is no longer append-only, the inorder numbering
+has other useful properties.
+First, the offset math is simpler:<blockquote>
+
+<p>
+seq(0, <i>K</i>) = 2 <i>K</i> <br>
+seq(<i>L</i>, <i>K</i>) = 2<sup><i>L</i>+1</sup> <i>K</i> + 2<sup><i>L</i></sup> – 1</blockquote>
+
+<p>
+Second, locality is improved.
+Now each parent hash sits exactly in the middle of its
+child subtrees,
+instead of on the far right side.
+<a class=anchor href="#appendix_c"><h2 id="appendix_c">Appendix C: Tile Storage Layout</h2></a>
+
+
+<p>
+Storing the hash tree in lg <i>N</i> separate levels made
+converting to tile storage very simple: just don’t write (<i>H</i>–1)/<i>H</i> of the files.
+The simplest tile implementation is probably to use separate files,
+but it is worth examining what it would take to convert an
+interlaced hash storage file to tile storage.
+It’s not as straightforward as omitting a few files.
+It’s not enough to just omit the hashes at certain levels:
+we also want each tile to appear contiguously in the file.
+For example, for tiles of height 2,
+the first tile at tile level 1 stores hashes h(2, 0)–h(2, 3),
+but neither the postorder nor inorder interlacing
+would place those four hashes next to each other.
+
+<p>
+Instead, we must simply define that tiles are stored contiguously
+and then decide a linear tile layout order.
+For tiles of height 2, the tiles form a 4-ary tree,
+and in general, the tiles form a 2<sup><i>H</i></sup>-ary tree.
+We could use a postorder layout, as in Appendix A:<blockquote>
+
+<p>
+seq(0, <i>K</i>) = <i>K</i> + <i>K</i>/2<sup><i>H</i></sup> + <i>K</i>/2<sup>2<i>H</i></sup> + <i>K</i>/2<sup>3<i>H</i></sup> + ... <br>
+seq(<i>L</i>, <i>K</i>) = seq(<i>L</i>–1, 2<sup><i>H</i></sup> <i>K</i> + 2<sup><i>H</i></sup> – 1) + 1 = seq(0, 2<sup><i>H</i>·<i>L</i></sup> (<i>K</i>+1) – 1) + <i>L</i></blockquote>
+
+<p>
+The postorder tile sequence places a parent tile
+immediately after its rightmost child tile,
+but the parent tile begins to be written
+after the leftmost child tile is completed.
+This means writing increasingly far ahead of the
+filled part of the hash file.
+For example, with tiles of height 2,
+the first hash of
+tile(2, 0) (postorder index 20) is written after filling tile(1, 0) (postorder index 4):
+
+<p>
+<img name="tlog-tile-post-16" class="center pad" width=498 height=126 src="tlog-tile-post-16.png" srcset="tlog-tile-post-16.png 1x, tlog-tile-post-16@1.5x.png 1.5x, tlog-tile-post-16@2x.png 2x, tlog-tile-post-16@3x.png 3x, tlog-tile-post-16@4x.png 4x">
+
+<p>
+The hash file catches up—there are no tiles written after index 20 until the hash file fills in entirely behind it—but
+then jumps ahead again—finishing tile 20 triggers writing the first hash into tile 84.
+In general only the first 1/2<sup><i>H</i></sup> or so of the hash file is guaranteed to be densely packed.
+Most file systems efficiently support files with large holes,
+but not all do:
+we may want to use a different tile layout to avoid arbitrarily large holes.
+
+<p>
+Placing a parent tile immediately after its leftmost child’s completed subtree
+would eliminate all holes (other than incomplete tiles) and would seem to correspond to
+the inorder layout of Appendix B:
+
+<p>
+<img name="tlog-tile-in1-16" class="center pad" width=498 height=126 src="tlog-tile-in1-16.png" srcset="tlog-tile-in1-16.png 1x, tlog-tile-in1-16@1.5x.png 1.5x, tlog-tile-in1-16@2x.png 2x, tlog-tile-in1-16@3x.png 3x, tlog-tile-in1-16@4x.png 4x">
+
+<p>
+But while the tree structure is regular,
+the numbering is not.
+Instead, the offset math is more like the postorder traversal.
+A simpler but far less obvious alternative is to vary the exact
+placement of the parent tiles relative to the subtrees:
+
+<p>
+<img name="tlog-tile-code-16" class="center pad" width=498 height=126 src="tlog-tile-code-16.png" srcset="tlog-tile-code-16.png 1x, tlog-tile-code-16@1.5x.png 1.5x, tlog-tile-code-16@2x.png 2x, tlog-tile-code-16@3x.png 3x, tlog-tile-code-16@4x.png 4x"><blockquote>
+
+<p>
+seq(<i>L</i>, <i>K</i>) = ((<i>K</i> + <i>B</i> – 2)/(<i>B</i> – 1))<sub><i>B</i></sub> || (1)<sub><i>B</i></sub><sup>L</sup></blockquote>
+
+<p>
+Here, (<i>X</i>)<sub><i>B</i></sub> means <i>X</i> written as a base-<i>B</i> number,
+|| denotes concatenation of base-<i>B</i> numbers,
+(1)<sub><i>B</i></sub><sup>L</sup>
+means the base-<i>B</i> digit 1 repeated <i>L</i> times,
+and the base is <i>B</i> = 2<sup><i>H</i></sup>.
+
+<p>
+This encoding generalizes the inorder binary-tree traversal (<i>H</i> = 1, <i>B</i> = 2),
+preserving its regular offset math
+at the cost of losing its regular tree structure.
+Since we only care about doing the math,
+not exactly what the tree looks like,
+this is probably a reasonable tradeoff.
+For more about this surprising ordering,
+see my blog post,
+“<a href="https://research.swtch.com/treenum">An Encoded Tree Traversal</a>.”
+      </div>
+      
+      
+      <div id="disqus_thread"></div>
+      <script>
+      var disqus_config = function () {
+          this.page.url = "https://research.swtch.com/tlog";  
+          this.page.identifier = "blog/tlog"; 
+      };
+      (function() { 
+          var d = document, s = d.createElement('script');
+          s.src = '//swtch.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+      
+    </div>
+
+    
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3319603-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+    
+    
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
